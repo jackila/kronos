@@ -1,0 +1,73 @@
+#  ------------------------ 模型描述
+
+# 业务模型与最终的数据状态
+#   学生
+#     班级信息 #多对一
+#     选修课信息 #一对多
+#         老师信息 #与选修课是一对一
+
+#  ------------------------ 数据信息
+
+# 【学生信息】单独的数据源，名称为：info_center.student
+# 【选修课信息】单独的数据源,名称为 course_center.optional_course
+# 【班级信息】、【老师信息】公用同一个数据源但是不同的数据库中，分别为：organize_center.grade、employee_center.teacher_info
+
+#  ------------------------ = 关联关系
+#
+# student.grade_id = grade.id
+# student.id = optional_course.student_id
+# optional_course.teacher_id = teacher_info.id
+#
+dataSources:
+  - schema: info_center
+    url: 127.0.0.1:3306
+    user: qa
+    password: 123456
+  - schema: course_center
+    url: 127.0.0.2:3306
+    user: qa
+    password: 123456
+  - schema: organize_center
+    url: 127.0.0.3:3306
+    user: qa
+    password: 123456
+  - schema: employee_center
+    url: 127.0.0.3:3306
+    user: qa
+    password: 123456
+tableInfos:
+  - tableName: info_center.student
+    mainTable: true
+  - tableName: course_center.optional_course
+  - tableName: organize_center.grade
+  - tableName: employee_center.teacher_info
+relations:
+  - "student.grade_id = grade.id"
+  - "student.id = optional_course.student_id"
+  - "optional_course.teacher_id = teacher_info.id"
+sinker:
+  type: es
+  host: es_host:9200
+  username: qa
+  password: 123456
+  id: info_center.student.id
+  mapping:
+    - field: stu_name
+      source: student.name
+    - field: stu_sex
+      source: student.sex
+    - field: stu_age
+      source: student.age
+    - field: grade
+      source: grade.grade_name
+    - field: course
+      source: optional_course
+      mapping:
+        - field: course_no
+          source: optional_course.name
+        - field: course_redit
+          source: optional_course.redit
+        - field: course_name
+          source: optional_course.name
+        - field: teacher_name
+          source: teacher_info.name

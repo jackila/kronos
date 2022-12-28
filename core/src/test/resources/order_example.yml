@@ -1,0 +1,43 @@
+dataSources:
+  - schema: inventory
+    url: 127.0.0.1:3306
+    user: qa
+    password: 123456
+tableInfos:
+  - tableName: inventory.orders
+    mainTable: true
+  - tableName: inventory.products
+  - tableName: inventory.customers
+  - tableName: inventory.products_on_hand
+relations:
+  - "orders.product_id = products.id"
+  - "orders.purchaser = customers.id"
+  - "products.id = products_on_hand.product_id"
+sinker:
+  type: es
+  host: es_host:es_port
+  username: elastic
+  password: 123456
+  id: inventory.orders.order_number
+  index: wide_orders
+  mapping:
+    - field: order_number
+      source: orders.order_number
+    - field: order_date
+      source: orders.order_date
+    - field: quantity
+      source: orders.quantity
+    - field: products
+      source: products
+      mapping:
+        - field: name
+          source: products.name
+        - field: description
+          source: products.description
+        - field: weight
+          source: products.weight
+        - field: products_on_hand
+          source: products_on_hand
+          mapping:
+            - field: quantity
+              source: products_on_hand.quantity
