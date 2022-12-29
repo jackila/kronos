@@ -24,7 +24,6 @@ import com.kronos.connector.mysql.testutils.UniqueDatabase;
 import com.kronos.jobgraph.JobConfiguration;
 import com.kronos.jobgraph.logical.LogicalGraph;
 import com.kronos.runtime.jobmaster.JobMaster;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /** Example Tests for {@link MySqlSource}. */
@@ -34,7 +33,7 @@ public class MySqlSourceExampleTest extends MySqlSourceTestBase {
             new UniqueDatabase(MYSQL_CONTAINER, "inventory", "mysqluser", "mysqlpw");
 
     @Test
-    @Ignore("Test ignored because it won't stop and is used for manual test")
+    //@Ignore("Test ignored because it won't stop and is used for manual test")
     public void testConsumingAllEventsInRow() throws Exception {
         inventoryDatabase =
                 new FixationDatabase(MYSQL_CONTAINER, "inventory", "mysqluser", "mysqlpw");
