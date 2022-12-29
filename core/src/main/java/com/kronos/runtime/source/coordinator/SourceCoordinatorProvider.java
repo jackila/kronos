@@ -34,7 +34,6 @@ public class SourceCoordinatorProvider<SplitT extends SourceSplit> extends Recre
     private static final long serialVersionUID = -1921681440009738462L;
     private final String operatorName;
     private final Source source;
-    //todo
     private final int numWorkerThreads = 1;
 
     /**

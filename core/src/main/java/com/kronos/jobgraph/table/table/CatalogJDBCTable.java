@@ -14,4 +14,13 @@ public class CatalogJDBCTable extends CatalogBaseTable{
     public CatalogJDBCTable(ObjectPath target) {
         this.target = target;
     }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer();
+        sb.append(target.getDatabaseName());
+        sb.append(".");
+        sb.append(target.getObjectName());
+        return sb.toString();
+    }
 }

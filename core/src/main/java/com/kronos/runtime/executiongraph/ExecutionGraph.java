@@ -1,7 +1,6 @@
 package com.kronos.runtime.executiongraph;
 
 import com.kronos.jobgraph.physic.JoinPhysicalGraph;
-import com.kronos.runtime.operators.coordination.OperatorCoordinatorHolder;
 
 import java.util.List;
 import java.util.concurrent.Future;
@@ -11,7 +10,7 @@ import java.util.concurrent.Future;
  * @Date: 17:40 2022-10-16
  */
 public interface ExecutionGraph {
-    public OperatorCoordinatorHolder coordinatorHolder();
+    List<ExecutionJobVertex> getAllVertices();
 
     List<Future> runAll(JoinPhysicalGraph graph);
 }

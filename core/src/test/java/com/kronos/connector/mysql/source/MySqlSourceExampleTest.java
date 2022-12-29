@@ -16,10 +16,9 @@
 
 package com.kronos.connector.mysql.source;
 
-import com.kronos.cdc.source.mysql.source.MySqlSource;
 import com.kronos.cdc.data.source.DtsRecord;
-import com.kronos.cdc.debezium.JsonDebeziumDeserializationSchema;
 import com.kronos.cdc.debezium.RowDebeziumDeserializationSchema;
+import com.kronos.cdc.source.mysql.source.MySqlSource;
 import com.kronos.connector.mysql.testutils.FixationDatabase;
 import com.kronos.connector.mysql.testutils.UniqueDatabase;
 import com.kronos.jobgraph.JobConfiguration;
@@ -33,29 +32,6 @@ public class MySqlSourceExampleTest extends MySqlSourceTestBase {
 
     private UniqueDatabase inventoryDatabase =
             new UniqueDatabase(MYSQL_CONTAINER, "inventory", "mysqluser", "mysqlpw");
-
-    @Test
-    @Ignore("Test ignored because it won't stop and is used for manual test")
-    public void testConsumingAllEvents() throws Exception {
-        inventoryDatabase.createAndInitialize();
-        MySqlSource<String> mySqlSource =
-                MySqlSource.<String>builder()
-                        .hostname(MYSQL_CONTAINER.getHost())
-                        .port(MYSQL_CONTAINER.getDatabasePort())
-                        .databaseList(inventoryDatabase.getDatabaseName())
-                        .tableList(inventoryDatabase.getDatabaseName() + ".products")
-                        .username(inventoryDatabase.getUsername())
-                        .password(inventoryDatabase.getPassword())
-                        .serverId("5401-5404")
-                        .deserializer(new JsonDebeziumDeserializationSchema())
-                        .includeSchemaChanges(true) // output the schema changes as well
-                        .build();
-
-        LogicalGraph graph = new LogicalGraph();
-        //graph.build(JobConfiguration.load("example.yml"));
-        JobMaster jobMaster = new JobMaster(mySqlSource);
-        jobMaster.execute(graph);
-    }
 
     @Test
     @Ignore("Test ignored because it won't stop and is used for manual test")
@@ -77,10 +53,9 @@ public class MySqlSourceExampleTest extends MySqlSourceTestBase {
                         .includeSchemaChanges(true) // output the schema changes as well
                         .build();
 
-        LogicalGraph graph = new LogicalGraph();
         JobConfiguration config = JobConfiguration.load("order_example.yml");
         config.getSinker().setHost(ES_CONTAINER.getHost()+":"+ES_CONTAINER.getMappedPort(9200));
-        graph.build(config);
+        LogicalGraph graph = LogicalGraph.instance(config);
         JobMaster jobMaster = new JobMaster(mySqlSource);
         jobMaster.execute(graph);
     }

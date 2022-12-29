@@ -17,8 +17,6 @@
 
 package com.kronos.runtime.io;
 
-import com.kronos.core.io.InputStatus;
-
 /**
  * It is an internal equivalent of {@link InputStatus} that provides
  * additional non public statuses.

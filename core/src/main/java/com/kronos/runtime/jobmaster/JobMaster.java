@@ -3,7 +3,6 @@ package com.kronos.runtime.jobmaster;
 import com.kronos.jobgraph.logical.LogicalGraph;
 import com.kronos.jobgraph.physic.JoinPhysicalGraph;
 import com.kronos.jobgraph.physic.operator.source.Source;
-import com.kronos.runtime.execution.Environment;
 import com.kronos.runtime.executiongraph.DefaultExecutionGraph;
 import com.kronos.runtime.executiongraph.ExecutionGraph;
 import com.kronos.runtime.operators.coordination.OperatorEvent;
@@ -32,10 +31,8 @@ public class JobMaster implements Runnable, JobMasterOperatorEventGateway {
 
     private final ExecutionGraph executionGraph;
 
-    private Environment env;
-
-    public JobMaster(Source source) {
-        this.executionGraph = new DefaultExecutionGraph(source, this);
+    public JobMaster(Source... source) {
+        this.executionGraph = new DefaultExecutionGraph(this,source);
         this.operatorCoordinatorHandler = new DefaultOperatorCoordinatorHandler(executionGraph);
         operatorCoordinatorHandler.initializeOperatorCoordinators();
     }
@@ -81,5 +78,4 @@ public class JobMaster implements Runnable, JobMasterOperatorEventGateway {
         return executionGraph.runAll(graph);
     }
 
-    // register
 }

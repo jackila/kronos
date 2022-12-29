@@ -1,12 +1,9 @@
 package com.kronos.runtime;
 
 import com.kronos.cdc.data.DiffStageRecords;
-import com.kronos.jobgraph.physic.JoinGraphOperator;
 import com.kronos.jobgraph.physic.JoinPhysicalGraph;
 import com.kronos.jobgraph.physic.StreamRecord;
 import com.kronos.jobgraph.physic.operator.StreamOperator;
-import com.kronos.jobgraph.physic.operator.db.DataWarehouseManager;
-import com.kronos.jobgraph.physic.operator.db.MemoryWarehouseManager;
 import com.kronos.jobgraph.physic.operator.source.Source;
 import com.kronos.runtime.execution.Environment;
 import com.kronos.runtime.io.DataInputStatus;
@@ -17,10 +14,10 @@ import com.kronos.runtime.tasks.OperatorChain;
 import com.kronos.runtime.tasks.Output;
 import com.kronos.utils.FlinkException;
 import com.kronos.utils.NamedThreadFactory;
-import com.lmax.disruptor.BlockingWaitStrategy;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventProcessor;
 import com.lmax.disruptor.RingBuffer;
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,9 +41,8 @@ import static org.kronos.utils.Preconditions.checkState;
 public abstract class StreamTask<OP extends StreamOperator> implements TaskExecutorGateway {
 
     private static Logger logger = LoggerFactory.getLogger(StreamTask.class);
-    protected RingBuffer<StreamRecord<DiffStageRecords>> sourceRingBuffer;
-    protected RingBuffer<StreamRecord<DiffStageRecords>> sinkRingBuffer;
-    private Engine engine;
+
+    //private Engine engine;
 
     protected int sourceSize;
 
@@ -83,11 +79,8 @@ public abstract class StreamTask<OP extends StreamOperator> implements TaskExecu
      * ring buffer init
      */
     public StreamTask(Environment environment) {
-        sourceRingBuffer = RingBuffer.createMultiProducer(new MessageFactory(), 1024 * 1024,
-                                                          new BlockingWaitStrategy());
-        sinkRingBuffer = RingBuffer.createMultiProducer(new MessageFactory(), 1024 * 1024,
-                                                          new BlockingWaitStrategy());
-        engine = new Engine();
+
+        //engine = new Engine();
         sourceSize = 1;
         executorService = Executors.newFixedThreadPool(sourceSize, new NamedThreadFactory());
         this.environment = environment;
@@ -106,7 +99,9 @@ public abstract class StreamTask<OP extends StreamOperator> implements TaskExecu
      *
      */
 
-    public List<Future> execute(JoinPhysicalGraph graph) throws Exception {
+    @SneakyThrows
+    public List<Future> execute(JoinPhysicalGraph graph,
+                                RingBuffer<StreamRecord<DiffStageRecords>> sourceRingBuffer) {
 
         // create operator chain
 
@@ -117,8 +112,6 @@ public abstract class StreamTask<OP extends StreamOperator> implements TaskExecu
         mainOperator = operatorChain.mainOperator();
         //init
         init();
-        //run main box
-        //status
         // -------- Invoke --------
         // many operator can be open by here,but now there is only source operator
         mainOperator.open();
@@ -129,18 +122,10 @@ public abstract class StreamTask<OP extends StreamOperator> implements TaskExecu
             workStatus.add(executorService.submit(this::runLoop));
         }
 
-        buildLocalOperator(graph);
-
         logger.info("the operator is end");
-        //createAndExecuteLocalOperator(streamGraph);
-        engine.start();
         return workStatus;
     }
-    private void buildLocalOperator(JoinPhysicalGraph graph) {
-        DataWarehouseManager warehouseManager = new MemoryWarehouseManager();//new RocksDBWarehouseManager();
-        JoinGraphOperator graphOperator = new JoinGraphOperator(sourceRingBuffer,sinkRingBuffer, graph, warehouseManager);
-        graphOperator.createOperator();
-    }
+
     @Override
     public void dispatchOperatorEvent(int operator,
                                       OperatorEvent event) throws FlinkException {

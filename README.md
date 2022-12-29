@@ -2,9 +2,7 @@
 
 ### 前言
 
-kronos是一个解决宽表同步的框架，它的定位类似flink cdc，比起flink cdc要轻巧、简单、灵活。尤其是解决了存储在es，并存在嵌套类型结构的数据。下面是对kronos的框架实现的一个原理解析。关于该项目的更多适用场景，将在其他文章中描述
-
-
+kronos是一个解决宽表同步的框架，它的定位类似flink cdc，比起flink cdc要轻巧、简单、灵活。尤其是解决了存储到es，并存在嵌套类型结构的数据。下面是对kronos的框架实现的一个原理解析。关于该项目的更多适用场景，将在其他文章中描述
 
 ![kronos.drawio](https://tva1.sinaimg.cn/large/e6c9d24ely1h25yrjeur7j20yc0jhabd.jpg)
 

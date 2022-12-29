@@ -29,14 +29,13 @@ public class ExecutionJobVertex {
     private final OperatorCoordinatorHolder coordinatorHolder;
 
     public ExecutionJobVertex(Source source,
-                              JobMaster master) throws Exception {
+                              JobMaster master,
+                              int operatorId) throws Exception {
 
         this.source = source;
-        OperatorCoordinator.Provider provider = getCoordinatorProvider("source Operator", 0);
+        OperatorCoordinator.Provider provider = getCoordinatorProvider("source Operator", operatorId);
         this.coordinatorHolder = OperatorCoordinatorHolder.create(
                 provider, this);
-
-
 
         for (int index = 0; index < parallelism; index++) {
             Environment env = new RuntimeEnvironment(new LocalTaskOperatorEventGateway(master, index), source);

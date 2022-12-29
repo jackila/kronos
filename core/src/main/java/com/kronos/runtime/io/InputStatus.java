@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.kronos.core.io;
+package com.kronos.runtime.io;
 
 
 /**

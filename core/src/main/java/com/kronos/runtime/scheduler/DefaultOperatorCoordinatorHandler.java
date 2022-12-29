@@ -19,6 +19,7 @@
 package com.kronos.runtime.scheduler;
 
 import com.kronos.runtime.executiongraph.ExecutionGraph;
+import com.kronos.runtime.executiongraph.ExecutionJobVertex;
 import com.kronos.runtime.operators.coordination.OperatorCoordinatorHolder;
 import com.kronos.runtime.operators.coordination.OperatorEvent;
 import com.kronos.runtime.source.coordinator.OperatorCoordinator;
@@ -27,43 +28,58 @@ import com.kronos.utils.FlinkRuntimeException;
 import com.kronos.utils.IOUtils;
 import org.kronos.utils.ExceptionUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Default handler for the {@link OperatorCoordinator OperatorCoordinators}.
  */
 public class DefaultOperatorCoordinatorHandler implements OperatorCoordinatorHandler {
 
-    private final OperatorCoordinatorHolder coordinatorHolder;
+    private final Map<Integer, OperatorCoordinatorHolder> coordinatorMap;
 
 
     public DefaultOperatorCoordinatorHandler(
             ExecutionGraph executionGraph) {
-        this.coordinatorHolder = createCoordinatorMap(executionGraph);
+        this.coordinatorMap = createCoordinatorMap(executionGraph);
     }
 
-    private static OperatorCoordinatorHolder createCoordinatorMap(
+    private static Map<Integer, OperatorCoordinatorHolder> createCoordinatorMap(
             ExecutionGraph executionGraph) {
-        return executionGraph.coordinatorHolder();
+        Map<Integer, OperatorCoordinatorHolder> coordinatorMap = new HashMap<>();
+        for (ExecutionJobVertex vertex : executionGraph.getAllVertices()) {
+            OperatorCoordinatorHolder holder = vertex.coordinatorHolder();
+            coordinatorMap.put(holder.operatorId(), holder);
+        }
+        return coordinatorMap;
     }
 
     @Override
     public void initializeOperatorCoordinators() {
-        coordinatorHolder.lazyInitialize();
+        for (OperatorCoordinatorHolder value : coordinatorMap.values()) {
+            value.lazyInitialize();
+        }
     }
 
     @Override
     public void startAllOperatorCoordinators() {
-        try {
-            coordinatorHolder.start();
-        } catch (Throwable t) {
-            ExceptionUtils.rethrowIfFatalErrorOrOOM(t);
-            IOUtils.closeQuietly(coordinatorHolder);
-            throw new FlinkRuntimeException("Failed to start the operator coordinators", t);
+        for (OperatorCoordinatorHolder value : coordinatorMap.values()) {
+            try {
+                value.start();
+            } catch (Throwable t) {
+                ExceptionUtils.rethrowIfFatalErrorOrOOM(t);
+                IOUtils.closeQuietly(value);
+                throw new FlinkRuntimeException("Failed to start the operator coordinators", t);
+            }
         }
     }
 
     @Override
     public void disposeAllOperatorCoordinators() {
-        IOUtils.closeQuietly(coordinatorHolder);
+        for (OperatorCoordinatorHolder value : coordinatorMap.values()) {
+            IOUtils.closeQuietly(value);
+        }
+
     }
 
     @Override
@@ -78,10 +94,12 @@ public class DefaultOperatorCoordinatorHandler implements OperatorCoordinatorHan
         // coordinator, then respond with an exception to the call. If task and coordinator exist,
         // then we assume that the call from the TaskManager was valid, and any bubbling exception
         // needs to cause a job failure.
-        try {
-            coordinatorHolder.handleEventFromOperator(taskExecutionId, evt);
-        } catch (Throwable t) {
-            ExceptionUtils.rethrowIfFatalErrorOrOOM(t);
+        for (OperatorCoordinatorHolder value : coordinatorMap.values()) {
+            try {
+                value.handleEventFromOperator(taskExecutionId, evt);
+            } catch (Throwable t) {
+                ExceptionUtils.rethrowIfFatalErrorOrOOM(t);
+            }
         }
     }
 

@@ -5,7 +5,7 @@ import com.kronos.api.connector.source.SourceSplit;
 import com.kronos.api.connector.source.SplitEnumerator;
 import com.kronos.api.connector.source.SplitEnumeratorContext;
 import com.kronos.api.connector.source.SplitsAssignment;
-import com.kronos.core.io.InputStatus;
+import com.kronos.runtime.io.InputStatus;
 import com.kronos.runtime.io.DataInputStatus;
 
 import java.util.List;
