@@ -42,7 +42,7 @@ mvn clean package -DskipTests
 
 Kronos is now installed in `build-target` as kronos.jar.
 
-### How to usage and result
+### How to use and show the view of result
 
 * 运行集成测试命令(`需要docker环境`)
 
