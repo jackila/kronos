@@ -44,14 +44,14 @@ Kronos is now installed in `build-target` as kronos.jar.
 
 ### How to use and show the view of result
 
-* 运行集成测试命令(`需要docker环境`)
+* 方式一：通过集成测试(`需要docker环境`)，了解该框架
 
-​		`mvn test -Dtest=MySqlSourceExampleTest -DfailIfNoTests=false`
+	 * `mvn test -Dtest=MySqlSourceExampleTest -DfailIfNoTests=false`
 
-* 运行`example`（业务背景见案例）
+* 方式二：通过业务模拟demo，了解kronos使用方法（业务背景见案例）
   * 运行`mysql`、`es`服务
-  * 执行`build-target\example.sql`
-  * `java -jar kronos.jar example.yml`
+  * `mysql`服务应用`build-target\example.sql`
+  * 运行服务`java -jar kronos.jar example.yml`
   * **原始数据**
     ![img](https://tva1.sinaimg.cn/large/008vxvgGly1h9ui8yd3h1j315c0u0diu.jpg)
   * **数据结果**
