@@ -16,6 +16,10 @@
 
 package com.kronos.cdc.source.mysql.source.reader;
 
+import static com.kronos.cdc.source.mysql.source.event.WakeupReaderEvent.WakeUpTarget.SNAPSHOT_READER;
+import static com.kronos.cdc.source.mysql.source.split.MySqlBinlogSplit.toNormalBinlogSplit;
+import static com.kronos.cdc.source.mysql.source.split.MySqlBinlogSplit.toSuspendedBinlogSplit;
+import static com.kronos.cdc.source.mysql.source.utils.ChunkUtils.getNextMetaGroupId;
 
 import com.kronos.api.connector.source.SourceEvent;
 import com.kronos.cdc.source.base.source.reader.RecordEmitter;
@@ -49,9 +53,6 @@ import com.kronos.utils.FlinkRuntimeException;
 import io.debezium.connector.mysql.MySqlConnection;
 import io.debezium.relational.TableId;
 import io.debezium.relational.history.TableChanges;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,16 +61,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-
-import static com.kronos.cdc.source.mysql.source.event.WakeupReaderEvent.WakeUpTarget.SNAPSHOT_READER;
-import static com.kronos.cdc.source.mysql.source.split.MySqlBinlogSplit.toNormalBinlogSplit;
-import static com.kronos.cdc.source.mysql.source.split.MySqlBinlogSplit.toSuspendedBinlogSplit;
-import static com.kronos.cdc.source.mysql.source.utils.ChunkUtils.getNextMetaGroupId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** The source reader for MySQL source splits. */
 public class MySqlSourceReader<T>
         extends SingleThreadMultiplexSourceReaderBase<
-        SourceRecords, T, MySqlSplit, MySqlSplitState> {
+                SourceRecords, T, MySqlSplit, MySqlSplitState> {
 
     private static final Logger LOG = LoggerFactory.getLogger(MySqlSourceReader.class);
 

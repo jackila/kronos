@@ -16,6 +16,8 @@
 
 package com.kronos.cdc.source.mysql.source.utils;
 
+import static com.kronos.cdc.source.mysql.source.utils.StatementUtils.quote;
+
 import com.kronos.cdc.source.mysql.schema.MySqlSchema;
 import com.kronos.cdc.source.mysql.source.config.MySqlSourceConfig;
 import com.kronos.utils.FlinkRuntimeException;
@@ -24,16 +26,13 @@ import io.debezium.jdbc.JdbcConnection;
 import io.debezium.relational.RelationalTableFilters;
 import io.debezium.relational.TableId;
 import io.debezium.relational.history.TableChanges;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.kronos.cdc.source.mysql.source.utils.StatementUtils.quote;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** Utilities to discovery matched tables. */
 public class TableDiscoveryUtils {

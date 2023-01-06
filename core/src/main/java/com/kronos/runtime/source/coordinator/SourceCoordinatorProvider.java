@@ -22,15 +22,13 @@ import com.kronos.api.connector.source.SourceSplit;
 import com.kronos.jobgraph.physic.operator.source.Source;
 import com.kronos.runtime.operators.coordination.RecreateOnResetOperatorCoordinator;
 import com.kronos.utils.FatalExitExceptionHandler;
-
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
-import java.util.function.BiConsumer;
 
 /** The provider of {@link SourceCoordinator}. */
-public class SourceCoordinatorProvider<SplitT extends SourceSplit> extends RecreateOnResetOperatorCoordinator.Provider{
+public class SourceCoordinatorProvider<SplitT extends SourceSplit>
+        extends RecreateOnResetOperatorCoordinator.Provider {
     private static final long serialVersionUID = -1921681440009738462L;
     private final String operatorName;
     private final Source source;
@@ -42,15 +40,8 @@ public class SourceCoordinatorProvider<SplitT extends SourceSplit> extends Recre
      * @param operatorName the name of the operator.
      * @param operatorID the ID of the operator this coordinator corresponds to.
      * @param source the Source that will be used for this coordinator.
-     * @param numWorkerThreads the number of threads the should provide to the SplitEnumerator for
-     *     doing async calls. See {@link
-     *     org.apache.flink.api.connector.source.SplitEnumeratorContext#callAsync(Callable,
-     *     BiConsumer) SplitEnumeratorContext.callAsync()}.
      */
-    public SourceCoordinatorProvider(
-            String operatorName,
-            int operatorID,
-            Source source) {
+    public SourceCoordinatorProvider(String operatorName, int operatorID, Source source) {
         super(operatorID);
         this.operatorName = operatorName;
         this.source = source;
@@ -59,18 +50,13 @@ public class SourceCoordinatorProvider<SplitT extends SourceSplit> extends Recre
     public OperatorCoordinator getCoordinator(OperatorCoordinator.Context context) {
         final String coordinatorThreadName = "SourceCoordinator-" + operatorName;
         CoordinatorExecutorThreadFactory coordinatorThreadFactory =
-                new CoordinatorExecutorThreadFactory(
-                        coordinatorThreadName);
+                new CoordinatorExecutorThreadFactory(coordinatorThreadName);
         ExecutorService coordinatorExecutor =
                 Executors.newSingleThreadExecutor(coordinatorThreadFactory);
 
         SourceCoordinatorContext<SplitT> sourceCoordinatorContext =
                 new SourceCoordinatorContext<>(
-                        coordinatorExecutor,
-                        coordinatorThreadFactory,
-                        numWorkerThreads,
-                        context
-                        );
+                        coordinatorExecutor, coordinatorThreadFactory, numWorkerThreads, context);
         return new SourceCoordinator(
                 operatorName, coordinatorExecutor, source, sourceCoordinatorContext);
     }
@@ -84,8 +70,7 @@ public class SourceCoordinatorProvider<SplitT extends SourceSplit> extends Recre
 
         private Thread t;
 
-        CoordinatorExecutorThreadFactory(
-                final String coordinatorThreadName) {
+        CoordinatorExecutorThreadFactory(final String coordinatorThreadName) {
             this(coordinatorThreadName, FatalExitExceptionHandler.INSTANCE);
         }
 

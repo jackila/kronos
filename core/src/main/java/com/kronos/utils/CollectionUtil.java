@@ -18,6 +18,7 @@
 
 package com.kronos.utils;
 
+import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,8 +31,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
 
 /** Simple utility to work with Java collections. */
 public final class CollectionUtil {

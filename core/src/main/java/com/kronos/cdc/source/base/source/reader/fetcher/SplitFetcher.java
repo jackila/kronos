@@ -23,9 +23,6 @@ import com.kronos.cdc.source.base.source.reader.RecordsWithSplitIds;
 import com.kronos.cdc.source.base.source.reader.splitreader.SplitReader;
 import com.kronos.cdc.source.base.source.reader.synchronization.FutureCompletingBlockingQueue;
 import io.debezium.annotation.GuardedBy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +31,8 @@ import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** The internal fetcher runnable responsible for polling message from the external system. */
 public class SplitFetcher<E, SplitT extends SourceSplit> implements Runnable {

@@ -18,9 +18,9 @@
 
 package com.kronos.utils;
 
-import org.kronos.utils.ExceptionUtils;
+import static org.kronos.utils.Preconditions.checkCompletedNormally;
+import static org.kronos.utils.Preconditions.checkNotNull;
 
-import javax.annotation.Nullable;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collection;
@@ -44,9 +44,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-
-import static org.kronos.utils.Preconditions.checkCompletedNormally;
-import static org.kronos.utils.Preconditions.checkNotNull;
+import javax.annotation.Nullable;
+import org.kronos.utils.ExceptionUtils;
 
 /** A collection of utilities that expand the usage of {@link CompletableFuture}. */
 public class FutureUtils {
@@ -343,7 +342,6 @@ public class FutureUtils {
     // ------------------------------------------------------------------------
     //  composing futures
     // ------------------------------------------------------------------------
-
 
     /**
      * Creates a future that is complete once all of the given futures have completed. The future

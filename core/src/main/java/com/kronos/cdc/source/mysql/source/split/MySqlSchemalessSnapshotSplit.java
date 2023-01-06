@@ -20,7 +20,6 @@ import com.kronos.cdc.source.mysql.source.offset.BinlogOffset;
 import com.kronos.types.RowType;
 import io.debezium.relational.TableId;
 import io.debezium.relational.history.TableChanges.TableChange;
-
 import java.util.HashMap;
 import java.util.Map;
 

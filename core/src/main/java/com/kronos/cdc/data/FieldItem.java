@@ -7,10 +7,7 @@ import lombok.Setter;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-/**
- * @Author: jackila
- * @Date: 11:47 2022/12/19
- */
+/** */
 @Getter
 @Setter
 public class FieldItem {
@@ -18,27 +15,30 @@ public class FieldItem {
     private RecordField field;
     private Object value;
 
-    public FieldItem(ObjectPath source,
-                     RecordField field,
-                     Object value) {
+    public FieldItem(ObjectPath source, RecordField field, Object value) {
         this.source = source;
         this.field = field;
         this.value = value;
     }
 
-    public String getFieldName(){
+    public String getFieldName() {
         return field.getFieldName();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
+        if (this == o) {
+            return true;
+        }
 
-        if (!(o instanceof FieldItem)) return false;
-
+        if (o == null) {
+            return false;
+        }
         FieldItem item = (FieldItem) o;
 
-        return new EqualsBuilder().append(value, item.value).isEquals();
+        return new EqualsBuilder()
+                .append(String.valueOf(this.value), String.valueOf(item.value))
+                .isEquals();
     }
 
     @Override

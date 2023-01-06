@@ -16,10 +16,20 @@
 
 package com.kronos.cdc.source.mysql.source.config;
 
+import static com.kronos.cdc.source.mysql.source.config.MySqlSourceOptions.CHUNK_KEY_EVEN_DISTRIBUTION_FACTOR_LOWER_BOUND;
+import static com.kronos.cdc.source.mysql.source.config.MySqlSourceOptions.CHUNK_KEY_EVEN_DISTRIBUTION_FACTOR_UPPER_BOUND;
+import static com.kronos.cdc.source.mysql.source.config.MySqlSourceOptions.CHUNK_META_GROUP_SIZE;
+import static com.kronos.cdc.source.mysql.source.config.MySqlSourceOptions.CONNECTION_POOL_SIZE;
+import static com.kronos.cdc.source.mysql.source.config.MySqlSourceOptions.CONNECT_MAX_RETRIES;
+import static com.kronos.cdc.source.mysql.source.config.MySqlSourceOptions.CONNECT_TIMEOUT;
+import static com.kronos.cdc.source.mysql.source.config.MySqlSourceOptions.HEARTBEAT_INTERVAL;
+import static com.kronos.cdc.source.mysql.source.config.MySqlSourceOptions.SCAN_INCREMENTAL_SNAPSHOT_CHUNK_SIZE;
+import static com.kronos.cdc.source.mysql.source.config.MySqlSourceOptions.SCAN_SNAPSHOT_FETCH_SIZE;
+import static org.kronos.utils.Preconditions.checkNotNull;
+
 import com.kronos.cdc.source.base.options.StartupOptions;
 import com.kronos.cdc.source.mysql.debezium.EmbeddedFlinkDatabaseHistory;
 import com.kronos.cdc.source.mysql.source.MySqlSource;
-
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.ZoneId;
@@ -27,9 +37,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
-
-import static com.kronos.cdc.source.mysql.source.config.MySqlSourceOptions.*;
-import static org.kronos.utils.Preconditions.checkNotNull;
 
 /** A factory to construct {@link MySqlSourceConfig}. */
 public class MySqlSourceConfigFactory implements Serializable {
@@ -263,7 +270,7 @@ public class MySqlSourceConfigFactory implements Serializable {
         props.setProperty("database.responseBuffering", "adaptive");
         props.setProperty("database.serverTimezone", serverTimeZone);
         // database history
-       props.setProperty(
+        props.setProperty(
                 "database.history", EmbeddedFlinkDatabaseHistory.class.getCanonicalName());
         props.setProperty(
                 "database.history.instance.name", UUID.randomUUID().toString() + "_" + subtaskId);

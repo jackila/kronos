@@ -10,32 +10,25 @@ import com.kronos.runtime.source.even.NoMoreSplitsEvent;
 import com.kronos.runtime.source.even.SourceEventWrapper;
 import com.kronos.utils.ExecutorThreadFactory;
 import com.kronos.utils.FlinkRuntimeException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
-
-/**
- * @Author: jackila
- * @Date: 11:45 2022-10-15
- */
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A context class for the {@link OperatorCoordinator}. Compared with {@link SplitEnumeratorContext}
- * this class allows interaction with state and sending {@link OperatorEvent} to the SourceOperator
- * while {@link SplitEnumeratorContext} only allows sending {@link SourceEvent}.
+ * this class allows interaction with state and sending {@link
+ * com.kronos.runtime.operators.coordination.OperatorEvent} to the SourceOperator while {@link
+ * SplitEnumeratorContext} only allows sending {@link SourceEvent}.
  *
  * <p>The context serves a few purposes:
  *
@@ -71,8 +64,7 @@ public class SourceCoordinatorContext<SplitT extends SourceSplit>
             ExecutorService coordinatorExecutor,
             SourceCoordinatorProvider.CoordinatorExecutorThreadFactory coordinatorThreadFactory,
             int numWorkerThreads,
-            OperatorCoordinator.Context operatorCoordinatorContext
-    ) {
+            OperatorCoordinator.Context operatorCoordinatorContext) {
         this(
                 coordinatorExecutor,
                 Executors.newScheduledThreadPool(
@@ -100,12 +92,10 @@ public class SourceCoordinatorContext<SplitT extends SourceSplit>
         this.subtaskGateways =
                 new OperatorCoordinator.SubtaskGateway
                         [operatorCoordinatorContext.currentParallelism()];
-
     }
 
     @Override
-    public void sendEventToSourceReader(int subtaskId,
-                                        SourceEvent event) {
+    public void sendEventToSourceReader(int subtaskId, SourceEvent event) {
         callInCoordinatorThread(
                 () -> {
                     final OperatorCoordinator.SubtaskGateway gateway =
@@ -114,7 +104,6 @@ public class SourceCoordinatorContext<SplitT extends SourceSplit>
                     return null;
                 },
                 String.format("Failed to send event %s to subtask %d", event, subtaskId));
-
     }
 
     @Override
@@ -142,21 +131,17 @@ public class SourceCoordinatorContext<SplitT extends SourceSplit>
 
                             final AddSplitEvent addSplitEvent;
                             try {
-                                addSplitEvent =
-                                        new AddSplitEvent(splits);
+                                addSplitEvent = new AddSplitEvent(splits);
                                 gateway.sendEvent(addSplitEvent);
                             } catch (Exception e) {
-                                throw new FlinkRuntimeException(
-                                        "Failed to serialize splits.", e);
+                                throw new FlinkRuntimeException("Failed to serialize splits.", e);
                             }
-
                         });
     }
 
     @Override
     public void signalNoMoreSplits(int subtask) {
-        final OperatorCoordinator.SubtaskGateway gateway =
-                getGatewayAndCheckReady(subtask);
+        final OperatorCoordinator.SubtaskGateway gateway = getGatewayAndCheckReady(subtask);
         try {
             gateway.sendEvent(new NoMoreSplitsEvent());
         } catch (Exception e) {
@@ -165,18 +150,14 @@ public class SourceCoordinatorContext<SplitT extends SourceSplit>
     }
 
     @Override
-    public <T> void callAsync(Callable<T> callable,
-                              BiConsumer<T, Throwable> handler) {
-
-    }
+    public <T> void callAsync(Callable<T> callable, BiConsumer<T, Throwable> handler) {}
 
     @Override
-    public <T> void callAsync(Callable<T> callable,
-                              BiConsumer<T, Throwable> handler,
-                              long initialDelay,
-                              long period) {
-
-    }
+    public <T> void callAsync(
+            Callable<T> callable,
+            BiConsumer<T, Throwable> handler,
+            long initialDelay,
+            long period) {}
 
     public void close() throws InterruptedException {
         closed = true;
@@ -205,8 +186,7 @@ public class SourceCoordinatorContext<SplitT extends SourceSplit>
      *
      * @param callable the callable to delegate.
      */
-    private <V> V callInCoordinatorThread(Callable<V> callable,
-                                          String errorMessage) {
+    private <V> V callInCoordinatorThread(Callable<V> callable, String errorMessage) {
         // Ensure the split assignment is done by the the coordinator executor.
         if (!coordinatorThreadFactory.isCurrentThreadCoordinatorThread()) {
             try {
@@ -223,15 +203,13 @@ public class SourceCoordinatorContext<SplitT extends SourceSplit>
         }
     }
 
-
     /**
      * Register a source reader.
      *
      * @param readerInfo the reader information of the source reader.
      */
     void registerSourceReader(ReaderInfo readerInfo) {
-        final ReaderInfo previousReader =
-                registeredReaders.put(readerInfo.subtaskId(), readerInfo);
+        final ReaderInfo previousReader = registeredReaders.put(readerInfo.subtaskId(), readerInfo);
         if (previousReader != null) {
             throw new IllegalStateException(
                     "Overwriting " + previousReader + " with " + readerInfo);

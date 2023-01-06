@@ -16,25 +16,30 @@
 
 package com.kronos.cdc.source.mysql.source.reader;
 
+import static com.kronos.cdc.source.mysql.source.utils.RecordUtils.getBinlogPosition;
+import static com.kronos.cdc.source.mysql.source.utils.RecordUtils.getHistoryRecord;
+import static com.kronos.cdc.source.mysql.source.utils.RecordUtils.getWatermark;
+import static com.kronos.cdc.source.mysql.source.utils.RecordUtils.isDataChangeRecord;
+import static com.kronos.cdc.source.mysql.source.utils.RecordUtils.isHeartbeatEvent;
+import static com.kronos.cdc.source.mysql.source.utils.RecordUtils.isHighWatermarkEvent;
+import static com.kronos.cdc.source.mysql.source.utils.RecordUtils.isSchemaChangeEvent;
+import static com.kronos.cdc.source.mysql.source.utils.RecordUtils.isWatermarkEvent;
 
 import com.kronos.api.operators.Collector;
+import com.kronos.cdc.debezium.DebeziumDeserializationSchema;
+import com.kronos.cdc.debezium.history.FlinkJsonTableChangeSerializer;
 import com.kronos.cdc.source.base.source.reader.RecordEmitter;
 import com.kronos.cdc.source.mysql.source.offset.BinlogOffset;
 import com.kronos.cdc.source.mysql.source.split.MySqlSplitState;
 import com.kronos.cdc.source.mysql.source.split.SourceRecords;
-import com.kronos.cdc.debezium.DebeziumDeserializationSchema;
-import com.kronos.cdc.debezium.history.FlinkJsonTableChangeSerializer;
 import com.kronos.jobgraph.physic.operator.source.SourceOutput;
 import io.debezium.document.Array;
 import io.debezium.relational.history.HistoryRecord;
 import io.debezium.relational.history.TableChanges;
+import java.util.Iterator;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Iterator;
-
-import static com.kronos.cdc.source.mysql.source.utils.RecordUtils.*;
 
 /**
  * The {@link RecordEmitter} implementation for {@link MySqlSourceReader}.
@@ -114,7 +119,6 @@ public final class MySqlRecordEmitter<T>
         outputCollector.output = output;
         debeziumDeserializationSchema.deserialize(element, outputCollector);
     }
-
 
     private static class OutputCollector<T> implements Collector<T> {
         private SourceOutput<T> output;

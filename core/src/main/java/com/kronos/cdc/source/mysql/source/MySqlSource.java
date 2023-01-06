@@ -1,7 +1,10 @@
 package com.kronos.cdc.source.mysql.source;
 
+import static com.kronos.cdc.source.mysql.debezium.DebeziumUtils.openJdbcConnection;
+
 import com.kronos.api.connector.source.SplitEnumerator;
 import com.kronos.api.connector.source.SplitEnumeratorContext;
+import com.kronos.cdc.debezium.DebeziumDeserializationSchema;
 import com.kronos.cdc.source.base.options.StartupMode;
 import com.kronos.cdc.source.base.source.reader.RecordsWithSplitIds;
 import com.kronos.cdc.source.base.source.reader.synchronization.FutureCompletingBlockingQueue;
@@ -18,17 +21,13 @@ import com.kronos.cdc.source.mysql.source.reader.MySqlSourceReader;
 import com.kronos.cdc.source.mysql.source.reader.MySqlSourceReaderContext;
 import com.kronos.cdc.source.mysql.source.reader.MySqlSplitReader;
 import com.kronos.cdc.source.mysql.source.split.SourceRecords;
-import com.kronos.cdc.debezium.DebeziumDeserializationSchema;
 import com.kronos.jobgraph.physic.operator.source.Source;
 import com.kronos.jobgraph.physic.operator.source.SourceReader;
 import com.kronos.jobgraph.physic.operator.source.SourceReaderContext;
 import com.kronos.utils.FlinkRuntimeException;
 import io.debezium.jdbc.JdbcConnection;
-
 import java.util.ArrayList;
 import java.util.function.Supplier;
-
-import static com.kronos.cdc.source.mysql.debezium.DebeziumUtils.openJdbcConnection;
 
 /**
  * The MySQL CDC Source based on FLIP-27 and Watermark Signal Algorithm which supports parallel
@@ -80,7 +79,6 @@ public class MySqlSource<T> implements Source {
         this.deserializationSchema = deserializationSchema;
     }
 
-
     @Override
     public SourceReader createSourceReader(SourceReaderContext readerContext) {
         // create source config for the given subtask (e.g. unique server id)
@@ -101,8 +99,7 @@ public class MySqlSource<T> implements Source {
                 elementsQueue,
                 splitReaderSupplier,
                 new MySqlRecordEmitter<>(
-                        deserializationSchema,
-                        sourceConfig.isIncludeSchemaChanges()),
+                        deserializationSchema, sourceConfig.isIncludeSchemaChanges()),
                 readerContext.getConfiguration(),
                 mySqlSourceReaderContext,
                 sourceConfig);

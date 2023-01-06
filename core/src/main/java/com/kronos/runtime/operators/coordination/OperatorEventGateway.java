@@ -36,8 +36,6 @@ package com.kronos.runtime.operators.coordination;
  */
 public interface OperatorEventGateway {
 
-    /**
-     * Sends the given event to the coordinator, where it will be handled by the {@link
-     */
+    /** Sends the given event to the coordinator, where it will be handled by the */
     void sendEventToCoordinator(OperatorEvent event);
 }

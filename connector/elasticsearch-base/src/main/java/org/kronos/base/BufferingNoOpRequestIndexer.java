@@ -18,13 +18,12 @@
 
 package org.kronos.base;
 
+import java.util.Collections;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import org.elasticsearch.action.ActionRequest;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.update.UpdateRequest;
-
-import java.util.Collections;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Implementation of a {@link RequestIndexer} that buffers {@link ActionRequest ActionRequests}

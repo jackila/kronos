@@ -17,7 +17,6 @@
 package com.kronos.cdc.source.base.config;
 
 import com.kronos.cdc.source.base.options.StartupOptions;
-
 import java.io.Serializable;
 
 /** The source configuration which offers basic source configuration. */

@@ -18,12 +18,11 @@
 
 package com.kronos.runtime.operators.coordination;
 
+import static org.kronos.utils.Preconditions.checkNotNull;
+
 import com.kronos.runtime.executiongraph.Execution;
 import com.kronos.runtime.executiongraph.ExecutionJobVertex;
 import com.kronos.utils.FlinkException;
-
-import static org.kronos.utils.Preconditions.checkNotNull;
-
 
 /**
  * An implementation of the {@link SubtaskAccess} interface that uses the ExecutionGraph's classes,
@@ -34,15 +33,13 @@ final class ExecutionSubtaskAccess implements SubtaskAccess {
     private final Execution taskExecution;
     private final int operator;
 
-    ExecutionSubtaskAccess(Execution taskExecution,
-                           int operator) {
+    ExecutionSubtaskAccess(Execution taskExecution, int operator) {
         this.taskExecution = taskExecution;
         this.operator = operator;
     }
 
     @Override
-    public void createEventSendAction(
-            OperatorEvent event) {
+    public void createEventSendAction(OperatorEvent event) {
 
         try {
             taskExecution.sendOperatorEvent(event);
@@ -63,8 +60,7 @@ final class ExecutionSubtaskAccess implements SubtaskAccess {
         private final ExecutionJobVertex ejv;
         private final int operator;
 
-        ExecutionJobVertexSubtaskAccess(ExecutionJobVertex ejv,
-                                        int operator) {
+        ExecutionJobVertexSubtaskAccess(ExecutionJobVertex ejv, int operator) {
             this.ejv = checkNotNull(ejv);
             this.operator = checkNotNull(operator);
         }
@@ -76,8 +72,7 @@ final class ExecutionSubtaskAccess implements SubtaskAccess {
                         "Subtask index out of bounds [0, " + ejv.getParallelism() + ')');
             }
 
-            final Execution taskExecution =
-                    ejv.getTaskExecutions().get(subtask);
+            final Execution taskExecution = ejv.getTaskExecutions().get(subtask);
             return new ExecutionSubtaskAccess(taskExecution, operator);
         }
     }

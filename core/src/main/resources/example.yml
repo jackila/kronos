@@ -1,0 +1,48 @@
+dataSources:
+  - schema: school_user
+    url: 127.0.0.1:3306
+    user: canal
+    password: canal
+  - schema: course_db
+    url: 127.0.0.2:3306
+    user: canal
+    password: canal
+  - schema: score_db
+    url: 127.0.0.3:3306
+    user: canal
+    password: canal
+tableInfos:
+  - tableName: school_user.students
+    mainTable: true
+  - tableName: school_user.teachers
+  - tableName: course_db.courses
+  - tableName: score_db.scores
+relations:
+  - "students.id = scores.sid"
+  - "courses.id = scores.cid"
+  - "teachers.id= courses.tid"
+sinker:
+  type: es
+  host: es_host:9200
+  username: qa
+  password: 123456
+  id: students.id
+  index: student
+  mapping:
+    - field: stu_name
+      source: students.sname
+    - field: stu_sex
+      source: students.sgender
+    - field: major
+      source: students.smajor
+    - field: credit_points
+      source: students.credit_points
+    - field: course
+      source: courses
+      mapping:
+        - field: cname
+          source: courses.cname
+        - field: tname
+          source: teachers.tname
+        - field: score
+          source: scores.score

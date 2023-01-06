@@ -16,14 +16,13 @@
 
 package com.kronos.cdc.source.mysql.source;
 
+import static org.kronos.utils.Preconditions.checkNotNull;
+
 import com.kronos.cdc.debezium.DebeziumDeserializationSchema;
 import com.kronos.cdc.source.base.options.StartupOptions;
 import com.kronos.cdc.source.mysql.source.config.MySqlSourceConfigFactory;
-
 import java.time.Duration;
 import java.util.Properties;
-
-import static org.kronos.utils.Preconditions.checkNotNull;
 
 /**
  * The builder class for {@link MySqlSource} to make it easier for the users to construct a {@link

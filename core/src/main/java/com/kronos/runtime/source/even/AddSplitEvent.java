@@ -18,10 +18,8 @@ limitations under the License.
 
 package com.kronos.runtime.source.even;
 
-
 import com.kronos.api.connector.source.SourceSplit;
 import com.kronos.runtime.operators.coordination.OperatorEvent;
-
 import java.util.ArrayList;
 import java.util.List;
 

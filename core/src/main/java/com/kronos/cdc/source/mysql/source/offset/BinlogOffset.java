@@ -17,13 +17,12 @@
 package com.kronos.cdc.source.mysql.source.offset;
 
 import io.debezium.connector.mysql.GtidSet;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.kafka.connect.errors.ConnectException;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.kafka.connect.errors.ConnectException;
 
 /**
  * A structure describes a fine grained offset in a binlog event including binlog position and gtid
@@ -65,8 +64,8 @@ public class BinlogOffset implements Comparable<BinlogOffset>, Serializable {
             long restartSkipEvents,
             long restartSkipRows,
             long binlogEpochSecs,
-             String restartGtidSet,
-             Integer serverId) {
+            String restartGtidSet,
+            Integer serverId) {
         Map<String, String> offsetMap = new HashMap<>();
         offsetMap.put(BINLOG_FILENAME_OFFSET_KEY, filename);
         offsetMap.put(BINLOG_POSITION_OFFSET_KEY, String.valueOf(position));
@@ -130,7 +129,8 @@ public class BinlogOffset implements Comparable<BinlogOffset>, Serializable {
                             + key
                             + "' parameter value "
                             + obj
-                            + " could not be converted to a long");
+                            + " could not be "
+                            + "converted to a long");
         }
     }
 

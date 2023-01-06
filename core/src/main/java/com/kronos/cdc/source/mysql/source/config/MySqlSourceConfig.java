@@ -16,23 +16,19 @@
 
 package com.kronos.cdc.source.mysql.source.config;
 
+import static org.kronos.utils.Preconditions.checkNotNull;
+
 import com.kronos.cdc.source.base.options.StartupOptions;
 import com.kronos.cdc.source.mysql.source.MySqlSource;
 import io.debezium.config.Configuration;
 import io.debezium.connector.mysql.MySqlConnectorConfig;
 import io.debezium.relational.RelationalTableFilters;
-
 import java.io.Serializable;
 import java.time.Duration;
 import java.util.List;
 import java.util.Properties;
 
-import static org.kronos.utils.Preconditions.checkNotNull;
-
-
-/**
- * A MySql Source configuration which is used by {@link MySqlSource}.
- */
+/** A MySql Source configuration which is used by {@link MySqlSource}. */
 public class MySqlSourceConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -138,7 +134,6 @@ public class MySqlSourceConfig implements Serializable {
         return tableList;
     }
 
-
     public ServerIdRange getServerIdRange() {
         return serverIdRange;
     }
@@ -210,7 +205,6 @@ public class MySqlSourceConfig implements Serializable {
     public Properties getJdbcProperties() {
         return jdbcProperties;
     }
-
 
     public String getChunkKeyColumn() {
         return chunkKeyColumn;

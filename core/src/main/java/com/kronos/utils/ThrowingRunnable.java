@@ -18,7 +18,6 @@
 
 package com.kronos.utils;
 
-
 import org.kronos.utils.ExceptionUtils;
 
 /**

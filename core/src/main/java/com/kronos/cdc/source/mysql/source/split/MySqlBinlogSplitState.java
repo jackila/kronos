@@ -16,18 +16,16 @@
 
 package com.kronos.cdc.source.mysql.source.split;
 
-
 import com.kronos.cdc.source.mysql.source.offset.BinlogOffset;
 import io.debezium.relational.TableId;
 import io.debezium.relational.history.TableChanges;
-
 import java.util.Map;
 
 /** The state of split to describe the binlog of MySql table(s). */
 public class MySqlBinlogSplitState extends MySqlSplitState {
 
-     private BinlogOffset startingOffset;
-     private BinlogOffset endingOffset;
+    private BinlogOffset startingOffset;
+    private BinlogOffset endingOffset;
     private final Map<TableId, TableChanges.TableChange> tableSchemas;
 
     public MySqlBinlogSplitState(MySqlBinlogSplit split) {
@@ -37,21 +35,19 @@ public class MySqlBinlogSplitState extends MySqlSplitState {
         this.tableSchemas = split.getTableSchemas();
     }
 
-    
     public BinlogOffset getStartingOffset() {
         return startingOffset;
     }
 
-    public void setStartingOffset( BinlogOffset startingOffset) {
+    public void setStartingOffset(BinlogOffset startingOffset) {
         this.startingOffset = startingOffset;
     }
 
-    
     public BinlogOffset getEndingOffset() {
         return endingOffset;
     }
 
-    public void setEndingOffset( BinlogOffset endingOffset) {
+    public void setEndingOffset(BinlogOffset endingOffset) {
         this.endingOffset = endingOffset;
     }
 

@@ -17,9 +17,8 @@
 package com.kronos.cdc.debezium;
 
 import com.kronos.api.operators.Collector;
-import org.apache.kafka.connect.source.SourceRecord;
-
 import java.io.Serializable;
+import org.apache.kafka.connect.source.SourceRecord;
 
 /**
  * The deserialization schema describes how to turn the Debezium SourceRecord into data types

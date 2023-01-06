@@ -18,18 +18,14 @@
 
 package com.kronos.runtime.scheduler;
 
-
 import com.kronos.runtime.operators.coordination.OperatorEvent;
+import com.kronos.runtime.source.coordinator.OperatorCoordinator;
 import com.kronos.utils.FlinkException;
 
 /** Handler for the {@link OperatorCoordinator OperatorCoordinators}. */
 public interface OperatorCoordinatorHandler {
 
-    /**
-     * Initialize operator coordinators.
-     *
-     * @param mainThreadExecutor Executor for submitting work to the main thread.
-     */
+    /** Initialize operator coordinators. */
     void initializeOperatorCoordinators();
 
     /** Start all operator coordinators. */
@@ -46,8 +42,6 @@ public interface OperatorCoordinatorHandler {
      * @param event Event to deliver to the OperatorCoordinator.
      * @throws FlinkException If no coordinator is registered for operator.
      */
-    void deliverOperatorEventToCoordinator(
-            int taskExecutionId, int operatorId, OperatorEvent event)
+    void deliverOperatorEventToCoordinator(int taskExecutionId, int operatorId, OperatorEvent event)
             throws FlinkException;
-
 }

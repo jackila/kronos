@@ -33,7 +33,7 @@ public class MySqlSourceExampleTest extends MySqlSourceTestBase {
             new UniqueDatabase(MYSQL_CONTAINER, "inventory", "mysqluser", "mysqlpw");
 
     @Test
-    //@Ignore("Test ignored because it won't stop and is used for manual test")
+    // @Ignore("Test ignored because it won't stop and is used for manual test")
     public void testConsumingAllEventsInRow() throws Exception {
         inventoryDatabase =
                 new FixationDatabase(MYSQL_CONTAINER, "inventory", "mysqluser", "mysqlpw");
@@ -44,7 +44,9 @@ public class MySqlSourceExampleTest extends MySqlSourceTestBase {
                         .hostname(MYSQL_CONTAINER.getHost())
                         .port(MYSQL_CONTAINER.getDatabasePort())
                         .databaseList(inventoryDatabase.getDatabaseName())
-                        .tableList(inventoryDatabase.getDatabaseName() + ".products",inventoryDatabase.getDatabaseName() + ".orders")
+                        .tableList(
+                                inventoryDatabase.getDatabaseName() + ".products",
+                                inventoryDatabase.getDatabaseName() + ".orders")
                         .username(inventoryDatabase.getUsername())
                         .password(inventoryDatabase.getPassword())
                         .serverId("5401-5404")
@@ -53,7 +55,7 @@ public class MySqlSourceExampleTest extends MySqlSourceTestBase {
                         .build();
 
         JobConfiguration config = JobConfiguration.load("order_example.yml");
-        config.getSinker().setHost(ES_CONTAINER.getHost()+":"+ES_CONTAINER.getMappedPort(9200));
+        config.getSinker().setHost(ES_CONTAINER.getHost() + ":" + ES_CONTAINER.getMappedPort(9200));
         LogicalGraph graph = LogicalGraph.instance(config);
         JobMaster jobMaster = new JobMaster(mySqlSource);
         jobMaster.execute(graph);

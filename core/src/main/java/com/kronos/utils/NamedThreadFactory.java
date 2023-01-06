@@ -1,37 +1,39 @@
 package com.kronos.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/** */
 public class NamedThreadFactory implements ThreadFactory {
 
-    private static final Logger           logger                   = LoggerFactory.getLogger(NamedThreadFactory.class);
-    final private static String           DEFAULT_NAME             = "kronos-worker";
-    final private String                  name;
-    final private boolean                 daemon;
-    final private ThreadGroup             group;
-    final private AtomicInteger           threadNumber             = new AtomicInteger(0);
-    final static UncaughtExceptionHandler uncaughtExceptionHandler = (t, e) -> {
-                                                                        if (e instanceof InterruptedException
-                                                                            || (e.getCause() != null && e.getCause() instanceof InterruptedException)) {
-                                                                            return;
-                                                                        }
+    private static final Logger logger = LoggerFactory.getLogger(NamedThreadFactory.class);
+    private static final String DEFAULT_NAME = "kronos-worker";
+    private final String name;
+    private final boolean daemon;
+    private final ThreadGroup group;
+    private final AtomicInteger threadNumber = new AtomicInteger(0);
+    private static final UncaughtExceptionHandler uncaughtExceptionHandler =
+            (t, e) -> {
+                if (e instanceof InterruptedException
+                        || (e.getCause() != null && e.getCause() instanceof InterruptedException)) {
+                    return;
+                }
 
-                                                                        logger.error("from " + t.getName(), e);
-                                                                    };
+                logger.error("from " + t.getName(), e);
+            };
 
-    public NamedThreadFactory(){
+    public NamedThreadFactory() {
         this(DEFAULT_NAME, true);
     }
 
-    public NamedThreadFactory(String name){
+    public NamedThreadFactory(String name) {
         this(name, true);
     }
 
-    public NamedThreadFactory(String name, boolean daemon){
+    public NamedThreadFactory(String name, boolean daemon) {
         this.name = name;
         this.daemon = daemon;
         SecurityManager s = System.getSecurityManager();
@@ -48,5 +50,4 @@ public class NamedThreadFactory implements ThreadFactory {
         t.setUncaughtExceptionHandler(uncaughtExceptionHandler);
         return t;
     }
-
 }

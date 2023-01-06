@@ -10,10 +10,7 @@ import org.apache.kafka.connect.data.Field;
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.Struct;
 
-/**
- * @Author: jackila
- * @Date: 17:01 2022/12/17
- */
+/** */
 @Getter
 @Setter
 public class DtsRecord implements Record {
@@ -25,8 +22,7 @@ public class DtsRecord implements Record {
     private ObjectPath target;
     private FieldItem primaryKey;
 
-    public DtsRecord(RowKind rowKind,
-                     SourceOffset sourceOffset) {
+    public DtsRecord(RowKind rowKind, SourceOffset sourceOffset) {
         this.type = rowKind;
         this.sourcePosition = sourceOffset;
     }

@@ -28,36 +28,34 @@ import com.kronos.runtime.operators.coordination.OperatorEventGateway;
 import com.kronos.utils.FunctionWithException;
 
 /**
- * 根据不同的source、创造source operator，并将source operator注册到dispacher中
- * 通过dispatcher将source operator与coordinate 关联起来
+ * 根据不同的source、创造source operator，并将source operator注册到dispacher中 通过dispatcher将source
+ * operator与coordinate 关联起来
  */
-public class SourceOperatorFactory implements StreamOperatorFactory{
+public class SourceOperatorFactory implements StreamOperatorFactory {
 
     private static final long serialVersionUID = 1L;
 
     private final Source source;
 
-    public SourceOperatorFactory(
-            Source source) {
+    public SourceOperatorFactory(Source source) {
         this.source = source;
     }
 
-    public <T extends StreamOperator> T createStreamOperator(
-            StreamOperatorParameters parameters) {
+    public <T extends StreamOperator> T createStreamOperator(StreamOperatorParameters parameters) {
         final OperatorEventGateway gateway =
-                parameters.getOperatorEventDispatcher().getOperatorEventGateway(0);
+                parameters
+                        .getOperatorEventDispatcher()
+                        .getOperatorEventGateway(parameters.getOperatorId());
 
         final SourceOperator sourceOperator =
-                instantiateSourceOperator(
-                        source::createSourceReader,
-                        gateway
-                );
+                instantiateSourceOperator(source::createSourceReader, gateway);
 
         // setup
-        parameters.getOperatorEventDispatcher().registerEventHandler(0,sourceOperator);
+        parameters.getOperatorEventDispatcher().registerEventHandler(0, sourceOperator);
 
         // today's lunch is generics spaghetti
-        @SuppressWarnings("unchecked") final T castedOperator = (T) sourceOperator;
+        @SuppressWarnings("unchecked")
+        final T castedOperator = (T) sourceOperator;
 
         return castedOperator;
     }
@@ -68,15 +66,12 @@ public class SourceOperatorFactory implements StreamOperatorFactory{
      * puts all "type non-safety" in one place and allows to maintain as much generics safety in the
      * main code as possible.
      */
-    private static <T, SplitT extends SourceSplit> SourceOperator<T, SplitT > instantiateSourceOperator(
-            FunctionWithException<SourceReaderContext, SourceReader, Exception>
-                    readerFactory,
-            OperatorEventGateway eventGateway
-    ) {
+    private static <T, SplitT extends SourceSplit>
+            SourceOperator<T, SplitT> instantiateSourceOperator(
+                    FunctionWithException<SourceReaderContext, SourceReader, Exception>
+                            readerFactory,
+                    OperatorEventGateway eventGateway) {
 
-        return new SourceOperator(
-                readerFactory,
-                eventGateway
-        );
+        return new SourceOperator(readerFactory, eventGateway);
     }
 }

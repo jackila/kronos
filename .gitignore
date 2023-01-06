@@ -4,6 +4,7 @@ target/
 .idea/
 *.class
 build
+build-target/
 .gradle
 .classpath
 .project

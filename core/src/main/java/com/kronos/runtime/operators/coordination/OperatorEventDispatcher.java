@@ -18,30 +18,22 @@
 
 package com.kronos.runtime.operators.coordination;
 
-
 import com.kronos.utils.FlinkException;
 
 /**
- *  从coordiantor 发送数据到该dispatcher，
- *  而该dispacher转发给响应的operator
- *  1. 何时初始化
- *  2. 发送给operator吗？还是响应的线程
+ * 从coordiantor 发送数据到该dispatcher， 而该dispacher转发给响应的operator 1. 何时初始化 2. 发送给operator吗？还是响应的线程
  *
- *  operator既可以通过它获取到event，也可以通过它发送event到coordinator
- *
+ * <p>operator既可以通过它获取到event，也可以通过它发送event到coordinator
  */
 public interface OperatorEventDispatcher {
 
-    void dispatchEventToHandlers(
-            int operatorID,
-            OperatorEvent evt)
-            throws FlinkException;
+    void dispatchEventToHandlers(int operatorID, OperatorEvent evt) throws FlinkException;
 
     /**
      * Register a listener that is notified every time an OperatorEvent is sent from the
      * OperatorCoordinator (of the operator with the given OperatorID) to this subtask.
      */
-    void registerEventHandler(int operator ,OperatorEventHandler handler);
+    void registerEventHandler(int operator, OperatorEventHandler handler);
 
     /**
      * Gets the gateway through which events can be passed to the OperatorCoordinator for the

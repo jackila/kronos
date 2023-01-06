@@ -18,7 +18,6 @@
 
 package com.kronos.types;
 
-
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
@@ -48,7 +47,6 @@ import java.util.Set;
  *       return myMethod(((DistinctType) type).getSourceType)}
  * </ul>
  */
-
 public enum LogicalTypeRoot {
     CHAR(LogicalTypeFamily.PREDEFINED, LogicalTypeFamily.CHARACTER_STRING),
 

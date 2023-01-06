@@ -4,20 +4,14 @@ import com.kronos.jobgraph.physic.StreamRecord;
 import com.kronos.jobgraph.physic.TPhysicalNode;
 import com.kronos.jobgraph.physic.operator.handler.AbstractTableTransformerHandler;
 import com.kronos.mock.MockTPhysicalNode;
-import org.junit.Assert;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.Assert;
 
-/**
- * @Author: jackila
- * @Date: 18:03 2022-12-16
- */
+/** */
 public class MockMiddleStageTableHandler extends MockStageTableHandler {
 
-    public MockMiddleStageTableHandler() {
-
-    }
+    public MockMiddleStageTableHandler() {}
 
     public MockMiddleStageTableHandler(TPhysicalNode node) {
         super(node);
@@ -30,9 +24,8 @@ public class MockMiddleStageTableHandler extends MockStageTableHandler {
     }
 
     @Override
-    public void onEvent(StreamRecord<List<String>> event,
-                        long sequence,
-                        boolean endOfBatch) throws Exception {
+    public void onEvent(StreamRecord<List<String>> event, long sequence, boolean endOfBatch)
+            throws Exception {
         if (node.getTarget().getObjectName() != null) {
             event.value().add(node.getTarget().getObjectName());
         }
@@ -41,8 +34,10 @@ public class MockMiddleStageTableHandler extends MockStageTableHandler {
             List<String> value = new ArrayList<>(event.value());
 
             Assert.assertTrue(
-                    String.format("[%s] the table %s not exist in %s", node.getTarget().getObjectName()
-                            , tableName, String.join(",", value)), value.contains(tableName));
+                    String.format(
+                            "[%s] the table %s not exist in %s",
+                            node.getTarget().getObjectName(), tableName, String.join(",", value)),
+                    value.contains(tableName));
 
             long count = value.stream().filter(v -> tableName.equalsIgnoreCase(v)).count();
             Assert.assertEquals("count is " + count, 1l, count);

@@ -6,27 +6,27 @@ import lombok.Setter;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-/**
- * @Author: jackila
- * @Date: 17:43 2022/12/18
- */
+/** */
 @Getter
 @Setter
 public class RelevanceInfo {
     private ObjectPath target;
     private String columnName;
 
-    public RelevanceInfo(ObjectPath target,
-                         String columnName) {
+    public RelevanceInfo(ObjectPath target, String columnName) {
         this.target = target;
         this.columnName = columnName;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
+        if (this == o) {
+            return true;
+        }
 
-        if (!(o instanceof RelevanceInfo)) return false;
+        if (!(o instanceof RelevanceInfo)) {
+            return false;
+        }
 
         RelevanceInfo that = (RelevanceInfo) o;
 

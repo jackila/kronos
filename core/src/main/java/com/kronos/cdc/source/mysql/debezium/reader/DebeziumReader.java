@@ -38,6 +38,5 @@ public interface DebeziumReader<T, Split> {
      * Reads records from MySQL. The method should return null when reaching the end of the split,
      * the empty {@link Iterator} will be returned if the data of split is on pulling.
      */
-    
     Iterator<T> pollSplitRecords() throws InterruptedException;
 }

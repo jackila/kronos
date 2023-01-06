@@ -1,6 +1,5 @@
 package com.kronos.jobgraph.physic.operator.source;
 
-
 import com.kronos.api.connector.source.SourceEvent;
 import com.kronos.api.connector.source.SourceSplit;
 import com.kronos.api.connector.source.lib.util.IteratorSourceSplit;
@@ -22,28 +21,21 @@ import com.kronos.runtime.source.even.SourceEventWrapper;
 import com.kronos.runtime.tasks.Output;
 import com.kronos.utils.CollectionUtil;
 import com.kronos.utils.FunctionWithException;
-
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
  * before flink use setup to init reader , now they select use readerFactory to achieve the target
- *
- * @Author: jackila
- * @Date: 10:17 PM 2022-7-25
+ * 2022-7-25
  */
 public class SourceOperator<OUT, SplitT extends SourceSplit> extends AbstractStreamOperator
         implements PushingAsyncDataInput, OperatorEventHandler {
-    /**
-     * The source reader that does most of the work.
-     */
+    /** The source reader that does most of the work. */
     private SourceReader sourceReader;
 
     private ReaderOutput currentMainOutput;
 
-    /**
-     * The state that holds the currently assigned splits.
-     */
+    /** The state that holds the currently assigned splits. */
     private List<IteratorSourceSplit> readerState;
 
     /** A mode to control the behaviour of the {@link #emitNext(DataOutput)} method. */
@@ -57,12 +49,9 @@ public class SourceOperator<OUT, SplitT extends SourceSplit> extends AbstractStr
      * must be lazily initialized, which is mainly because the metrics groups that the reader relies
      * on is lazily initialized.
      */
-    private final FunctionWithException<SourceReaderContext, SourceReader, Exception>
-            readerFactory;
+    private final FunctionWithException<SourceReaderContext, SourceReader, Exception> readerFactory;
 
-    /**
-     * The event gateway through which this operator talks to its coordinator.
-     */
+    /** The event gateway through which this operator talks to its coordinator. */
     private final OperatorEventGateway operatorEventGateway;
 
     private final CompletableFuture<Void> finished = new CompletableFuture<>();
@@ -75,16 +64,13 @@ public class SourceOperator<OUT, SplitT extends SourceSplit> extends AbstractStr
         DATA_FINISHED
     }
 
-
     /**
      * todo construct coordinator\config
      *
      * @param readerFactory
      */
     public SourceOperator(
-            FunctionWithException readerFactory,
-            OperatorEventGateway operatorEventGateway
-    ) {
+            FunctionWithException readerFactory, OperatorEventGateway operatorEventGateway) {
         this.readerFactory = readerFactory;
         this.operatorEventGateway = operatorEventGateway;
         this.operatingMode = OperatingMode.OUTPUT_NOT_INITIALIZED;
@@ -95,31 +81,30 @@ public class SourceOperator<OUT, SplitT extends SourceSplit> extends AbstractStr
         if (sourceReader != null) {
             return;
         }
-        //作为与enumer split之间的沟通渠道
-        final SourceReaderContext context = new SourceReaderContext() {
+        // 作为与enumer split之间的沟通渠道
+        final SourceReaderContext context =
+                new SourceReaderContext() {
 
-            @Override
-            public void sendSplitRequest() {
-                operatorEventGateway.sendEventToCoordinator(
-                        new RequestSplitEvent());
-            }
+                    @Override
+                    public void sendSplitRequest() {
+                        operatorEventGateway.sendEventToCoordinator(new RequestSplitEvent());
+                    }
 
-            @Override
-            public void sendSourceEventToCoordinator(SourceEvent event) {
-                operatorEventGateway.sendEventToCoordinator(new SourceEventWrapper(event));
-            }
+                    @Override
+                    public void sendSourceEventToCoordinator(SourceEvent event) {
+                        operatorEventGateway.sendEventToCoordinator(new SourceEventWrapper(event));
+                    }
 
-            @Override
-            public int getIndexOfSubtask() {
-                return 0;
-            }
+                    @Override
+                    public int getIndexOfSubtask() {
+                        return 0;
+                    }
 
-            @Override
-            public Configuration getConfiguration() {
-                return null;
-            }
-
-        };
+                    @Override
+                    public Configuration getConfiguration() {
+                        return null;
+                    }
+                };
 
         sourceReader = readerFactory.apply(context);
     }
@@ -142,9 +127,7 @@ public class SourceOperator<OUT, SplitT extends SourceSplit> extends AbstractStr
     }
 
     private void registerReader() {
-        operatorEventGateway.sendEventToCoordinator(
-                new ReaderRegistrationEvent(
-                        index));
+        operatorEventGateway.sendEventToCoordinator(new ReaderRegistrationEvent(index));
     }
 
     public CompletableFuture<Void> stop() {
@@ -157,6 +140,7 @@ public class SourceOperator<OUT, SplitT extends SourceSplit> extends AbstractStr
         }
         return finished;
     }
+
     @Override
     public void close() throws Exception {
         if (sourceReader != null) {
@@ -174,7 +158,7 @@ public class SourceOperator<OUT, SplitT extends SourceSplit> extends AbstractStr
         if (currentMainOutput != null) {
             sourceReader.pollNext(currentMainOutput);
         }
-        //init current main output
+        // init current main output
         currentMainOutput = new StreamingReaderOutput(output);
         return sourceReader.pollNext(currentMainOutput);
     }

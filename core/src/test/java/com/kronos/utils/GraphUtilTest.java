@@ -3,20 +3,15 @@ package com.kronos.utils;
 import com.kronos.jobgraph.logical.TransformerLogicalNode;
 import com.kronos.jobgraph.physic.TPhysicalNode;
 import com.kronos.jobgraph.table.ObjectPath;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.List;
 import org.apache.commons.compress.utils.Lists;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Deque;
-import java.util.List;
-
-/**
- * @Author: jackila
- * @Date: 19:57 2022-12-16
- */
 class GraphUtilTest {
     private TransformerLogicalNode root;
     private String[] expect;
@@ -63,11 +58,12 @@ class GraphUtilTest {
         D.addChild(G);
 
         root = A;
-        expect = new String[]{"A", "B", "C", "D", "E", "F", "G"};
+        expect = new String[] {"A", "B", "C", "D", "E", "F", "G"};
     }
+
     @Test
-    void convertToPhysicalGraph() {
-    }
+    void convertToPhysicalGraph() {}
+
     @Test
     void convertToPhysicalNode() {
 
@@ -92,5 +88,4 @@ class GraphUtilTest {
         }
         return ret;
     }
-
 }

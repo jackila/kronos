@@ -16,25 +16,23 @@
 
 package com.kronos.cdc.source.mysql.source.split;
 
-
 import com.kronos.cdc.source.mysql.source.offset.BinlogOffset;
 
 /** The state of split to describe the binlog of MySql table(s). */
 public class MySqlSnapshotSplitState extends MySqlSplitState {
 
-     private BinlogOffset highWatermark;
+    private BinlogOffset highWatermark;
 
     public MySqlSnapshotSplitState(MySqlSnapshotSplit split) {
         super(split);
         this.highWatermark = split.getHighWatermark();
     }
 
-    
     public BinlogOffset getHighWatermark() {
         return highWatermark;
     }
 
-    public void setHighWatermark( BinlogOffset highWatermark) {
+    public void setHighWatermark(BinlogOffset highWatermark) {
         this.highWatermark = highWatermark;
     }
 

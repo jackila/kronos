@@ -18,11 +18,6 @@
 
 package com.kronos.runtime.operators.coordination;
 
-import com.kronos.runtime.message.Acknowledge;
-
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletableFuture;
-
 /**
  * This interface offers access to a parallel subtask in the scope of the subtask as the target for
  * sending {@link OperatorEvent}s from an {@link OperatorCoordinator}.
@@ -43,8 +38,7 @@ public interface SubtaskAccess {
      * now (for example, the event may be sent at a later point due to checkpoint alignment through
      * the {@link OperatorEventValve}).
      */
-    void createEventSendAction(
-            OperatorEvent event);
+    void createEventSendAction(OperatorEvent event);
 
     /** Gets the parallel subtask index of the target subtask. */
     int getSubtaskIndex();

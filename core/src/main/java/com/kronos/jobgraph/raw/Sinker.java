@@ -2,10 +2,7 @@ package com.kronos.jobgraph.raw;
 
 import java.util.List;
 
-/**
- * @Author: jackila
- * @Date: 12:21 PM 2022-5-29
- */
+/** */
 public class Sinker {
     private String type;
     private String host;

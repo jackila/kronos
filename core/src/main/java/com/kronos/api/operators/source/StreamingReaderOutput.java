@@ -5,10 +5,7 @@ import com.kronos.jobgraph.physic.operator.source.ReaderOutput;
 import com.kronos.jobgraph.physic.operator.source.SourceOutput;
 import com.kronos.runtime.tasks.Output;
 
-/**
- * @Author: jackila
- * @Date: 20:25 2022-10-13
- */
+/** */
 public class StreamingReaderOutput<T> implements ReaderOutput<T> {
     public Output output;
 
@@ -31,8 +28,5 @@ public class StreamingReaderOutput<T> implements ReaderOutput<T> {
     }
 
     @Override
-    public void releaseOutputForSplit(String splitId) {
-
-    }
-
+    public void releaseOutputForSplit(String splitId) {}
 }

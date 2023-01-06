@@ -16,13 +16,15 @@
 
 package com.kronos.cdc.source.mysql.debezium.task;
 
+import static com.kronos.cdc.source.mysql.source.offset.BinlogOffset.NO_STOPPING_OFFSET;
+import static com.kronos.cdc.source.mysql.source.utils.RecordUtils.getBinlogPosition;
+
 import com.github.shyiko.mysql.binlog.event.Event;
 import com.kronos.cdc.source.mysql.debezium.dispatcher.EventDispatcherImpl;
 import com.kronos.cdc.source.mysql.debezium.dispatcher.SignalEventDispatcher;
 import com.kronos.cdc.source.mysql.debezium.reader.SnapshotSplitReader;
 import com.kronos.cdc.source.mysql.source.offset.BinlogOffset;
 import com.kronos.cdc.source.mysql.source.split.MySqlBinlogSplit;
-
 import io.debezium.DebeziumException;
 import io.debezium.connector.mysql.MySqlConnection;
 import io.debezium.connector.mysql.MySqlConnectorConfig;
@@ -35,9 +37,6 @@ import io.debezium.relational.TableId;
 import io.debezium.util.Clock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static com.kronos.cdc.source.mysql.source.offset.BinlogOffset.NO_STOPPING_OFFSET;
-import static com.kronos.cdc.source.mysql.source.utils.RecordUtils.getBinlogPosition;
 
 /**
  * Task to read all binlog for table and also supports read bounded (from lowWatermark to
@@ -96,7 +95,8 @@ public class MySqlBinlogSplitReadTask extends MySqlStreamingChangeEventSource {
                             new DebeziumException("Error processing binlog signal event", e));
                 }
                 // tell reader the binlog task finished
-                ((SnapshotSplitReader.SnapshotBinlogSplitChangeEventSourceContextImpl) context).finished();
+                ((SnapshotSplitReader.SnapshotBinlogSplitChangeEventSourceContextImpl) context)
+                        .finished();
             }
         }
     }

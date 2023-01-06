@@ -16,6 +16,14 @@
 
 package com.kronos.cdc.source.mysql.source.utils;
 
+import static com.kronos.cdc.source.mysql.debezium.dispatcher.EventDispatcherImpl.HISTORY_RECORD_FIELD;
+import static com.kronos.cdc.source.mysql.debezium.dispatcher.SignalEventDispatcher.SIGNAL_EVENT_VALUE_SCHEMA_NAME;
+import static com.kronos.cdc.source.mysql.debezium.dispatcher.SignalEventDispatcher.SPLIT_ID_KEY;
+import static com.kronos.cdc.source.mysql.debezium.dispatcher.SignalEventDispatcher.WATERMARK_KIND;
+import static io.debezium.connector.AbstractSourceInfo.DATABASE_NAME_KEY;
+import static io.debezium.connector.AbstractSourceInfo.TABLE_NAME_KEY;
+
+import com.kronos.cdc.source.mysql.debezium.dispatcher.SignalEventDispatcher.WatermarkKind;
 import com.kronos.cdc.source.mysql.debezium.reader.DebeziumReader;
 import com.kronos.cdc.source.mysql.source.offset.BinlogOffset;
 import com.kronos.cdc.source.mysql.source.split.FinishedSnapshotSplitInfo;
@@ -26,10 +34,6 @@ import io.debezium.document.DocumentReader;
 import io.debezium.relational.TableId;
 import io.debezium.relational.history.HistoryRecord;
 import io.debezium.util.SchemaNameAdjuster;
-import org.apache.kafka.connect.data.Schema;
-import org.apache.kafka.connect.data.Struct;
-import org.apache.kafka.connect.source.SourceRecord;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -43,12 +47,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import com.kronos.cdc.source.mysql.debezium.dispatcher.SignalEventDispatcher.WatermarkKind;
-
-import static com.kronos.cdc.source.mysql.debezium.dispatcher.EventDispatcherImpl.HISTORY_RECORD_FIELD;
-import static com.kronos.cdc.source.mysql.debezium.dispatcher.SignalEventDispatcher.*;
-import static io.debezium.connector.AbstractSourceInfo.DATABASE_NAME_KEY;
-import static io.debezium.connector.AbstractSourceInfo.TABLE_NAME_KEY;
+import org.apache.kafka.connect.data.Schema;
+import org.apache.kafka.connect.data.Struct;
+import org.apache.kafka.connect.source.SourceRecord;
 
 /** Utility class to deal record. */
 public class RecordUtils {

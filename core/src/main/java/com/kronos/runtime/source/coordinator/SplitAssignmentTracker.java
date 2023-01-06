@@ -20,7 +20,6 @@ package com.kronos.runtime.source.coordinator;
 
 import com.kronos.api.connector.source.SourceSplit;
 import com.kronos.api.connector.source.SplitsAssignment;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;

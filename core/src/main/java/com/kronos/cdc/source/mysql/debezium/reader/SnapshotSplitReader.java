@@ -16,6 +16,15 @@
 
 package com.kronos.cdc.source.mysql.debezium.reader;
 
+import static com.kronos.cdc.source.mysql.source.utils.RecordUtils.formatMessageTimestamp;
+import static com.kronos.cdc.source.mysql.source.utils.RecordUtils.getSplitKey;
+import static com.kronos.cdc.source.mysql.source.utils.RecordUtils.isDataChangeRecord;
+import static com.kronos.cdc.source.mysql.source.utils.RecordUtils.isHighWatermarkEvent;
+import static com.kronos.cdc.source.mysql.source.utils.RecordUtils.isLowWatermarkEvent;
+import static com.kronos.cdc.source.mysql.source.utils.RecordUtils.splitKeyRangeContains;
+import static com.kronos.cdc.source.mysql.source.utils.RecordUtils.upsertBinlog;
+import static org.kronos.utils.Preconditions.checkState;
+
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.kronos.cdc.source.mysql.debezium.dispatcher.SignalEventDispatcher;
 import com.kronos.cdc.source.mysql.debezium.task.MySqlBinlogSplitReadTask;
@@ -38,11 +47,6 @@ import io.debezium.pipeline.DataChangeEvent;
 import io.debezium.pipeline.source.spi.ChangeEventSource;
 import io.debezium.pipeline.spi.SnapshotResult;
 import io.debezium.util.SchemaNameAdjuster;
-import org.apache.kafka.connect.data.Struct;
-import org.apache.kafka.connect.source.SourceRecord;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -53,10 +57,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import static com.kronos.cdc.source.mysql.source.utils.RecordUtils.*;
-import static org.kronos.utils.Preconditions.checkState;
-
+import org.apache.kafka.connect.data.Struct;
+import org.apache.kafka.connect.source.SourceRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A snapshot reader that reads data from Table in split level, the split is assigned by primary key
@@ -224,7 +228,6 @@ public class SnapshotSplitReader implements DebeziumReader<SourceRecords, MySqlS
                 || (!currentTaskRunning && !hasNextElement.get() && reachEnd.get());
     }
 
-    
     @Override
     public Iterator<SourceRecords> pollSplitRecords() throws InterruptedException {
         checkReadException();

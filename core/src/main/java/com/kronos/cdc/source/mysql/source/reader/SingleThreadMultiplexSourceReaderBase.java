@@ -18,7 +18,6 @@
 
 package com.kronos.cdc.source.mysql.source.reader;
 
-
 import com.kronos.api.connector.source.SourceSplit;
 import com.kronos.cdc.source.base.source.reader.RecordEmitter;
 import com.kronos.cdc.source.base.source.reader.RecordsWithSplitIds;
@@ -30,7 +29,6 @@ import com.kronos.cdc.source.base.source.reader.synchronization.FutureCompleting
 import com.kronos.config.Configuration;
 import com.kronos.jobgraph.physic.operator.source.SourceReader;
 import com.kronos.jobgraph.physic.operator.source.SourceReaderContext;
-
 import java.util.function.Supplier;
 
 /**

@@ -20,7 +20,6 @@ import com.kronos.cdc.source.mysql.source.config.MySqlSourceConfig;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.debezium.connector.mysql.MySqlConnectorConfig;
-
 import java.util.Properties;
 
 /** A connection pool factory to create pooled DataSource {@link HikariDataSource}. */

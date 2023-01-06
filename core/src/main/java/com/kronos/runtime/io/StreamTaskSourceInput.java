@@ -2,27 +2,21 @@ package com.kronos.runtime.io;
 
 import com.kronos.jobgraph.physic.operator.source.SourceOperator;
 import com.kronos.runtime.tasks.Output;
-
 import java.util.concurrent.CompletableFuture;
 
-/**
- * 作为一个processor 的input，it cantain a operator
- *
- * @Author: jackila
- * @Date: 6:15 PM 2022-8-02
- */
-public class StreamTaskSourceInput implements StreamTaskInput{
+/** 作为一个processor 的input，it cantain a operator. */
+public class StreamTaskSourceInput implements StreamTaskInput {
     private final SourceOperator operator;
     private final int inputIndex;
 
     private final AvailabilityHelper isBlockedAvailability = new AvailabilityHelper();
-
 
     public StreamTaskSourceInput(SourceOperator operator, int inputIndex) {
         this.operator = operator;
         this.inputIndex = inputIndex;
         isBlockedAvailability.resetAvailable();
     }
+
     @Override
     public int getInputIndex() {
         return this.inputIndex;
@@ -51,5 +45,4 @@ public class StreamTaskSourceInput implements StreamTaskInput{
     public CompletableFuture<?> getAvailableFuture() {
         return isBlockedAvailability.and(operator);
     }
-
 }

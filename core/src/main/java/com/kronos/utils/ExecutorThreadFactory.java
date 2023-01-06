@@ -18,11 +18,11 @@
 
 package com.kronos.utils;
 
+import static org.mockito.internal.util.Checks.checkNotNull;
+
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import static org.mockito.internal.util.Checks.checkNotNull;
 
 /**
  * A thread factory intended for use by critical thread pools. Critical thread pools here mean
@@ -119,6 +119,7 @@ public class ExecutorThreadFactory implements ThreadFactory {
 
     // --------------------------------------------------------------------------------------------
 
+    /** */
     public static final class Builder {
         private String poolName;
         private int priority = Thread.NORM_PRIORITY;

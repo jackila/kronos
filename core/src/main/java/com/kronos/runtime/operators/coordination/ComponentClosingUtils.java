@@ -19,10 +19,8 @@ limitations under the License.
 package com.kronos.runtime.operators.coordination;
 
 import com.kronos.utils.ThrowingRunnable;
-
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 /** A util class to help with a clean component shutdown. */

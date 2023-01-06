@@ -18,18 +18,15 @@
 
 package org.kronos;
 
+import static org.kronos.utils.Preconditions.checkNotNull;
 
+import java.util.concurrent.atomic.AtomicLong;
 import org.elasticsearch.action.ActionRequest;
 import org.elasticsearch.action.bulk.BulkProcessor;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.kronos.base.RequestIndexer;
-
-import java.util.concurrent.atomic.AtomicLong;
-
-import static org.kronos.utils.Preconditions.checkNotNull;
-
 
 /**
  * Implementation of a {@link RequestIndexer}, using a {@link BulkProcessor}. {@link ActionRequest

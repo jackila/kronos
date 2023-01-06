@@ -18,7 +18,6 @@
 
 package com.kronos.utils;
 
-
 /**
  * Sets a context class loader in a "try-with-resources" pattern.
  *

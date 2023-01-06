@@ -18,14 +18,12 @@
 
 package com.kronos.runtime.operators.coordination;
 
-import com.kronos.jobgraph.tasks.TaskOperatorEventGateway;
-import com.kronos.utils.FlinkException;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.kronos.utils.Preconditions.checkNotNull;
 
+import com.kronos.jobgraph.tasks.TaskOperatorEventGateway;
+import com.kronos.utils.FlinkException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * An implementation of the {@link OperatorEventDispatcher}.
@@ -38,17 +36,13 @@ public final class OperatorEventDispatcherImpl implements OperatorEventDispatche
 
     private final TaskOperatorEventGateway toCoordinator;
 
-    public OperatorEventDispatcherImpl(
-            TaskOperatorEventGateway toCoordinator) {
+    public OperatorEventDispatcherImpl(TaskOperatorEventGateway toCoordinator) {
         this.toCoordinator = checkNotNull(toCoordinator);
         this.handlers = new HashMap<>();
     }
 
     @Override
-    public void dispatchEventToHandlers(
-            int operatorID,
-            OperatorEvent evt)
-            throws FlinkException {
+    public void dispatchEventToHandlers(int operatorID, OperatorEvent evt) throws FlinkException {
 
         final OperatorEventHandler handler = handlers.get(operatorID);
         if (handler != null) {
@@ -79,8 +73,7 @@ public final class OperatorEventDispatcherImpl implements OperatorEventDispatche
 
         private final int operatorId;
 
-        private OperatorEventGatewayImpl(
-                TaskOperatorEventGateway toCoordinator, int operatorId) {
+        private OperatorEventGatewayImpl(TaskOperatorEventGateway toCoordinator, int operatorId) {
             this.toCoordinator = toCoordinator;
             this.operatorId = operatorId;
         }

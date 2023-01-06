@@ -25,12 +25,11 @@ import com.kronos.cdc.data.source.RecordSchema;
 import com.kronos.cdc.data.source.RowImage;
 import com.kronos.cdc.data.source.SourceOffset;
 import io.debezium.data.Envelope;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.Struct;
 import org.apache.kafka.connect.source.SourceRecord;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * A JSON format implementation of {@link DebeziumDeserializationSchema} which deserializes the
@@ -40,14 +39,14 @@ public class RowDebeziumDeserializationSchema implements DebeziumDeserialization
     private static final long serialVersionUID = 1L;
 
     @Override
-    public void deserialize(SourceRecord record,
-                            Collector<DtsRecord> out) throws Exception {
+    public void deserialize(SourceRecord record, Collector<DtsRecord> out) throws Exception {
         DtsRecord data = convertToDtsRecord(record);
         out.collect(data);
     }
 
     /**
      * debzium will handle primary key change
+     *
      * @param record
      * @return
      */
@@ -71,7 +70,7 @@ public class RowDebeziumDeserializationSchema implements DebeziumDeserialization
             case UPDATE:
                 data.setAfter(extractAfterRow(value, valueSchema));
                 data.setBefore(extractBeforeRow(value, valueSchema));
-                //todo may be it change the tabelName
+                // todo may be it change the tabelName
                 data.setTarget(data.getAfter().getTarget());
                 break;
         }
@@ -79,36 +78,34 @@ public class RowDebeziumDeserializationSchema implements DebeziumDeserialization
         return data;
     }
 
-    private RowImage extractAfterRow(Struct value,
-                                     Schema valueSchema) {
+    private RowImage extractAfterRow(Struct value, Schema valueSchema) {
         Schema afterSchema = valueSchema.field(Envelope.FieldName.AFTER).schema();
         Struct after = value.getStruct(Envelope.FieldName.AFTER);
 
         return convert(afterSchema, after);
-
     }
 
-    private RowImage extractBeforeRow(Struct value,
-                                      Schema valueSchema) {
+    private RowImage extractBeforeRow(Struct value, Schema valueSchema) {
         Schema afterSchema = valueSchema.field(Envelope.FieldName.BEFORE).schema();
         Struct after = value.getStruct(Envelope.FieldName.BEFORE);
 
         return convert(afterSchema, after);
-
     }
 
-    private RowImage convert(Schema schema,
-                             Struct value) {
+    private RowImage convert(Schema schema, Struct value) {
         Tuple2<String, String> topicInfo = extractDatabaseAndTableName(schema.name());
         String database = topicInfo.f0;
         String tableName = topicInfo.f1;
         RecordSchema recordSchema = new RecordSchema(database, tableName);
 
         List<RecordField> records =
-                schema.fields().stream().map(field -> new RecordField(field)).collect(Collectors.toList());
+                schema.fields().stream()
+                        .map(field -> new RecordField(field))
+                        .collect(Collectors.toList());
         recordSchema.setRecordFields(records);
         RowImage rowImage = new RowImage(recordSchema, records.size());
-        records.stream().forEach(r -> rowImage.setValue(r.getFieldPosition(), value.get(r.getFieldName())));
+        records.stream()
+                .forEach(r -> rowImage.setValue(r.getFieldPosition(), value.get(r.getFieldName())));
         return rowImage;
     }
 
@@ -120,5 +117,4 @@ public class RowDebeziumDeserializationSchema implements DebeziumDeserialization
         }
         return Tuple2.of(info[1], info[2]);
     }
-
 }

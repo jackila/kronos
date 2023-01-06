@@ -1,14 +1,10 @@
 package com.kronos.jobgraph.physic;
 
 import com.lmax.disruptor.RingBuffer;
-
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/**
- * @Author: jackila
- * @Date: 19:09 2022-12-15
- */
+/** */
 public class StreamRecordEventProducer {
     // 存储数据的环形队列
     private final RingBuffer<StreamRecord<List<String>>> ringBuffer;
@@ -23,9 +19,9 @@ public class StreamRecordEventProducer {
 
         try {
             // sequence位置取出的事件是空事件
-            StreamRecord<List<String>> event= ringBuffer.get(sequence);
+            StreamRecord<List<String>> event = ringBuffer.get(sequence);
             // 空事件添加业务信息
-            String sender = "["+content+"]";
+            String sender = "[" + content + "]";
             CopyOnWriteArrayList<String> data = new CopyOnWriteArrayList<>();
             data.add(sender);
             event.setValue(data);

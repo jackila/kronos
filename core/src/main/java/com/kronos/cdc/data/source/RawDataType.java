@@ -1,16 +1,12 @@
 package com.kronos.cdc.data.source;
 
-/**
- * @Author: jackila
- * @Date: 19:22 2022/12/17
- */
+/** */
 public class RawDataType {
 
     private final String typeName;
     private final int typeId;
 
-    RawDataType(String typeName,
-                int typeId) {
+    RawDataType(String typeName, int typeId) {
         this.typeName = typeName;
         this.typeId = typeId;
     }
@@ -27,12 +23,9 @@ public class RawDataType {
         return of("UNKNOWN", dataTypeId);
     }
 
-    public static RawDataType of(String dataTypeName,
-                                 int dataTypeId) {
+    public static RawDataType of(String dataTypeName, int dataTypeId) {
         return new RawDataType(dataTypeName, dataTypeId);
     }
-
-
 
     public static RawDataType copy(RawDataType source) {
         return RawDataType.of(source.getTypeName(), source.getTypeId());
@@ -40,12 +33,18 @@ public class RawDataType {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         RawDataType that = (RawDataType) o;
 
-        if (typeId != that.typeId) return false;
+        if (typeId != that.typeId) {
+            return false;
+        }
         return typeName.equals(that.typeName);
     }
 

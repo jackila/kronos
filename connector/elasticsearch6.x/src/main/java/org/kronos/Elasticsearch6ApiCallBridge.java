@@ -17,6 +17,11 @@
 
 package org.kronos;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
+import javax.annotation.Nullable;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.bulk.BackoffPolicy;
 import org.elasticsearch.action.bulk.BulkItemResponse;
@@ -31,12 +36,6 @@ import org.kronos.base.RequestIndexer;
 import org.kronos.utils.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.annotation.Nullable;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 
 /** Implementation of {@link ElasticsearchApiCallBridge} for Elasticsearch 6 and later versions. */
 public class Elasticsearch6ApiCallBridge

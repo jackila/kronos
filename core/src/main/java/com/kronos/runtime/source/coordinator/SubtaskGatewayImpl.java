@@ -18,15 +18,9 @@
 
 package com.kronos.runtime.source.coordinator;
 
-import com.kronos.runtime.message.Acknowledge;
 import com.kronos.runtime.operators.coordination.OperatorEvent;
 import com.kronos.runtime.operators.coordination.SubtaskAccess;
 import com.kronos.utils.FlinkRuntimeException;
-
-import java.io.IOException;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 
 /**
  * Implementation of the {@link OperatorCoordinator.SubtaskGateway} interface that access to
@@ -40,9 +34,7 @@ public class SubtaskGatewayImpl implements OperatorCoordinator.SubtaskGateway {
 
     private final SubtaskAccess subtaskAccess;
 
-    public SubtaskGatewayImpl(
-            SubtaskAccess subtaskAccess
-    ) {
+    public SubtaskGatewayImpl(SubtaskAccess subtaskAccess) {
         this.subtaskAccess = subtaskAccess;
     }
 

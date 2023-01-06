@@ -5,10 +5,7 @@ import com.kronos.jobgraph.physic.StreamRecord;
 import com.kronos.jobgraph.physic.operator.handler.StageType;
 import com.kronos.jobgraph.physic.operator.request.QueryResponse;
 
-/**
- * @Author: jackila
- * @Date: 11:29 2022-12-15
- */
+/** */
 public class FrontStageTableHandler extends PrepareTableHandler {
     @Override
     public void catchEventChange(StreamRecord<DiffStageRecords> event) {
@@ -16,6 +13,7 @@ public class FrontStageTableHandler extends PrepareTableHandler {
         // set it into record
         event.value().getPrepareRecord().addItem(response);
     }
+
     @Override
     public boolean doHandler(StreamRecord<DiffStageRecords> event) {
         return event.value().doHandler(node, StageType.FRONT);

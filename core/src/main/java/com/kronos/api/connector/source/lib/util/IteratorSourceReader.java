@@ -4,17 +4,13 @@ import com.kronos.jobgraph.physic.operator.source.ReaderOutput;
 import com.kronos.jobgraph.physic.operator.source.SourceReader;
 import com.kronos.jobgraph.physic.operator.source.SourceReaderContext;
 import com.kronos.runtime.io.DataInputStatus;
-
 import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 
-/**
- * @Author: jackila
- * @Date: 13:21 2022-9-17
- */
+/** */
 public class IteratorSourceReader implements SourceReader<IteratorSourceSplit> {
 
     /** The context for this reader, to communicate with the enumerator. */
@@ -45,7 +41,6 @@ public class IteratorSourceReader implements SourceReader<IteratorSourceSplit> {
         this.availability = new CompletableFuture<>();
         this.remainingSplits = new ArrayDeque<>();
     }
-
 
     @Override
     public void start() {

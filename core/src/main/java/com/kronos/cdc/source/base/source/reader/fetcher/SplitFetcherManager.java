@@ -18,14 +18,10 @@
 
 package com.kronos.cdc.source.base.source.reader.fetcher;
 
-
 import com.kronos.api.connector.source.SourceSplit;
 import com.kronos.cdc.source.base.source.reader.RecordsWithSplitIds;
 import com.kronos.cdc.source.base.source.reader.splitreader.SplitReader;
 import com.kronos.cdc.source.base.source.reader.synchronization.FutureCompletingBlockingQueue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -38,6 +34,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A class responsible for starting the {@link SplitFetcher} and manage the life cycles of them.

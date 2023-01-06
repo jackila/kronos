@@ -20,7 +20,6 @@ package com.kronos.cdc.source.base.source.reader.splitreader;
 
 import com.kronos.api.connector.source.SourceSplit;
 import com.kronos.cdc.source.base.source.reader.RecordsWithSplitIds;
-
 import java.io.IOException;
 
 /**

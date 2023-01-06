@@ -18,8 +18,7 @@
 package com.kronos.runtime.io;
 
 /**
- * It is an internal equivalent of {@link InputStatus} that provides
- * additional non public statuses.
+ * It is an internal equivalent of {@link InputStatus} that provides additional non public statuses.
  *
  * <p>An {@code InputStatus} indicates the availability of data from an asynchronous input. When
  * asking an asynchronous input to produce data, it returns this status to indicate how to proceed.

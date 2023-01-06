@@ -17,11 +17,11 @@
 
 package com.kronos.runtime.io;
 
-
 import com.kronos.jobgraph.physic.StreamRecord;
 import com.kronos.runtime.tasks.Output;
 
-public interface PushingAsyncDataInput<T> extends AvailabilityProvider{
+/** @param <T> */
+public interface PushingAsyncDataInput<T> extends AvailabilityProvider {
 
     /**
      * Pushes the next element to the output from current data input, and returns the input status
@@ -34,11 +34,10 @@ public interface PushingAsyncDataInput<T> extends AvailabilityProvider{
     /**
      * Basic data output interface used in emitting the next element from data input.
      *
-     *   The type encapsulated with the stream record.
+     * <p>The type encapsulated with the stream record.
      */
     interface DataOutput {
 
         void emitRecord(StreamRecord streamRecord) throws Exception;
-
     }
 }

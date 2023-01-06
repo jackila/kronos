@@ -1,11 +1,6 @@
 package com.kronos.jobgraph.physic.operator;
 
-import com.kronos.jobgraph.physic.StreamRecord;
-
-/**
- * @Author: jackila
- * @Date: 11:34 AM 2022-7-24
- */
+/** 2022-7-24 */
 public abstract class DataStreamSource<T> {
     private int operatorId;
     private String operatorName;
@@ -21,7 +16,5 @@ public abstract class DataStreamSource<T> {
 
     public abstract T fetchData();
 
-    public void cancel() {
-
-    }
+    public void cancel() {}
 }

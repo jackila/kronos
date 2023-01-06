@@ -18,9 +18,9 @@
 
 package com.kronos.cdc.source.base.source.reader.synchronization;
 
-import com.kronos.utils.FlinkRuntimeException;
+import static org.kronos.utils.Preconditions.checkArgument;
 
-import javax.annotation.concurrent.GuardedBy;
+import com.kronos.utils.FlinkRuntimeException;
 import java.lang.reflect.Field;
 import java.util.ArrayDeque;
 import java.util.Arrays;
@@ -31,9 +31,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
-import static org.kronos.utils.Preconditions.checkArgument;
-
+import javax.annotation.concurrent.GuardedBy;
 
 /**
  * A custom implementation of blocking queue in combination with a {@link CompletableFuture} that is

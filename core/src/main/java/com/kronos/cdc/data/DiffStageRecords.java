@@ -7,12 +7,7 @@ import com.kronos.jobgraph.table.ObjectPath;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Map;
-
-/**
- * @Author: jackila
- * @Date: 12:55 2022/12/18
- */
+/** */
 @Getter
 @Setter
 public class DiffStageRecords implements Record {
@@ -20,24 +15,21 @@ public class DiffStageRecords implements Record {
         this.source = source;
     }
 
-    public DiffStageRecords() {
-    }
+    public DiffStageRecords() {}
 
     private DtsRecord source;
     private ControllerRecord controller;
 
     private PrePareRecord prepareRecord;
 
-    /**
-     * use by backstage and sinker operator
-     */
+    /** use by backstage and sinker operator */
     private SinkerRecord sinkerRecord;
 
-    public RowKind getEventType(){
+    public RowKind getEventType() {
         return source.getType();
     }
-    public boolean doHandler(TPhysicalNode target,
-                             StageType type) {
+
+    public boolean doHandler(TPhysicalNode target, StageType type) {
         return controller.doHandle(target, type);
     }
 
@@ -49,8 +41,7 @@ public class DiffStageRecords implements Record {
         return source.getTarget();
     }
 
-    public DiffStageRecords partClone(ObjectPath target,
-                                      Map<String, FieldItem> item) {
+    public DiffStageRecords partClone(ObjectPath target, ItemValue item) {
         ControllerRecord controllerRecord = new ControllerRecord(controller);
         DiffStageRecords records = new DiffStageRecords();
         records.setController(controllerRecord);

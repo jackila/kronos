@@ -18,14 +18,13 @@
 
 package com.kronos.config;
 
-import com.kronos.config.description.Description;
+import static org.kronos.utils.Preconditions.checkNotNull;
 
+import com.kronos.config.description.Description;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import static org.kronos.utils.Preconditions.checkNotNull;
 
 /**
  * {@code ConfigOptions} are used to build a {@link ConfigOption}. The option is typically built in

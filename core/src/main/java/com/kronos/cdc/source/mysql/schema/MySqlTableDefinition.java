@@ -16,15 +16,14 @@
 
 package com.kronos.cdc.source.mysql.schema;
 
+import static com.kronos.cdc.source.mysql.source.utils.StatementUtils.quote;
+
 import com.kronos.cdc.source.mysql.source.utils.StatementUtils;
 import com.kronos.utils.CollectionUtil;
 import io.debezium.relational.TableId;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.kronos.cdc.source.mysql.source.utils.StatementUtils.quote;
+import org.apache.commons.lang3.StringUtils;
 
 /** used to generate table definition in ddl with "desc table". */
 public class MySqlTableDefinition {

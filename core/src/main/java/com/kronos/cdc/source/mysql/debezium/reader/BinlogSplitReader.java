@@ -34,10 +34,6 @@ import io.debezium.pipeline.DataChangeEvent;
 import io.debezium.pipeline.source.spi.ChangeEventSource;
 import io.debezium.relational.TableId;
 import io.debezium.relational.Tables;
-import org.apache.kafka.connect.source.SourceRecord;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -49,9 +45,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
-
-import static com.kronos.cdc.source.mysql.source.utils.RecordUtils.*;
-
+import org.apache.kafka.connect.source.SourceRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A Debezium binlog reader implementation that also support reads binlog and filter overlapping
@@ -137,7 +133,6 @@ public class BinlogSplitReader implements DebeziumReader<SourceRecords, MySqlSpl
         return currentBinlogSplit == null || !currentTaskRunning;
     }
 
-    
     @Override
     public Iterator<SourceRecords> pollSplitRecords() throws InterruptedException {
         checkReadException();
@@ -208,9 +203,9 @@ public class BinlogSplitReader implements DebeziumReader<SourceRecords, MySqlSpl
      * </pre>
      */
     private boolean shouldEmit(SourceRecord sourceRecord) {
-        if (isDataChangeRecord(sourceRecord)) {
-            TableId tableId = getTableId(sourceRecord);
-            BinlogOffset position = getBinlogPosition(sourceRecord);
+        if (RecordUtils.isDataChangeRecord(sourceRecord)) {
+            TableId tableId = RecordUtils.getTableId(sourceRecord);
+            BinlogOffset position = RecordUtils.getBinlogPosition(sourceRecord);
             if (hasEnterPureBinlogPhase(tableId, position)) {
                 return true;
             }
@@ -221,7 +216,7 @@ public class BinlogSplitReader implements DebeziumReader<SourceRecords, MySqlSpl
                                 statefulTaskContext.getDatabaseSchema().tableFor(tableId),
                                 statefulTaskContext.getSourceConfig().getChunkKeyColumn());
                 Object[] key =
-                        getSplitKey(
+                        RecordUtils.getSplitKey(
                                 splitKeyType,
                                 sourceRecord,
                                 statefulTaskContext.getSchemaNameAdjuster());

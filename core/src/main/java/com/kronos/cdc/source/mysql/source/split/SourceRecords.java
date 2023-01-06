@@ -16,11 +16,10 @@
 
 package com.kronos.cdc.source.mysql.source.split;
 
-import org.apache.kafka.connect.source.SourceRecord;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.apache.kafka.connect.source.SourceRecord;
 
 /** Data structure to describe a set of {@link SourceRecord}. */
 public final class SourceRecords {

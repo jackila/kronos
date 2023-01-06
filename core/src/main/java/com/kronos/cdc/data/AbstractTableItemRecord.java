@@ -1,44 +1,45 @@
 package com.kronos.cdc.data;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.kronos.cdc.data.source.DtsRecord;
 import com.kronos.cdc.data.source.RowImage;
 import com.kronos.jobgraph.logical.QueryCondition;
 import com.kronos.jobgraph.physic.operator.request.QueryResponse;
 import com.kronos.jobgraph.table.ObjectPath;
-
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-/**
- * @Author: jackila
- * @Date: 13:50 2022/12/19
- */
+/** abstract. */
 public abstract class AbstractTableItemRecord implements Record {
-    protected ConcurrentHashMap<ObjectPath, List<Map<String, FieldItem>>> items;
+    protected ConcurrentHashMap<ObjectPath, List<ItemValue>> items;
 
     public List<Object> find(QueryCondition condition) {
-        List<Map<String, FieldItem>> tableItems = items.getOrDefault(condition.getFindTarget(), Lists.newArrayList());
-        return tableItems.stream().map(t -> t.getOrDefault(condition.getFindField(), null)).collect(Collectors.toList());
+        ObjectPath findTarget = condition.getFindTarget();
+        if (items.containsKey(findTarget)) {
+            List<ItemValue> itemValues = items.get(findTarget);
+            return itemValues.stream()
+                    .map(t -> t.getColumnValues().getOrDefault(condition.getFindField(), null))
+                    .collect(Collectors.toList());
+        } else {
+            return Lists.newArrayList();
+        }
     }
 
     public void addItem(QueryResponse response) {
-        if(response == null){
+        if (response == null) {
             return;
         }
-        List<Map<String, FieldItem>> data = response.getData();
+        List<ItemValue> data = response.getData();
         if (data == null || data.isEmpty()) {
             return;
         }
         items.put(response.getTarget(), data);
     }
 
-    protected ConcurrentHashMap<ObjectPath, List<Map<String, FieldItem>>> init(DtsRecord record) {
-        ConcurrentHashMap<ObjectPath, List<Map<String, FieldItem>>> ret = new ConcurrentHashMap<>();
-        Map<String, FieldItem> data = Maps.newHashMap();
+    protected ConcurrentHashMap<ObjectPath, List<ItemValue>> init(DtsRecord record) {
+        ConcurrentHashMap<ObjectPath, List<ItemValue>> ret = new ConcurrentHashMap<>();
+        ItemValue data = null;
         switch (record.getType()) {
             case INSERT:
             case UPDATE:
@@ -51,11 +52,11 @@ public abstract class AbstractTableItemRecord implements Record {
         return ret;
     }
 
-    private Map<String, FieldItem> convert(RowImage row) {
+    private ItemValue convert(RowImage row) {
         return row.toFieldItemMap();
     }
 
-    public ConcurrentHashMap<ObjectPath, List<Map<String, FieldItem>>> getItems() {
+    public ConcurrentHashMap<ObjectPath, List<ItemValue>> getItems() {
         return items;
     }
 }

@@ -5,11 +5,9 @@ import com.kronos.jobgraph.physic.StreamRecord;
 import com.kronos.jobgraph.physic.operator.request.DeleteRequest;
 import com.kronos.jobgraph.physic.operator.request.InsertRequest;
 
-/**
- * @Author: jackila
- * @Date: 11:28 2022/12/20
- */
-public class ModifyWareHouseHandler extends AbstractTableTransformerHandler<StreamRecord<DiffStageRecords>> {
+/** */
+public class ModifyWareHouseHandler
+        extends AbstractTableTransformerHandler<StreamRecord<DiffStageRecords>> {
     private boolean local = true;
 
     @Override
@@ -18,22 +16,21 @@ public class ModifyWareHouseHandler extends AbstractTableTransformerHandler<Stre
             DiffStageRecords value = event.value();
             switch (value.getEventType()) {
                 case INSERT:
-                    //insert data
+                    // insert data
                     wareHouseManager.insert(InsertRequest.build(value.getSource()));
                     break;
                 case DELETE:
                     wareHouseManager.delete(DeleteRequest.build(value.getSource()));
-                    //delete data
+                    // delete data
                     break;
                 case UPDATE:
-                    //delete data
+                    // delete data
                     wareHouseManager.delete(DeleteRequest.build(value.getSource()));
-                    //insert data
+                    // insert data
                     wareHouseManager.insert(InsertRequest.build(value.getSource()));
                     break;
             }
         }
-
     }
 
     @Override

@@ -16,6 +16,9 @@
 
 package com.kronos.cdc.source.mysql.source.reader;
 
+import static com.kronos.cdc.source.mysql.debezium.DebeziumUtils.createBinaryClient;
+import static com.kronos.cdc.source.mysql.debezium.DebeziumUtils.createMySqlConnection;
+
 import com.github.shyiko.mysql.binlog.BinaryLogClient;
 import com.kronos.cdc.source.base.source.reader.RecordsWithSplitIds;
 import com.kronos.cdc.source.base.source.reader.splitreader.SplitReader;
@@ -27,22 +30,16 @@ import com.kronos.cdc.source.mysql.debezium.reader.SnapshotSplitReader;
 import com.kronos.cdc.source.mysql.debezium.task.context.StatefulTaskContext;
 import com.kronos.cdc.source.mysql.source.MySqlSource;
 import com.kronos.cdc.source.mysql.source.config.MySqlSourceConfig;
-
 import com.kronos.cdc.source.mysql.source.split.MySqlRecords;
 import com.kronos.cdc.source.mysql.source.split.MySqlSplit;
 import com.kronos.cdc.source.mysql.source.split.SourceRecords;
 import io.debezium.connector.mysql.MySqlConnection;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.Queue;
-
-import static com.kronos.cdc.source.mysql.debezium.DebeziumUtils.createBinaryClient;
-import static com.kronos.cdc.source.mysql.debezium.DebeziumUtils.createMySqlConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** The {@link SplitReader} implementation for the {@link MySqlSource}. */
 public class MySqlSplitReader implements SplitReader<SourceRecords, MySqlSplit> {
@@ -53,8 +50,8 @@ public class MySqlSplitReader implements SplitReader<SourceRecords, MySqlSplit> 
     private final int subtaskId;
     private final MySqlSourceReaderContext context;
 
-     private DebeziumReader<SourceRecords, MySqlSplit> currentReader;
-     private String currentSplitId;
+    private DebeziumReader<SourceRecords, MySqlSplit> currentReader;
+    private String currentSplitId;
 
     public MySqlSplitReader(
             MySqlSourceConfig sourceConfig, int subtaskId, MySqlSourceReaderContext context) {

@@ -10,14 +10,10 @@ import com.kronos.runtime.source.coordinator.SourceCoordinatorProvider;
 import com.kronos.runtime.taskexecutor.LocalTaskOperatorEventGateway;
 import com.kronos.runtime.taskmanager.RuntimeEnvironment;
 import com.kronos.runtime.tasks.SourceOperatorStreamTask;
-
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @Author: jackila
- * @Date: 21:56 2022-10-17
- */
+/** */
 public class ExecutionJobVertex {
     private String name = "";
     private int parallelism = 1;
@@ -28,27 +24,27 @@ public class ExecutionJobVertex {
     private final Source source;
     private final OperatorCoordinatorHolder coordinatorHolder;
 
-    public ExecutionJobVertex(Source source,
-                              JobMaster master,
-                              int operatorId) throws Exception {
+    public ExecutionJobVertex(Source source, JobMaster master, int operatorId) throws Exception {
 
         this.source = source;
-        OperatorCoordinator.Provider provider = getCoordinatorProvider("source Operator", operatorId);
-        this.coordinatorHolder = OperatorCoordinatorHolder.create(
-                provider, this);
+        OperatorCoordinator.Provider provider =
+                getCoordinatorProvider("source Operator", operatorId);
+        this.coordinatorHolder = OperatorCoordinatorHolder.create(provider, this);
 
-        for (int index = 0; index < parallelism; index++) {
-            Environment env = new RuntimeEnvironment(new LocalTaskOperatorEventGateway(master, index), source);
-            StreamTask task = new SourceOperatorStreamTask(index, env);
-            taskExecutions.put(index, new Execution(task));
+        for (int parallelismIndex = 0; parallelismIndex < parallelism; parallelismIndex++) {
+            Environment env =
+                    new RuntimeEnvironment(
+                            new LocalTaskOperatorEventGateway(master, parallelismIndex),
+                            source,
+                            operatorId);
+            StreamTask task = new SourceOperatorStreamTask(parallelismIndex, env);
+            taskExecutions.put(parallelismIndex, new Execution(task));
         }
     }
 
     public OperatorCoordinator.Provider getCoordinatorProvider(
-            String operatorName,
-            int operatorID) {
-        return new SourceCoordinatorProvider<>(
-                operatorName, operatorID, source);
+            String operatorName, int operatorID) {
+        return new SourceCoordinatorProvider<>(operatorName, operatorID, source);
     }
 
     public OperatorCoordinatorHolder coordinatorHolder() {
@@ -88,6 +84,6 @@ public class ExecutionJobVertex {
     }
 
     public Execution[] getAllExecution() {
-        return taskExecutions.values().toArray(new Execution[]{});
+        return taskExecutions.values().toArray(new Execution[] {});
     }
 }

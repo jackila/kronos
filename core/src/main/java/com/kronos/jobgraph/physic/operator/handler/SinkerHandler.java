@@ -8,18 +8,14 @@ import org.kronos.connector.SinkFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @Author: jackila
- * @Date: 19:17 2022-12-16
- */
+/** */
 public class SinkerHandler extends AbstractTableTransformerHandler<StreamRecord<DiffStageRecords>> {
 
     private Logger logger = LoggerFactory.getLogger(SinkerHandler.class);
 
     private SinkFunction<RecordSet> sinker;
 
-    public SinkerHandler() {
-    }
+    public SinkerHandler() {}
 
     @SneakyThrows
     public SinkerHandler(SinkFunction sink) {

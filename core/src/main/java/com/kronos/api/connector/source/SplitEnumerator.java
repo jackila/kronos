@@ -2,10 +2,7 @@ package com.kronos.api.connector.source;
 
 import java.io.IOException;
 
-/**
- * @Author: jackila
- * @Date: 8:29 AM 2022-8-08
- */
+/** */
 public interface SplitEnumerator<SplitT extends SourceSplit> {
     /**
      * Start the split enumerator.
@@ -13,7 +10,6 @@ public interface SplitEnumerator<SplitT extends SourceSplit> {
      * <p>The default behavior does nothing.
      */
     void start();
-
 
     /**
      * Handles the request for a split. This method is called when the reader with the given subtask
@@ -35,7 +31,6 @@ public interface SplitEnumerator<SplitT extends SourceSplit> {
      * connections.
      */
     void close() throws IOException;
-
 
     /**
      * Handles a custom source event from the source reader.

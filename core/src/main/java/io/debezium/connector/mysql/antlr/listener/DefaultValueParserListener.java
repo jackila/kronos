@@ -12,7 +12,6 @@ import io.debezium.ddl.parser.mysql.generated.MySqlParser.CurrentTimestampContex
 import io.debezium.ddl.parser.mysql.generated.MySqlParser.DefaultValueContext;
 import io.debezium.ddl.parser.mysql.generated.MySqlParserBaseListener;
 import io.debezium.relational.ColumnEditor;
-
 import java.util.concurrent.atomic.AtomicReference;
 
 /**

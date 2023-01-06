@@ -7,16 +7,14 @@ import com.kronos.jobgraph.physic.JoinPhysicalGraph;
 import com.kronos.jobgraph.physic.StreamRecord;
 import com.kronos.jobgraph.physic.TPhysicalNode;
 import com.kronos.jobgraph.table.ObjectPath;
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @Author: jackila
- * @Date: 19:17 2022-12-16
- */
-public class ControllerHandler extends AbstractTableTransformerHandler<StreamRecord<DiffStageRecords>> {
+/** */
+public class ControllerHandler
+        extends AbstractTableTransformerHandler<StreamRecord<DiffStageRecords>> {
 
     private final Map<ObjectPath, List<ObjectPath>> targetPath = Maps.newHashMap();
 
@@ -38,13 +36,13 @@ public class ControllerHandler extends AbstractTableTransformerHandler<StreamRec
         return true;
     }
 
-    private boolean travel(TPhysicalNode head,
-                           List<ObjectPath> path) {
+    private boolean travel(TPhysicalNode head, List<ObjectPath> path) {
         if (head == null) {
             return false;
         }
-
-        targetPath.put(head.getTarget(), new ArrayList<>(path));
+        ArrayList<ObjectPath> objectPaths = new ArrayList<>(path);
+        Collections.reverse(objectPaths);
+        targetPath.put(head.getTarget(), objectPaths);
         path.add(head.getTarget());
         if (head.getNodes() == null || head.getNodes().isEmpty()) {
             return true;

@@ -38,6 +38,7 @@ public interface Environment {
     /** Gets the gateway through which operators can send events to the operator coordinators. */
     TaskOperatorEventGateway getOperatorCoordinatorEventGateway();
 
-    public Source source();
+    int getOperatorId();
 
+    public Source source();
 }

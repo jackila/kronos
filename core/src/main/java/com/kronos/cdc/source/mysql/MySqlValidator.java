@@ -16,17 +16,16 @@
 
 package com.kronos.cdc.source.mysql;
 
+import static com.kronos.cdc.source.mysql.source.config.MySqlSourceOptions.SERVER_TIME_ZONE;
+import static io.debezium.config.Configuration.from;
 
+import com.kronos.cdc.debezium.Validator;
 import com.kronos.cdc.source.mysql.debezium.DebeziumUtils;
 import com.kronos.cdc.source.mysql.source.config.MySqlSourceConfig;
 import com.kronos.cdc.source.mysql.source.utils.ValidationException;
-import com.kronos.cdc.debezium.Validator;
-import com.kronos.utils.TableException;
 import com.kronos.utils.FlinkRuntimeException;
+import com.kronos.utils.TableException;
 import io.debezium.jdbc.JdbcConnection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -35,9 +34,8 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
-
-import static com.kronos.cdc.source.mysql.source.config.MySqlSourceOptions.SERVER_TIME_ZONE;
-import static io.debezium.config.Configuration.from;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The validator for MySql: it only cares about the version of the database is larger than or equal

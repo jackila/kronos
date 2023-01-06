@@ -5,9 +5,8 @@ import com.kronos.api.connector.source.SourceSplit;
 import com.kronos.api.connector.source.SplitEnumerator;
 import com.kronos.api.connector.source.SplitEnumeratorContext;
 import com.kronos.api.connector.source.SplitsAssignment;
-import com.kronos.runtime.io.InputStatus;
 import com.kronos.runtime.io.DataInputStatus;
-
+import com.kronos.runtime.io.InputStatus;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -15,10 +14,9 @@ import java.util.concurrent.CompletableFuture;
  * The interface for a source reader which is responsible for reading the records from the source
  * splits assigned by {@link SplitEnumerator}.
  *
- * @Author: jackila
- * @Date: 10:28 PM 2022-7-25
+ * <p>2022-7-25
  */
-public interface SourceReader<SplitT extends SourceSplit> extends AutoCloseable{
+public interface SourceReader<SplitT extends SourceSplit> extends AutoCloseable {
 
     void start();
 
@@ -75,5 +73,4 @@ public interface SourceReader<SplitT extends SourceSplit> extends AutoCloseable{
      * @param sourceEvent the event sent by the {@link SplitEnumerator}.
      */
     default void handleSourceEvents(SourceEvent sourceEvent) {}
-
 }

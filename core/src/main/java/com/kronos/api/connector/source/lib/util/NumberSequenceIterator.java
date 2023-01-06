@@ -18,7 +18,6 @@
 
 package com.kronos.api.connector.source.lib.util;
 
-
 import java.util.NoSuchElementException;
 
 /**

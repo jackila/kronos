@@ -1,34 +1,27 @@
 package com.kronos.jobgraph.raw;
 
-/**
- * @Author: jackila
- * @Date: 11:07 AM 2022-5-29
- */
+/** */
 public class TableInfo {
     private String tableName;
     private String database;
     private boolean mainTable;
 
-    public TableInfo(String tableName,
-                     String database,
-                     boolean mainTable) {
+    public TableInfo(String tableName, String database, boolean mainTable) {
         this.tableName = tableName;
         this.database = database;
         this.mainTable = mainTable;
     }
 
-    public TableInfo(String tableName,
-                     String database) {
+    public TableInfo(String tableName, String database) {
         this.tableName = tableName;
         this.database = database;
     }
 
-    public TableInfo() {
-    }
+    public TableInfo() {}
 
     public TableInfo(String table, boolean mainTable) {
         String[] split = table.split("\\.");
-        if(split.length != 2){
+        if (split.length != 2) {
             throw new RuntimeException("the table info should be database.tableName");
         }
         this.database = split[0].trim();
@@ -37,7 +30,7 @@ public class TableInfo {
     }
 
     public TableInfo(String table) {
-       this(table,false);
+        this(table, false);
     }
 
     public String getTableName() {
@@ -46,10 +39,10 @@ public class TableInfo {
 
     public void setTableName(String tableName) {
         String[] info = tableName.split("\\.");
-        if(info.length == 2){
+        if (info.length == 2) {
             this.database = info[0].trim();
             this.tableName = info[1].trim();
-        }else{
+        } else {
             this.tableName = tableName;
         }
     }
@@ -72,12 +65,18 @@ public class TableInfo {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         TableInfo tableInfo = (TableInfo) o;
 
-        if (!tableName.equals(tableInfo.tableName)) return false;
+        if (!tableName.equals(tableInfo.tableName)) {
+            return false;
+        }
         return database.equals(tableInfo.database);
     }
 

@@ -19,7 +19,6 @@ package com.kronos.cdc.source.base.config;
 import com.kronos.cdc.source.base.options.StartupOptions;
 import io.debezium.config.Configuration;
 import io.debezium.relational.RelationalDatabaseConnectorConfig;
-
 import java.time.Duration;
 import java.util.List;
 import java.util.Properties;

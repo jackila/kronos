@@ -4,19 +4,18 @@ import com.kronos.jobgraph.physic.operator.source.Source;
 import com.kronos.jobgraph.tasks.TaskOperatorEventGateway;
 import com.kronos.runtime.execution.Environment;
 
-/**
- * @Author: jackila
- * @Date: 23:06 2022-10-19
- */
+/** */
 public class RuntimeEnvironment implements Environment {
     private final TaskOperatorEventGateway operatorEventGateway;
     private final Source source;
+    private final int operatorId;
 
-    public RuntimeEnvironment(TaskOperatorEventGateway operatorEventGateway,Source source) {
+    public RuntimeEnvironment(
+            TaskOperatorEventGateway operatorEventGateway, Source source, int operatorId) {
         this.operatorEventGateway = operatorEventGateway;
         this.source = source;
+        this.operatorId = operatorId;
     }
-
 
     @Override
     public int getExecutionId() {
@@ -26,6 +25,11 @@ public class RuntimeEnvironment implements Environment {
     @Override
     public TaskOperatorEventGateway getOperatorCoordinatorEventGateway() {
         return operatorEventGateway;
+    }
+
+    @Override
+    public int getOperatorId() {
+        return operatorId;
     }
 
     public Source source() {

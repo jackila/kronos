@@ -16,6 +16,8 @@
 
 package com.kronos.cdc.source.mysql.debezium.task;
 
+import static com.kronos.cdc.source.mysql.debezium.DebeziumUtils.currentBinlogOffset;
+
 import com.kronos.cdc.source.mysql.debezium.dispatcher.EventDispatcherImpl;
 import com.kronos.cdc.source.mysql.debezium.dispatcher.SignalEventDispatcher;
 import com.kronos.cdc.source.mysql.debezium.reader.SnapshotSplitReader;
@@ -43,10 +45,6 @@ import io.debezium.util.Clock;
 import io.debezium.util.ColumnUtils;
 import io.debezium.util.Strings;
 import io.debezium.util.Threads;
-import org.apache.kafka.connect.errors.ConnectException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.UnsupportedEncodingException;
 import java.sql.Blob;
 import java.sql.PreparedStatement;
@@ -55,9 +53,9 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.time.Duration;
 import java.util.Calendar;
-
-import static com.kronos.cdc.source.mysql.debezium.DebeziumUtils.currentBinlogOffset;
-
+import org.apache.kafka.connect.errors.ConnectException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** Task to read snapshot split of table. */
 public class MySqlSnapshotSplitReadTask

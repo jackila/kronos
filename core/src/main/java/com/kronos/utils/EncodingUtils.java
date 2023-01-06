@@ -18,8 +18,9 @@
 
 package com.kronos.utils;
 
-import com.kronos.cdc.source.mysql.source.utils.ValidationException;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
+import com.kronos.cdc.source.mysql.source.utils.ValidationException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringWriter;
@@ -28,16 +29,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 /**
  * General utilities for string-encoding. This class is used to avoid additional dependencies to
  * other projects.
  */
 public abstract class EncodingUtils {
 
-    private static final Base64.Encoder BASE64_ENCODER =
-            Base64.getUrlEncoder().withoutPadding();
+    private static final Base64.Encoder BASE64_ENCODER = Base64.getUrlEncoder().withoutPadding();
 
     private static final Base64.Decoder BASE64_DECODER = Base64.getUrlDecoder();
 

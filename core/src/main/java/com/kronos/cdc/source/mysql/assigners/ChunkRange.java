@@ -16,10 +16,9 @@
 
 package com.kronos.cdc.source.mysql.assigners;
 
-import javax.annotation.Nullable;
 import java.util.Objects;
-
-import static org.kronos.utils.Preconditions.checkArgument;
+import javax.annotation.Nullable;
+import org.kronos.utils.Preconditions;
 
 /**
  * An internal structure describes a chunk range with a chunk start (inclusive) and chunk end
@@ -44,7 +43,7 @@ class ChunkRange {
 
     private ChunkRange(@Nullable Object chunkStart, @Nullable Object chunkEnd) {
         if (chunkStart != null || chunkEnd != null) {
-            checkArgument(
+            Preconditions.checkArgument(
                     !Objects.equals(chunkStart, chunkEnd),
                     "Chunk start %s shouldn't be equal to chunk end %s",
                     chunkStart,

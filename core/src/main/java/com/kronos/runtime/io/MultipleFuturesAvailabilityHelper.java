@@ -1,13 +1,10 @@
 package com.kronos.runtime.io;
 
-import java.util.concurrent.CompletableFuture;
-
 import static com.kronos.utils.FutureUtils.assertNoException;
 
-/**
- * @Author: jackila
- * @Date: 19:10 2022-12-13
- */
+import java.util.concurrent.CompletableFuture;
+
+/** */
 public class MultipleFuturesAvailabilityHelper {
 
     private final CompletableFuture<?>[] futuresToCombine;

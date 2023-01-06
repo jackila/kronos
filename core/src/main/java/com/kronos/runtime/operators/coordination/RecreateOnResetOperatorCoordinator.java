@@ -21,15 +21,13 @@ package com.kronos.runtime.operators.coordination;
 import com.kronos.annotation.ThrowingConsumer;
 import com.kronos.runtime.source.coordinator.OperatorCoordinator;
 import com.kronos.utils.ThrowingRunnable;
-import org.kronos.utils.Preconditions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.time.Duration;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.LinkedBlockingQueue;
-
+import org.kronos.utils.Preconditions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A class that will recreate a new {@link OperatorCoordinator} instance when reset to checkpoint.
@@ -84,19 +82,16 @@ public class RecreateOnResetOperatorCoordinator implements OperatorCoordinator {
 
     // ---------------------
 
-    
     public OperatorCoordinator getInternalCoordinator() throws Exception {
         waitForAllAsyncCallsFinish();
         return coordinator.internalCoordinator;
     }
 
-    
     QuiesceableContext getQuiesceableContext() throws Exception {
         waitForAllAsyncCallsFinish();
         return coordinator.internalQuiesceableContext;
     }
 
-    
     void waitForAllAsyncCallsFinish() throws Exception {
         CompletableFuture<Void> future = new CompletableFuture<>();
         coordinator.applyCall("waitForAllAsyncCallsFinish", c -> future.complete(null));
@@ -124,7 +119,6 @@ public class RecreateOnResetOperatorCoordinator implements OperatorCoordinator {
             return create(context, CLOSING_TIMEOUT_MS);
         }
 
-        
         protected OperatorCoordinator create(Context context, long closingTimeoutMs)
                 throws Exception {
             return new RecreateOnResetOperatorCoordinator(context, this, closingTimeoutMs);
@@ -143,7 +137,6 @@ public class RecreateOnResetOperatorCoordinator implements OperatorCoordinator {
      * coordinator context. After the quiescence, the "reading" methods will still work, but the
      * "writing" methods will become a no-op or fail immediately.
      */
-    
     static class QuiesceableContext implements OperatorCoordinator.Context {
         private final OperatorCoordinator.Context context;
         private volatile boolean quiesced;
@@ -167,7 +160,6 @@ public class RecreateOnResetOperatorCoordinator implements OperatorCoordinator {
             quiesced = true;
         }
 
-        
         boolean isQuiesced() {
             return quiesced;
         }
@@ -295,15 +287,13 @@ public class RecreateOnResetOperatorCoordinator implements OperatorCoordinator {
         }
 
         void resetAndStart(
-                final long checkpointId,
-                 final byte[] checkpointData,
-                final boolean started) {
+                final long checkpointId, final byte[] checkpointData, final boolean started) {
 
             if (failed || closed || internalCoordinator == null) {
                 return;
             }
             try {
-                //internalCoordinator.resetToCheckpoint(checkpointId, checkpointData);
+                // internalCoordinator.resetToCheckpoint(checkpointId, checkpointData);
                 // Start the new coordinator if this coordinator has been started before reset to
                 // the checkpoint.
                 if (started) {
@@ -319,7 +309,7 @@ public class RecreateOnResetOperatorCoordinator implements OperatorCoordinator {
             // Don't repeatedly fail the job.
             if (!failed) {
                 failed = true;
-                //internalQuiesceableContext.getContext().failJob(t);
+                // internalQuiesceableContext.getContext().failJob(t);
                 pendingCalls.clear();
             }
         }

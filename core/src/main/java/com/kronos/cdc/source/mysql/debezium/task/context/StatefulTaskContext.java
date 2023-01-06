@@ -16,6 +16,8 @@
 
 package com.kronos.cdc.source.mysql.debezium.task.context;
 
+import static com.kronos.cdc.source.mysql.debezium.task.context.MySqlEventMetadataProvider.BINLOG_FILENAME_OFFSET_KEY;
+
 import com.github.shyiko.mysql.binlog.BinaryLogClient;
 import com.kronos.cdc.source.mysql.debezium.DebeziumUtils;
 import com.kronos.cdc.source.mysql.debezium.EmbeddedFlinkDatabaseHistory;
@@ -24,7 +26,6 @@ import com.kronos.cdc.source.mysql.debezium.dispatcher.SignalEventDispatcher;
 import com.kronos.cdc.source.mysql.source.config.MySqlSourceConfig;
 import com.kronos.cdc.source.mysql.source.offset.BinlogOffset;
 import com.kronos.cdc.source.mysql.source.split.MySqlSplit;
-import io.debezium.connector.AbstractSourceInfo;
 import io.debezium.connector.base.ChangeEventQueue;
 import io.debezium.connector.mysql.GtidSet;
 import io.debezium.connector.mysql.MySqlChangeEventSourceMetricsFactory;
@@ -34,30 +35,19 @@ import io.debezium.connector.mysql.MySqlDatabaseSchema;
 import io.debezium.connector.mysql.MySqlOffsetContext;
 import io.debezium.connector.mysql.MySqlStreamingChangeEventSourceMetrics;
 import io.debezium.connector.mysql.MySqlTopicSelector;
-import io.debezium.data.Envelope;
 import io.debezium.pipeline.DataChangeEvent;
 import io.debezium.pipeline.ErrorHandler;
 import io.debezium.pipeline.EventDispatcher;
 import io.debezium.pipeline.metrics.SnapshotChangeEventSourceMetrics;
 import io.debezium.pipeline.metrics.StreamingChangeEventSourceMetrics;
-import io.debezium.pipeline.source.spi.EventMetadataProvider;
 import io.debezium.pipeline.spi.OffsetContext;
 import io.debezium.relational.TableId;
-import io.debezium.schema.DataCollectionId;
 import io.debezium.schema.TopicSelector;
 import io.debezium.util.Clock;
-import io.debezium.util.Collect;
 import io.debezium.util.SchemaNameAdjuster;
-import org.apache.kafka.connect.data.Struct;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.time.Instant;
-import java.util.List;
-import java.util.Map;
-
-import static com.kronos.cdc.source.mysql.debezium.task.context.StatefulTaskContext.MySqlEventMetadataProvider.BINLOG_FILENAME_OFFSET_KEY;
-
 
 /**
  * A stateful task context that contains entries the debezium mysql connector task required.
@@ -271,57 +261,6 @@ public class StatefulTaskContext {
             LOG.info("MySQL has the binlog file '{}' required by the connector", binlogFilename);
         }
         return found;
-    }
-
-    /** Copied from debezium for accessing here. */
-    public static class MySqlEventMetadataProvider implements EventMetadataProvider {
-        public static final String SERVER_ID_KEY = "server_id";
-
-        public static final String GTID_KEY = "gtid";
-        public static final String BINLOG_FILENAME_OFFSET_KEY = "file";
-        public static final String BINLOG_POSITION_OFFSET_KEY = "pos";
-        public static final String BINLOG_ROW_IN_EVENT_OFFSET_KEY = "row";
-        public static final String THREAD_KEY = "thread";
-        public static final String QUERY_KEY = "query";
-
-        @Override
-        public Instant getEventTimestamp(
-                DataCollectionId source, OffsetContext offset, Object key, Struct value) {
-            if (value == null) {
-                return null;
-            }
-            final Struct sourceInfo = value.getStruct(Envelope.FieldName.SOURCE);
-            if (source == null) {
-                return null;
-            }
-            final Long timestamp = sourceInfo.getInt64(AbstractSourceInfo.TIMESTAMP_KEY);
-            return timestamp == null ? null : Instant.ofEpochMilli(timestamp);
-        }
-
-        @Override
-        public Map<String, String> getEventSourcePosition(
-                DataCollectionId source, OffsetContext offset, Object key, Struct value) {
-            if (value == null) {
-                return null;
-            }
-            final Struct sourceInfo = value.getStruct(Envelope.FieldName.SOURCE);
-            if (source == null) {
-                return null;
-            }
-            return Collect.hashMapOf(
-                    BINLOG_FILENAME_OFFSET_KEY,
-                    sourceInfo.getString(BINLOG_FILENAME_OFFSET_KEY),
-                    BINLOG_POSITION_OFFSET_KEY,
-                    Long.toString(sourceInfo.getInt64(BINLOG_POSITION_OFFSET_KEY)),
-                    BINLOG_ROW_IN_EVENT_OFFSET_KEY,
-                    Integer.toString(sourceInfo.getInt32(BINLOG_ROW_IN_EVENT_OFFSET_KEY)));
-        }
-
-        @Override
-        public String getTransactionId(
-                DataCollectionId source, OffsetContext offset, Object key, Struct value) {
-            return ((MySqlOffsetContext) offset).getTransactionId();
-        }
     }
 
     public static Clock getClock() {

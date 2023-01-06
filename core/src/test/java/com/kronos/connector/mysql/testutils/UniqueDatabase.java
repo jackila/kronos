@@ -16,7 +16,7 @@
 
 package com.kronos.connector.mysql.testutils;
 
-import org.apache.commons.lang3.StringUtils;
+import static org.junit.Assert.assertNotNull;
 
 import java.net.URL;
 import java.nio.file.Files;
@@ -32,8 +32,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static org.junit.Assert.assertNotNull;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Create and populate a unique instance of a MySQL database for each run of JUnit test. A user of
@@ -47,7 +46,7 @@ import static org.junit.Assert.assertNotNull;
 public class UniqueDatabase {
 
     private static final String[] CREATE_DATABASE_DDL =
-            new String[]{"CREATE DATABASE $DBNAME$;", "USE $DBNAME$;"};
+            new String[] {"CREATE DATABASE $DBNAME$;", "USE $DBNAME$;"};
     private static final Pattern COMMENT_PATTERN = Pattern.compile("^(.*)--.*$");
 
     private final MySqlContainer container;
@@ -57,10 +56,7 @@ public class UniqueDatabase {
     private final String password;
 
     public UniqueDatabase(
-            MySqlContainer container,
-            String databaseName,
-            String username,
-            String password) {
+            MySqlContainer container, String databaseName, String username, String password) {
         this(
                 container,
                 databaseName,
@@ -90,7 +86,8 @@ public class UniqueDatabase {
             String username,
             String password) {
         this.container = container;
-        this.databaseName = StringUtils.isBlank(identifier) ? databaseName : databaseName + "_" + identifier;
+        this.databaseName =
+                StringUtils.isBlank(identifier) ? databaseName : databaseName + "_" + identifier;
         this.templateName = databaseName;
         this.username = username;
         this.password = password;
@@ -116,31 +113,27 @@ public class UniqueDatabase {
         return password;
     }
 
-    /**
-     * @return Fully qualified table name <code>&lt;databaseName&gt;.&lt;tableName&gt;</code>
-     */
+    /** @return Fully qualified table name <code>&lt;databaseName&gt;.&lt;tableName&gt;</code> */
     public String qualifiedTableName(final String tableName) {
         return String.format("%s.%s", databaseName, tableName);
     }
 
-    /**
-     * Creates the database and populates it with initialization SQL script.
-     */
+    /** Creates the database and populates it with initialization SQL script. */
     public void createAndInitialize() {
         final String ddlFile = String.format("ddl/%s.sql", templateName);
         final URL ddlTestFile = UniqueDatabase.class.getClassLoader().getResource(ddlFile);
         assertNotNull("Cannot locate " + ddlFile, ddlTestFile);
         try {
             try (Connection connection =
-                         DriverManager.getConnection(
-                                 container.getJdbcUrl(), username, password);
-                 Statement statement = connection.createStatement()) {
+                            DriverManager.getConnection(
+                                    container.getJdbcUrl(), username, password);
+                    Statement statement = connection.createStatement()) {
                 final List<String> statements =
                         Arrays.stream(
                                         Stream.concat(
                                                         Arrays.stream(CREATE_DATABASE_DDL),
                                                         Files.readAllLines(
-                                                                        Paths.get(ddlTestFile.toURI()))
+                                                                Paths.get(ddlTestFile.toURI()))
                                                                 .stream())
                                                 .map(String::trim)
                                                 .filter(x -> !x.startsWith("--") && !x.isEmpty())

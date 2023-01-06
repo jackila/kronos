@@ -16,6 +16,9 @@
 
 package com.kronos.cdc.source.mysql.source.enumerator;
 
+import static com.kronos.cdc.source.mysql.assigners.AssignerStatus.isAssigning;
+import static com.kronos.cdc.source.mysql.assigners.AssignerStatus.isAssigningFinished;
+import static com.kronos.cdc.source.mysql.assigners.AssignerStatus.isSuspended;
 
 import com.google.common.collect.Lists;
 import com.kronos.api.connector.source.SourceEvent;
@@ -38,9 +41,6 @@ import com.kronos.cdc.source.mysql.source.offset.BinlogOffset;
 import com.kronos.cdc.source.mysql.source.split.FinishedSnapshotSplitInfo;
 import com.kronos.cdc.source.mysql.source.split.MySqlSplit;
 import com.kronos.utils.FlinkRuntimeException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -48,11 +48,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
-
-import static com.kronos.cdc.source.mysql.assigners.AssignerStatus.*;
-
-;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A MySQL CDC source enumerator that enumerates receive the split request and assign the split to

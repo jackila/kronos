@@ -5,15 +5,10 @@ import com.lmax.disruptor.EventHandler;
 import org.junit.platform.commons.logging.Logger;
 import org.junit.platform.commons.logging.LoggerFactory;
 
-/**
- * just a interface but do nothing
- * @Author: jackila
- * @Date: 10:00 AM 2022-7-23
- */
+/** */
 public abstract class AbstractStreamOperator implements EventHandler<StreamRecord>, StreamOperator {
     /** The logger used by the operator class and its subclasses. */
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractStreamOperator.class);
-
 
     private String operatorName;
 

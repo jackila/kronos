@@ -3,8 +3,8 @@ package com.kronos.jobgraph.physic;
 import com.kronos.jobgraph.physic.disruptor.ProcessorInput;
 import com.kronos.jobgraph.physic.operator.db.DataWarehouseManager;
 import com.kronos.jobgraph.physic.operator.db.MemoryWarehouseManager;
-import com.kronos.jobgraph.physic.operator.handler.StageType;
 import com.kronos.jobgraph.physic.operator.handler.AbstractTableTransformerHandler;
+import com.kronos.jobgraph.physic.operator.handler.StageType;
 import com.kronos.jobgraph.table.ObjectPath;
 import com.kronos.mock.MockEmptyHandler;
 import com.kronos.mock.MockTPhysicalNode;
@@ -14,17 +14,13 @@ import com.kronos.mock.handler.MockMiddleStageTableHandler;
 import com.kronos.mock.handler.MockStageTableHandler;
 import com.lmax.disruptor.EventProcessor;
 import com.lmax.disruptor.RingBuffer;
+import java.util.List;
+import java.util.function.Function;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-import java.util.function.Function;
-
-/**
- * @Author: jackila
- * @Date: 17:10 2022-12-15
- */
+/** 2022-12-15 */
 class JoinOperatorTest {
 
     JoinGraphOperator operator;
@@ -112,7 +108,8 @@ class JoinOperatorTest {
         endNode = new MockTPhysicalNode(new ObjectPath(null, null));
         endNode.addParentNode(G).addParentNode(E).addParentNode(F).addParentNode(C);
 
-        ((MockTPhysicalNode) A).addMiddleStageFinishedTable(endNode.getCheckBackStageFinishedTable());
+        ((MockTPhysicalNode) A)
+                .addMiddleStageFinishedTable(endNode.getCheckBackStageFinishedTable());
         return A;
     }
 
@@ -120,22 +117,24 @@ class JoinOperatorTest {
     void appendTaskToOperator() {
         // create controller operator,mock is do nothing
         MockTPhysicalNode emptyNode = new MockTPhysicalNode(new ObjectPath());
-        ProcessorInput input = operator.createOperator(emptyNode, new ProcessorInput(), new MockEmptyHandler());
-        Function<StageType, AbstractTableTransformerHandler> chooseHandler = (type) -> {
-            MockStageTableHandler handler;
-            switch (type) {
-                case FRONT:
-                    handler = new MockFrontStageTableHandler();
-                    break;
-                case MIDDLE:
-                    handler = new MockMiddleStageTableHandler();
-                    break;
-                case BACK:
-                default:
-                    handler = new MockBackStageTableHandler();
-            }
-            return handler;
-        };
+        ProcessorInput input =
+                operator.createOperator(emptyNode, new ProcessorInput(), new MockEmptyHandler());
+        Function<StageType, AbstractTableTransformerHandler> chooseHandler =
+                (type) -> {
+                    MockStageTableHandler handler;
+                    switch (type) {
+                        case FRONT:
+                            handler = new MockFrontStageTableHandler();
+                            break;
+                        case MIDDLE:
+                            handler = new MockMiddleStageTableHandler();
+                            break;
+                        case BACK:
+                        default:
+                            handler = new MockBackStageTableHandler();
+                    }
+                    return handler;
+                };
         ProcessorInput nextInput = operator.appendTaskOperator(chooseHandler, input);
         operator.createOperator(endNode, nextInput, new MockStageTableHandler(endNode));
     }
@@ -144,12 +143,13 @@ class JoinOperatorTest {
     void reverseCreated() {
         // create controller operator,mock is do nothing
         MockTPhysicalNode emptyNode = new MockTPhysicalNode(new ObjectPath());
-        ProcessorInput input = operator.createOperator(emptyNode, new ProcessorInput(),
-                                                       new MockEmptyHandler());
-        ProcessorInput processorInput = operator.innerFrontCreated(graph, root, new MockFrontStageTableHandler(),
-                                                                   input);
+        ProcessorInput input =
+                operator.createOperator(emptyNode, new ProcessorInput(), new MockEmptyHandler());
+        ProcessorInput processorInput =
+                operator.innerFrontCreated(graph, root, new MockFrontStageTableHandler(), input);
         // create root
-        ProcessorInput rootInput = operator.createOperator(root, processorInput, new MockFrontStageTableHandler(root));
+        ProcessorInput rootInput =
+                operator.createOperator(root, processorInput, new MockFrontStageTableHandler(root));
         // check data operator
         operator.createOperator(endNode, rootInput, new MockFrontStageTableHandler(endNode));
     }
@@ -160,5 +160,4 @@ class JoinOperatorTest {
         ProcessorInput nextInput = operator.createBackOperator(new MockBackStageTableHandler());
         operator.createOperator(endNode, nextInput, new MockBackStageTableHandler(endNode));
     }
-
 }

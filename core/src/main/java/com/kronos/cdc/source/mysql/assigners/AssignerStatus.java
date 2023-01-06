@@ -19,8 +19,6 @@ package com.kronos.cdc.source.mysql.assigners;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static java.lang.String.format;
-
 /**
  * The state of split assigner finite state machine, tips: we use word status instead of word state
  * to avoid conflict with Flink state keyword. The assigner finite state machine goes this way.
@@ -123,21 +121,21 @@ public enum AssignerStatus {
 
     public AssignerStatus onFinish() {
         throw new IllegalStateException(
-                format(
+                String.format(
                         "Invalid call, assigner under %s state can not call onFinish()",
                         fromStatusCode(this.getStatusCode())));
     }
 
     public AssignerStatus suspend() {
         throw new IllegalStateException(
-                format(
+                String.format(
                         "Invalid call, assigner under %s state can not call suspend()",
                         fromStatusCode(this.getStatusCode())));
     }
 
     public AssignerStatus wakeup() {
         throw new IllegalStateException(
-                format(
+                String.format(
                         "Invalid call, assigner under %s state can not call wakeup()",
                         fromStatusCode(this.getStatusCode())));
     }
@@ -161,7 +159,7 @@ public enum AssignerStatus {
                 return NEWLY_ADDED_ASSIGNING_FINISHED;
             default:
                 throw new IllegalStateException(
-                        format(
+                        String.format(
                                 "Invalid status code %s,the valid code range is [0, 4]",
                                 statusCode));
         }

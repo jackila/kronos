@@ -18,7 +18,6 @@
 
 package com.kronos.types;
 
-
 /**
  * An enumeration of logical type families for clustering {@link LogicalTypeRoot}s into categories.
  *
@@ -26,7 +25,6 @@ package com.kronos.types;
  * However, it reflects just a subset of the evolving standard and contains some extensions
  * (indicated by {@code EXTENSION}).
  */
-
 public enum LogicalTypeFamily {
     PREDEFINED,
 

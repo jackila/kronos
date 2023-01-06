@@ -20,7 +20,6 @@ import com.kronos.cdc.source.mysql.assigners.state.PendingSplitsState;
 import com.kronos.cdc.source.mysql.source.offset.BinlogOffset;
 import com.kronos.cdc.source.mysql.source.split.FinishedSnapshotSplitInfo;
 import com.kronos.cdc.source.mysql.source.split.MySqlSplit;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;

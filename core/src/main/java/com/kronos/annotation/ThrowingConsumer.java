@@ -18,7 +18,6 @@
 
 package com.kronos.annotation;
 
-
 /**
  * This interface is basically Java's {@link java.util.function.Consumer} interface enhanced with
  * the ability to throw an exception.

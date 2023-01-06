@@ -17,7 +17,6 @@
 
 package com.kronos.runtime.io;
 
-
 import java.util.concurrent.CompletableFuture;
 
 /**

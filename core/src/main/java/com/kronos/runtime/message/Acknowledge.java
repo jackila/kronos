@@ -25,7 +25,7 @@ public class Acknowledge implements Serializable {
 
     private static final long serialVersionUID = 7808628311617273755L;
 
-    /** The singleton instance */
+    /** The singleton instance. */
     private static final Acknowledge INSTANCE = new Acknowledge();
 
     /**
@@ -39,7 +39,7 @@ public class Acknowledge implements Serializable {
 
     // ------------------------------------------------------------------------
 
-    /** Private constructor to prevent instantiation */
+    /** Private constructor to prevent instantiation. */
     private Acknowledge() {}
 
     // ------------------------------------------------------------------------

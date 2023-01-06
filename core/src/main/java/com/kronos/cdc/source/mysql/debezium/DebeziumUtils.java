@@ -16,6 +16,8 @@
 
 package com.kronos.cdc.source.mysql.debezium;
 
+import static com.kronos.cdc.source.mysql.source.utils.TableDiscoveryUtils.listTables;
+
 import com.github.shyiko.mysql.binlog.BinaryLogClient;
 import com.kronos.cdc.source.mysql.source.config.MySqlSourceConfig;
 import com.kronos.cdc.source.mysql.source.connection.JdbcConnectionFactory;
@@ -23,6 +25,7 @@ import com.kronos.cdc.source.mysql.source.offset.BinlogOffset;
 import com.kronos.utils.FlinkRuntimeException;
 import io.debezium.config.Configuration;
 import io.debezium.connector.mysql.MySqlConnection;
+import io.debezium.connector.mysql.MySqlConnection.MySqlConnectionConfiguration;
 import io.debezium.connector.mysql.MySqlConnectorConfig;
 import io.debezium.connector.mysql.MySqlDatabaseSchema;
 import io.debezium.connector.mysql.MySqlSystemVariables;
@@ -34,16 +37,13 @@ import io.debezium.jdbc.TemporalPrecisionMode;
 import io.debezium.relational.TableId;
 import io.debezium.schema.TopicSelector;
 import io.debezium.util.SchemaNameAdjuster;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
-import static com.kronos.cdc.source.mysql.source.utils.TableDiscoveryUtils.listTables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** Utilities related to Debezium. */
 public class DebeziumUtils {
@@ -75,7 +75,7 @@ public class DebeziumUtils {
     public static MySqlConnection createMySqlConnection(
             Configuration dbzConfiguration, Properties jdbcProperties) {
         return new MySqlConnection(
-                new MySqlConnection.MySqlConnectionConfiguration(dbzConfiguration, jdbcProperties));
+                new MySqlConnectionConfiguration(dbzConfiguration, jdbcProperties));
     }
 
     /** Creates a new {@link BinaryLogClient} for consuming mysql binlog. */

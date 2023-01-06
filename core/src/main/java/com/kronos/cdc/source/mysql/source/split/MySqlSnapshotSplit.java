@@ -20,7 +20,6 @@ import com.kronos.cdc.source.mysql.source.offset.BinlogOffset;
 import com.kronos.types.RowType;
 import io.debezium.relational.TableId;
 import io.debezium.relational.history.TableChanges.TableChange;
-
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
@@ -32,12 +31,12 @@ public class MySqlSnapshotSplit extends MySqlSplit {
     private final RowType splitKeyType;
     private final Map<TableId, TableChange> tableSchemas;
 
-     private final Object[] splitStart;
-     private final Object[] splitEnd;
+    private final Object[] splitStart;
+    private final Object[] splitEnd;
     /** The high watermark is not null when the split read finished. */
-     private final BinlogOffset highWatermark;
+    private final BinlogOffset highWatermark;
 
-     transient byte[] serializedFormCache;
+    transient byte[] serializedFormCache;
 
     public MySqlSnapshotSplit(
             TableId tableId,
@@ -60,17 +59,14 @@ public class MySqlSnapshotSplit extends MySqlSplit {
         return tableId;
     }
 
-    
     public Object[] getSplitStart() {
         return splitStart;
     }
 
-    
     public Object[] getSplitEnd() {
         return splitEnd;
     }
 
-    
     public BinlogOffset getHighWatermark() {
         return highWatermark;
     }

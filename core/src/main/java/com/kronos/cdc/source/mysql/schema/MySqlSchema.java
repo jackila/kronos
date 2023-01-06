@@ -16,6 +16,9 @@
 
 package com.kronos.cdc.source.mysql.schema;
 
+import static com.kronos.cdc.source.mysql.debezium.DebeziumUtils.createMySqlDatabaseSchema;
+import static com.kronos.cdc.source.mysql.source.utils.StatementUtils.quote;
+
 import com.kronos.cdc.source.mysql.source.config.MySqlSourceConfig;
 import com.kronos.utils.FlinkRuntimeException;
 import io.debezium.connector.mysql.MySqlConnectorConfig;
@@ -25,17 +28,13 @@ import io.debezium.jdbc.JdbcConnection;
 import io.debezium.relational.TableId;
 import io.debezium.relational.history.TableChanges.TableChange;
 import io.debezium.schema.SchemaChangeEvent;
-import org.apache.commons.lang3.StringUtils;
-
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.kronos.cdc.source.mysql.debezium.DebeziumUtils.createMySqlDatabaseSchema;
-import static com.kronos.cdc.source.mysql.source.utils.StatementUtils.quote;
+import org.apache.commons.lang3.StringUtils;
 
 /** A component used to get schema by table path. */
 public class MySqlSchema {

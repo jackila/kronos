@@ -16,6 +16,10 @@
 
 package com.kronos.cdc.source.mysql.assigners;
 
+import static com.kronos.cdc.source.mysql.assigners.AssignerStatus.isAssigningFinished;
+import static com.kronos.cdc.source.mysql.assigners.AssignerStatus.isSuspended;
+import static com.kronos.cdc.source.mysql.debezium.DebeziumUtils.discoverCapturedTables;
+import static com.kronos.cdc.source.mysql.debezium.DebeziumUtils.openJdbcConnection;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.kronos.cdc.source.mysql.assigners.state.SnapshotPendingSplitsState;
@@ -32,11 +36,6 @@ import com.kronos.utils.FlinkRuntimeException;
 import io.debezium.jdbc.JdbcConnection;
 import io.debezium.relational.TableId;
 import io.debezium.relational.history.TableChanges;
-import org.kronos.utils.Preconditions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -50,12 +49,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.stream.Collectors;
-
-import static com.kronos.cdc.source.mysql.assigners.AssignerStatus.isAssigningFinished;
-import static com.kronos.cdc.source.mysql.assigners.AssignerStatus.isSuspended;
-import static com.kronos.cdc.source.mysql.debezium.DebeziumUtils.discoverCapturedTables;
-import static com.kronos.cdc.source.mysql.debezium.DebeziumUtils.openJdbcConnection;
-
+import javax.annotation.Nullable;
+import org.kronos.utils.Preconditions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A {@link MySqlSplitAssigner} that splits tables into small chunk splits based on primary key

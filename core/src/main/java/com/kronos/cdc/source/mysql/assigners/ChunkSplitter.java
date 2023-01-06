@@ -16,6 +16,14 @@
 
 package com.kronos.cdc.source.mysql.assigners;
 
+import static com.kronos.cdc.source.mysql.debezium.DebeziumUtils.openJdbcConnection;
+import static com.kronos.cdc.source.mysql.source.utils.ObjectUtils.doubleCompare;
+import static com.kronos.cdc.source.mysql.source.utils.StatementUtils.queryApproximateRowCnt;
+import static com.kronos.cdc.source.mysql.source.utils.StatementUtils.queryMin;
+import static com.kronos.cdc.source.mysql.source.utils.StatementUtils.queryMinMax;
+import static com.kronos.cdc.source.mysql.source.utils.StatementUtils.queryNextChunkMax;
+import static java.math.BigDecimal.ROUND_CEILING;
+
 import com.kronos.cdc.source.mysql.schema.MySqlSchema;
 import com.kronos.cdc.source.mysql.schema.MySqlTypeUtils;
 import com.kronos.cdc.source.mysql.source.config.MySqlSourceConfig;
@@ -30,9 +38,6 @@ import io.debezium.relational.Column;
 import io.debezium.relational.Table;
 import io.debezium.relational.TableId;
 import io.debezium.relational.history.TableChanges;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -42,11 +47,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
-import static com.kronos.cdc.source.mysql.debezium.DebeziumUtils.openJdbcConnection;
-import static com.kronos.cdc.source.mysql.source.utils.ObjectUtils.doubleCompare;
-import static com.kronos.cdc.source.mysql.source.utils.StatementUtils.*;
-import static java.math.BigDecimal.ROUND_CEILING;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The {@code ChunkSplitter}'s task is to split table into a set of chunks or called splits (i.e.

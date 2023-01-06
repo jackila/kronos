@@ -9,16 +9,15 @@ import com.kronos.jobgraph.raw.Sinker;
 import com.kronos.jobgraph.raw.TableInfo;
 import com.kronos.jobgraph.table.ObjectPath;
 import io.debezium.annotation.VisibleForTesting;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.List;
+import lombok.SneakyThrows;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
-import java.io.InputStream;
-import java.util.List;
-
-/**
- * @Author: jackila
- * @Date: 10:45 PM 2022-5-28
- */
+/** */
 public class JobConfiguration {
     private List<DataSource> dataSources;
     private List<TableInfo> tableInfos;
@@ -30,7 +29,10 @@ public class JobConfiguration {
                 .filter(t -> t.isMainTable())
                 .map(t -> new ObjectPath(t.getDatabase(), t.getTableName()))
                 .findAny()
-                .orElseThrow(() -> new RuntimeException("not config main table,the config need mainTable"));
+                .orElseThrow(
+                        () ->
+                                new RuntimeException(
+                                        "not config main table,the config need mainTable"));
     }
 
     public List<Tuple2<RelevanceInfo, RelevanceInfo>> getConnectRelation() {
@@ -60,15 +62,18 @@ public class JobConfiguration {
         }
         for (TableInfo tableInfo : tableInfos) {
             if (tableName.equalsIgnoreCase(tableInfo.getTableName())) {
-                return new RelevanceInfo(new ObjectPath(tableInfo.getDatabase(), tableName), column);
+                return new RelevanceInfo(
+                        new ObjectPath(tableInfo.getDatabase(), tableName), column);
             }
         }
-        throw new RuntimeException("the table " + table + " from relation can not find in tableInfo");
+        throw new RuntimeException(
+                "the table " + table + " from relation can not find in tableInfo");
     }
 
+    @SneakyThrows
     public static JobConfiguration load(String name) {
         Yaml yaml = new Yaml(new Constructor(JobConfiguration.class));
-        InputStream resourceAsStream = JobConfiguration.class.getClassLoader().getResourceAsStream(name);
+        InputStream resourceAsStream = new FileInputStream(new File(name));
         return yaml.load(resourceAsStream);
     }
 
@@ -104,11 +109,11 @@ public class JobConfiguration {
         this.sinker = sinker;
     }
 
-    public String sinkerPrimaryKey(){
+    public String sinkerPrimaryKey() {
         return this.sinker.getId();
     }
 
-    public List<Mapper> sinkerMapper(){
+    public List<Mapper> sinkerMapper() {
         return this.sinker.getMapping();
     }
 }

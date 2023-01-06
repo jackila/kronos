@@ -1,19 +1,15 @@
 package com.kronos.jobgraph.table;
 
 import com.google.common.annotations.VisibleForTesting;
-
 import java.util.Objects;
 
-/**
- * @Author: jackila
- * @Date: 7:20 PM 2022-6-23
- */
+/** */
 public class ObjectPath {
     private String databaseName;
     private String objectName;
 
     public ObjectPath(String databaseName, String objectName) {
-        //todo check database objectname not null
+        // todo check database objectname not null
         this.databaseName = databaseName;
         this.objectName = objectName;
     }
@@ -24,8 +20,7 @@ public class ObjectPath {
         this.objectName = name;
     }
 
-    public ObjectPath() {
-    }
+    public ObjectPath() {}
 
     public String getDatabaseName() {
         return databaseName;
@@ -37,8 +32,12 @@ public class ObjectPath {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ObjectPath that = (ObjectPath) o;
         return databaseName.equals(that.databaseName) && objectName.equals(that.objectName);
     }
@@ -50,10 +49,10 @@ public class ObjectPath {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("ObjectPath{");
-        sb.append("databaseName='").append(databaseName).append('\'');
-        sb.append(", objectName='").append(objectName).append('\'');
-        sb.append('}');
+        final StringBuffer sb = new StringBuffer();
+        sb.append(databaseName);
+        sb.append(".");
+        sb.append(objectName);
         return sb.toString();
     }
 }

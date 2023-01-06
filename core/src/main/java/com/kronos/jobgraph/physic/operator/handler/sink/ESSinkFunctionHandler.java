@@ -1,34 +1,42 @@
 package com.kronos.jobgraph.physic.operator.handler.sink;
 
 import com.kronos.cdc.data.ControllerRecord;
+import com.kronos.cdc.data.ItemValue;
 import com.kronos.cdc.data.sink.RecordSet;
 import com.kronos.cdc.data.sink.es.Column2FieldInfo;
 import com.kronos.jobgraph.physic.JoinPhysicalGraph;
 import com.kronos.jobgraph.physic.TPhysicalNode;
+import com.kronos.jobgraph.table.ObjectPath;
 import com.kronos.jobgraph.table.database.ElasticsearchCatalogDatabase;
 import com.kronos.utils.EsUtils;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.elasticsearch.action.ActionRequest;
 import org.elasticsearch.client.Requests;
 import org.kronos.base.ElasticsearchSinkFunction;
 import org.kronos.base.RequestIndexer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.Date;
-import java.util.Map;
-
-/**
- * @Author: jackila
- * @Date: 22:01 2022/12/26
- */
+/** */
 public class ESSinkFunctionHandler implements ElasticsearchSinkFunction<RecordSet> {
     private ElasticsearchCatalogDatabase configureInfo;
     private JoinPhysicalGraph graph;
-
     private Column2FieldInfo esFieldInfo;
-
     private String esPrimaryKey;
+    private static Logger logger = LoggerFactory.getLogger(ESSinkFunctionHandler.class);
 
-    public ESSinkFunctionHandler(ElasticsearchCatalogDatabase configureInfo,
-                                 JoinPhysicalGraph graph) {
+    public static final ThreadLocal<ConcurrentHashMap<ObjectPath, List<ItemValue>>>
+            LOCAL_REQUEST_DATA;
+
+    static {
+        LOCAL_REQUEST_DATA = new ThreadLocal();
+    }
+
+    public ESSinkFunctionHandler(
+            ElasticsearchCatalogDatabase configureInfo, JoinPhysicalGraph graph) {
 
         this.configureInfo = configureInfo;
         this.graph = graph;
@@ -37,13 +45,18 @@ public class ESSinkFunctionHandler implements ElasticsearchSinkFunction<RecordSe
     }
 
     @Override
-    public void process(RecordSet element,
-                        RequestIndexer indexer) {
+    public void process(RecordSet element, RequestIndexer indexer) {
 
-        ActionRequest actionRequest = createIndexRequest(element);
-
-        if (actionRequest != null) {
-            indexer.add(actionRequest);
+        try {
+            LOCAL_REQUEST_DATA.set(element.getItems());
+            ActionRequest actionRequest = createIndexRequest(element);
+            if (actionRequest != null) {
+                indexer.add(actionRequest);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            LOCAL_REQUEST_DATA.remove();
         }
     }
 
@@ -53,22 +66,38 @@ public class ESSinkFunctionHandler implements ElasticsearchSinkFunction<RecordSe
     }
 
     private ActionRequest createUpsertRequest(RecordSet element) {
-        Map sinkVal = EsUtils.buildTrunkJsonMap(element.getItems(), esFieldInfo);
+        Object id = getRequestId(element);
+        Map sinkVal = EsUtils.buildTrunkJsonMap(esFieldInfo);
 
-        if (!sinkVal.isEmpty()) {
+        if (!sinkVal.isEmpty() && id != null) {
             sinkVal.put("upsertTime", new Date());
-            String id = String.valueOf(sinkVal.get(esPrimaryKey));
-            return Requests.indexRequest().index(configureInfo.getIndex()).type("_doc").id(id).source(sinkVal);
+            return Requests.indexRequest()
+                    .index(configureInfo.getIndex())
+                    .type("_doc")
+                    .id(String.valueOf(id))
+                    .source(sinkVal);
         }
         return null;
     }
 
+    private Object getRequestId(RecordSet element) {
+        Object id = element.getPrimaryKey().getValue();
+        if (id == null) {
+            logger.error("the element can not find primary key ,and skip it {}", element);
+        }
+        return id;
+    }
+
     private ActionRequest createDeleteRequest(RecordSet element) {
+
+        Object requestId = getRequestId(element);
+        if (requestId != null) {
+            return Requests.deleteRequest(configureInfo.getIndex()).id(String.valueOf(requestId));
+        }
         return null;
     }
 
-    private boolean isMasterDeleted(ControllerRecord controller,
-                                    TPhysicalNode root) {
+    private boolean isMasterDeleted(ControllerRecord controller, TPhysicalNode root) {
         return controller.isMasterTableDeleteOperation(root);
     }
 }

@@ -18,9 +18,8 @@
 
 package org.kronos.base;
 
-import org.elasticsearch.action.ActionRequest;
-
 import java.io.IOException;
+import org.elasticsearch.action.ActionRequest;
 
 /**
  * Creates multiple {@link ActionRequest ActionRequests} from an element in a stream.
@@ -71,5 +70,5 @@ public interface ElasticsearchSinkFunction<T> {
      * @param element incoming element to process
      * @param indexer request indexer that {@code ActionRequest} should be added to
      */
-    void process(T element,  RequestIndexer indexer);
+    void process(T element, RequestIndexer indexer);
 }

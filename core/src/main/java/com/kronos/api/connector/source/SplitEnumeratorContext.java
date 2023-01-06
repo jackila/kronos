@@ -8,15 +8,11 @@ package com.kronos.api.connector.source;
  *
  * @param <SplitT> the type of the splits.
  */
-
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
 
-/**
- * @Author: jackila
- * @Date: 11:35 2022-10-15
- */
+/** */
 public interface SplitEnumeratorContext<SplitT extends SourceSplit> {
     /**
      * Send a source event to a source reader. The source reader is identified by its subtask id.

@@ -18,14 +18,13 @@
 
 package com.kronos.config;
 
-import com.kronos.config.description.Description;
+import static org.kronos.utils.Preconditions.checkNotNull;
 
+import com.kronos.config.description.Description;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static org.kronos.utils.Preconditions.checkNotNull;
 
 /**
  * A {@code ConfigOption} describes a configuration parameter. It encapsulates the configuration

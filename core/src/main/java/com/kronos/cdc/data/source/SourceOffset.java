@@ -1,13 +1,9 @@
 package com.kronos.cdc.data.source;
 
+import java.util.Map;
 import lombok.Getter;
 
-import java.util.Map;
-
-/**
- * @Author: jackila
- * @Date: 19:53 2022/12/17
- */
+/** */
 @Getter
 public class SourceOffset {
     private static final String FILE_LABEL = "file";

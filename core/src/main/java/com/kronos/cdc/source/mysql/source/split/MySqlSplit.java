@@ -19,7 +19,6 @@ package com.kronos.cdc.source.mysql.source.split;
 import com.kronos.api.connector.source.SourceSplit;
 import io.debezium.relational.TableId;
 import io.debezium.relational.history.TableChanges;
-
 import java.util.Map;
 import java.util.Objects;
 

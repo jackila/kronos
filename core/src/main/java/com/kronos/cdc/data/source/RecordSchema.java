@@ -1,20 +1,17 @@
 package com.kronos.cdc.data.source;
 
 import com.kronos.jobgraph.table.ObjectPath;
-import lombok.Getter;
-import lombok.Setter;
-import org.apache.kafka.connect.data.Schema;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.kafka.connect.data.Schema;
 
-/**
- * schema.
- */
+/** schema. */
 @Setter
 @Getter
 public class RecordSchema {
@@ -24,8 +21,7 @@ public class RecordSchema {
     private List<RecordField> recordFields;
     private Map<String, Integer> recordFieldIndex;
 
-    public RecordSchema(String databaseName,
-                        String tableName) {
+    public RecordSchema(String databaseName, String tableName) {
         this.databaseName = databaseName;
         this.tableName = tableName;
         this.target = new ObjectPath(databaseName, tableName);
@@ -63,8 +59,7 @@ public class RecordSchema {
         return this.getField(fieldName, true);
     }
 
-    public Optional<RecordField> getField(String fieldName,
-                                          boolean load) {
+    public Optional<RecordField> getField(String fieldName, boolean load) {
         Integer index = this.recordFieldIndex.get(fieldName);
         if (null == index) {
             return Optional.empty();

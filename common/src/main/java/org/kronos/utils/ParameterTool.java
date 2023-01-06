@@ -18,8 +18,6 @@
 
 package org.kronos.utils;
 
-import org.apache.commons.lang3.math.NumberUtils;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -36,6 +34,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
+import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  * This class provides simple utility methods for reading and parsing program arguments from

@@ -16,11 +16,10 @@
 
 package com.kronos.cdc.source.base.options;
 
-import java.io.Serializable;
-import java.util.Objects;
-
 import static org.kronos.utils.Preconditions.checkNotNull;
 
+import java.io.Serializable;
+import java.util.Objects;
 
 /** Flink CDC Connector startup options. */
 public final class StartupOptions implements Serializable {

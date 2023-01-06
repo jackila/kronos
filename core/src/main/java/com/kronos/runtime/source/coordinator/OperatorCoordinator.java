@@ -1,16 +1,11 @@
 package com.kronos.runtime.source.coordinator;
 
-import com.kronos.runtime.message.Acknowledge;
 import com.kronos.runtime.operators.coordination.OperatorEvent;
-
 import java.io.Serializable;
-import java.util.concurrent.CompletableFuture;
 
 /**
- * Operator coordinators are for example source and sink coordinators that discover and assign
- * work, or aggregate and commit metadata.
- * @Author: jackila
- * @Date: 01:07 2022-10-15
+ * Operator coordinators are for example source and sink coordinators that discover and assign work,
+ * or aggregate and commit metadata.
  */
 public interface OperatorCoordinator {
     /**
@@ -56,7 +51,6 @@ public interface OperatorCoordinator {
     interface Context {
         /** Gets the current parallelism with which this operator is executed. */
         int currentParallelism();
-
 
         int getOperatorId();
     }

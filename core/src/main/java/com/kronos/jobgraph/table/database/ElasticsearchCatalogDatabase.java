@@ -3,17 +3,13 @@ package com.kronos.jobgraph.table.database;
 import com.kronos.jobgraph.raw.Sinker;
 import com.kronos.jobgraph.table.DatabaseType;
 import com.kronos.jobgraph.table.ObjectPath;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Builder;
 import lombok.Data;
 import org.apache.http.HttpHost;
 
-import java.util.ArrayList;
-import java.util.List;
-
-/**
- * @Author: jackila
- * @Date: 15:24 2022/12/27
- */
+/** */
 @Data
 @Builder
 public class ElasticsearchCatalogDatabase extends CatalogDatabase {
@@ -33,17 +29,18 @@ public class ElasticsearchCatalogDatabase extends CatalogDatabase {
     private int backoffRetries = 3;
 
     public static CatalogDatabase build(Sinker sinker) {
-        ElasticsearchCatalogDatabase build = new ElasticsearchCatalogDatabaseBuilder()
-                .index(sinker.getIndex())
-                .id(sinker.getId())
-                .bulkAction(100)
-                .bulkSizeMb(0)
-                .bulkIntervalMs(200)
-                .backoffEnable(true)
-                .backoffType("CONSTANT")
-                .backoffDelay(200)
-                .backoffRetries(3)
-                .build();
+        ElasticsearchCatalogDatabase build =
+                new ElasticsearchCatalogDatabaseBuilder()
+                        .index(sinker.getIndex())
+                        .id(sinker.getId())
+                        .bulkAction(100)
+                        .bulkSizeMb(0)
+                        .bulkIntervalMs(200)
+                        .backoffEnable(true)
+                        .backoffType("CONSTANT")
+                        .backoffDelay(200)
+                        .backoffRetries(3)
+                        .build();
         build.setDatabaseType(DatabaseType.ES);
         build.setUsername(sinker.getUsername());
         build.setPassword(sinker.getPassword());

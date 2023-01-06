@@ -5,14 +5,10 @@ import com.kronos.jobgraph.raw.DataSource;
 import com.kronos.jobgraph.table.DatabaseType;
 import com.kronos.jobgraph.table.ObjectPath;
 import com.kronos.jobgraph.table.table.CatalogJDBCTable;
+import java.util.List;
 import lombok.Data;
 
-import java.util.List;
-
-/**
- * @Author: jackila
- * @Date: 15:25 2022/12/27
- */
+/** */
 @Data
 public class JDBCCatalogDatabase extends CatalogDatabase {
     private String database;
@@ -45,6 +41,9 @@ public class JDBCCatalogDatabase extends CatalogDatabase {
 
     @Override
     public boolean checkTable(String table) {
-        return tables.stream().filter(t -> table.equalsIgnoreCase(t.getTarget().getObjectName())).findAny().isPresent();
+        return tables.stream()
+                .filter(t -> table.equalsIgnoreCase(t.getTarget().getObjectName()))
+                .findAny()
+                .isPresent();
     }
 }

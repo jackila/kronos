@@ -16,9 +16,7 @@
 
 package com.kronos.cdc.source.mysql.source.event;
 
-
 import com.kronos.api.connector.source.SourceEvent;
-
 import java.util.List;
 
 /**

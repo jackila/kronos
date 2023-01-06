@@ -16,10 +16,8 @@
 
 package com.kronos.cdc.source.mysql.source.event;
 
-
 import com.kronos.api.connector.source.SourceEvent;
 import com.kronos.cdc.source.mysql.source.offset.BinlogOffset;
-
 import java.util.Map;
 
 /**

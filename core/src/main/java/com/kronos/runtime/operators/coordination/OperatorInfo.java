@@ -18,7 +18,6 @@
 
 package com.kronos.runtime.operators.coordination;
 
-
 import java.util.Collection;
 import java.util.stream.Collectors;
 

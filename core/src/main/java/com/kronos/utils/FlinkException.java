@@ -18,7 +18,6 @@
 
 package com.kronos.utils;
 
-
 /** Base class of all Flink-specific checked exceptions. */
 public class FlinkException extends Exception {
 

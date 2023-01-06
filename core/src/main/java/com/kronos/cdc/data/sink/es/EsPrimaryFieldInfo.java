@@ -6,22 +6,15 @@ import com.kronos.jobgraph.table.ObjectPath;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * @Author: jackila
- * @Date: 15:32 2020-10-10
- */
+/** */
 @Data
 @NoArgsConstructor
 public class EsPrimaryFieldInfo extends EsBasicFieldInfo {
 
-    /**
-     * 该字段数据的来源：字段
-     */
+    /** 该字段数据的来源：字段 */
     private String sourceField;
 
-    /**
-     * 如果type为object，那么该值存在数据
-     */
+    /** 如果type为object，那么该值存在数据 */
     private EsNestTableFieldInfo nestTable;
 
     public EsPrimaryFieldInfo(Mapper mapper) {
@@ -35,8 +28,11 @@ public class EsPrimaryFieldInfo extends EsBasicFieldInfo {
             this.setSourceTable(CatalogManager.getInstance().findObjectPathByTable(table));
             this.setSourceField(components[1]);
         } else {
-            throw new RuntimeException("the mapping field is illegal: " + source + " and it should contain table and " +
-                                               "field like table.field");
+            throw new RuntimeException(
+                    "the mapping field is illegal: "
+                            + source
+                            + " and it should contain table and "
+                            + "field like table.field");
         }
 
         this.setName(mapper.getField());

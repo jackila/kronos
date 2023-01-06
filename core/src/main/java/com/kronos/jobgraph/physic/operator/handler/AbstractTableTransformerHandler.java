@@ -11,10 +11,7 @@ import com.kronos.jobgraph.physic.operator.request.QueryResponse;
 import com.lmax.disruptor.EventHandler;
 import lombok.SneakyThrows;
 
-/**
- * @Author: jackila
- * @Date: 19:20 2022-12-15
- */
+/** */
 public abstract class AbstractTableTransformerHandler<S> implements EventHandler<S> {
     protected TPhysicalNode node;
     protected DataWarehouseManager wareHouseManager;
@@ -24,9 +21,7 @@ public abstract class AbstractTableTransformerHandler<S> implements EventHandler
     }
 
     @Override
-    public void onEvent(S event,
-                        long sequence,
-                        boolean endOfBatch) throws Exception {
+    public void onEvent(S event, long sequence, boolean endOfBatch) throws Exception {
         if (doHandler(event)) {
             catchEventChange(event);
         } else if (isChainHead(event)) {
@@ -39,24 +34,25 @@ public abstract class AbstractTableTransformerHandler<S> implements EventHandler
 
         QueryCondition condition = findQueryCondition(value);
         AbstractTableItemRecord record = getItemRecord(value);
+        boolean sourceTips = computeSourceTip();
 
-        QueryRequest request = QueryRequest.newInstance(record, condition, node.getTarget());
+        QueryRequest request =
+                QueryRequest.newInstance(record, condition, node.getTarget(), sourceTips);
         // request data item
         return wareHouseManager.select(request);
     }
 
-    protected void initChainHead(S event) {
-
+    protected boolean computeSourceTip() {
+        return true;
     }
+
+    protected void initChainHead(S event) {}
 
     protected boolean isChainHead(S event) {
         return false;
     }
 
-    public void catchEventChange(S event) {
-    }
-
-    ;
+    public void catchEventChange(S event) {}
 
     public QueryCondition findQueryCondition(DiffStageRecords value) {
         return null;

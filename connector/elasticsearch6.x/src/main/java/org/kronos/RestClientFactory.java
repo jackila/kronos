@@ -17,9 +17,8 @@
 
 package org.kronos;
 
-import org.elasticsearch.client.RestClientBuilder;
-
 import java.io.Serializable;
+import org.elasticsearch.client.RestClientBuilder;
 
 /**
  * A factory that is used to configure the {@link org.elasticsearch.client.RestHighLevelClient}

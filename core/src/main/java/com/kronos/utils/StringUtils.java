@@ -18,16 +18,14 @@
 
 package com.kronos.utils;
 
+import static org.kronos.utils.Preconditions.checkArgument;
+import static org.kronos.utils.Preconditions.checkNotNull;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
-
-import static org.kronos.utils.Preconditions.checkArgument;
-import static org.kronos.utils.Preconditions.checkNotNull;
-
+import javax.annotation.Nullable;
 
 /** Utility class to convert objects into strings in vice-versa. */
 public final class StringUtils {

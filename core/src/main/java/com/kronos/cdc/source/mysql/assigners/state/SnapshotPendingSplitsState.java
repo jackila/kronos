@@ -22,7 +22,6 @@ import com.kronos.cdc.source.mysql.source.reader.MySqlSplitReader;
 import com.kronos.cdc.source.mysql.source.split.MySqlSchemalessSnapshotSplit;
 import io.debezium.relational.TableId;
 import io.debezium.relational.history.TableChanges.TableChange;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;

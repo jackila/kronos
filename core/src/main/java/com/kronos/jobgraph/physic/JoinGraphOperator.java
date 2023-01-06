@@ -24,12 +24,6 @@ import com.lmax.disruptor.EventProcessor;
 import com.lmax.disruptor.FatalExceptionHandler;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.SequenceBarrier;
-import lombok.SneakyThrows;
-import org.apache.commons.lang3.StringUtils;
-import org.kronos.ElasticsearchSink;
-import org.kronos.base.ElasticsearchSinkBase;
-import org.kronos.connector.SinkFunction;
-
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -37,11 +31,13 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Function;
+import lombok.SneakyThrows;
+import org.apache.commons.lang3.StringUtils;
+import org.kronos.ElasticsearchSink;
+import org.kronos.base.ElasticsearchSinkBase;
+import org.kronos.connector.SinkFunction;
 
-/**
- * @Author: jackila
- * @Date: 16:53 2022-12-14
- */
+/** */
 public class JoinGraphOperator<T extends Record> {
     private RingBuffer<StreamRecord<DiffStageRecords>> sourceRingBuffer;
     private RingBuffer<StreamRecord<DiffStageRecords>> sinkerRingBuffer;
@@ -57,17 +53,18 @@ public class JoinGraphOperator<T extends Record> {
     private static final int CONTROLLER_PARALLEL = 1;
     private static final int SINKER_PARALLEL = 1;
 
-    public JoinGraphOperator(RingBuffer<StreamRecord<DiffStageRecords>> sourceRingBuffer,
-                             RingBuffer<StreamRecord<DiffStageRecords>> sinkerRingBuffer,
-                             JoinPhysicalGraph graph,
-                             DataWarehouseManager warehouseManager
-    ) {
+    public JoinGraphOperator(
+            RingBuffer<StreamRecord<DiffStageRecords>> sourceRingBuffer,
+            RingBuffer<StreamRecord<DiffStageRecords>> sinkerRingBuffer,
+            JoinPhysicalGraph graph,
+            DataWarehouseManager warehouseManager) {
         this.graph = graph;
         this.sourceRingBuffer = sourceRingBuffer;
         this.sinkerRingBuffer = sinkerRingBuffer;
         this.warehouseManager = warehouseManager;
         this.consumerRepository = new ArrayList<>();
-        this.catalogDatabase = (ElasticsearchCatalogDatabase)CatalogManager.getInstance().findSinkerCatalog();
+        this.catalogDatabase =
+                (ElasticsearchCatalogDatabase) CatalogManager.getInstance().findSinkerCatalog();
     }
 
     public void createOperator() {
@@ -76,56 +73,56 @@ public class JoinGraphOperator<T extends Record> {
         // filter operator
         // controller operator
         nextInput = appendControllerOperator(nextInput);
-        //join operator
+        // join operator
         nextInput = appendTaskOperator((type) -> chooseHandler(type), nextInput);
-        //end and add to queue(or sinker)
+        // end and add to queue(or sinker)
         SinkFunction sink = createSinkFunction();
-        appendSinkerOperator(nextInput,sink);
+        appendSinkerOperator(nextInput, sink);
     }
 
     private SinkFunction createSinkFunction() {
 
-
         // use a ElasticsearchSink.Builder to create an ElasticsearchSink
-        ElasticsearchSink.Builder<RecordSet> esSinkBuilder = new ElasticsearchSink.Builder<RecordSet>(
-                catalogDatabase.httpHosts(),
-                new ESSinkFunctionHandler(catalogDatabase,graph)
-        );
+        ElasticsearchSink.Builder<RecordSet> esSinkBuilder =
+                new ElasticsearchSink.Builder<RecordSet>(
+                        catalogDatabase.httpHosts(),
+                        new ESSinkFunctionHandler(catalogDatabase, graph));
 
-        esSinkBuilder.setRestClientFactory(new RestClientFactoryImpl(catalogDatabase.getUsername(),
-                                                                     catalogDatabase.getPassword()));
+        esSinkBuilder.setRestClientFactory(
+                new RestClientFactoryImpl(
+                        catalogDatabase.getUsername(), catalogDatabase.getPassword()));
 
-        // configuration for the bulk requests; this instructs the sink to emit after every element, otherwise they
+        // configuration for the bulk requests; this instructs the sink to emit after every element,
+        // otherwise they
         // would be buffered
-        if (catalogDatabase.getBulkAction()> 0) {
+        if (catalogDatabase.getBulkAction() > 0) {
             esSinkBuilder.setBulkFlushMaxActions(catalogDatabase.getBulkAction());
         }
 
-        if (catalogDatabase.getBulkSizeMb()> 0) {
+        if (catalogDatabase.getBulkSizeMb() > 0) {
             esSinkBuilder.setBulkFlushMaxSizeMb(catalogDatabase.getBulkSizeMb());
         }
 
-        if (catalogDatabase.getBulkIntervalMs()> 0) {
+        if (catalogDatabase.getBulkIntervalMs() > 0) {
             esSinkBuilder.setBulkFlushInterval(catalogDatabase.getBulkIntervalMs());
         }
 
-        /**
-         * 是否开启异常重试机制
-         */
+        /** 是否开启异常重试机制 */
         esSinkBuilder.setBulkFlushBackoff(catalogDatabase.isBackoffEnable());
 
         String backoffType = catalogDatabase.getBackoffType();
         if (StringUtils.equals("CONSTANT", backoffType) || StringUtils.isBlank(backoffType)) {
             esSinkBuilder.setBulkFlushBackoffType(ElasticsearchSinkBase.FlushBackoffType.CONSTANT);
         } else if (StringUtils.equals("EXPONENTIAL", backoffType)) {
-            esSinkBuilder.setBulkFlushBackoffType(ElasticsearchSinkBase.FlushBackoffType.EXPONENTIAL);
+            esSinkBuilder.setBulkFlushBackoffType(
+                    ElasticsearchSinkBase.FlushBackoffType.EXPONENTIAL);
         } else {
             throw new RuntimeException("backoff type not support this type:" + backoffType);
         }
         esSinkBuilder.setBulkFlushBackoffDelay(catalogDatabase.getBackoffDelay());
         esSinkBuilder.setBulkFlushBackoffRetries(catalogDatabase.getBackoffRetries());
 
-        //esSinkBuilder.setFailureHandler(new CustomActionRequestFailureHandler());
+        // esSinkBuilder.setFailureHandler(new CustomActionRequestFailureHandler());
 
         return esSinkBuilder.build();
     }
@@ -140,27 +137,26 @@ public class JoinGraphOperator<T extends Record> {
         return createOperator(nextInput, CONTROLLER_PARALLEL, handler);
     }
 
-    private ProcessorInput appendSinkerOperator(ProcessorInput nextInput,
-                                                SinkFunction sink) {
+    private ProcessorInput appendSinkerOperator(ProcessorInput nextInput, SinkFunction sink) {
         SinkerHandler handler = new SinkerHandler(sink);
         return createOperator(nextInput, SINKER_PARALLEL, handler, sinkerRingBuffer);
     }
 
-    public ProcessorInput appendTaskOperator(Function<StageType, AbstractTableTransformerHandler> chooseHandler,
-                                             ProcessorInput input) {
-        //font stage
+    public ProcessorInput appendTaskOperator(
+            Function<StageType, AbstractTableTransformerHandler> chooseHandler,
+            ProcessorInput input) {
+        // font stage
         ProcessorInput nextInput = createFontOperator(chooseHandler.apply(StageType.FRONT), input);
-        //middle stage
+        // middle stage
         createMiddleStage(graph.getRoot(), nextInput, chooseHandler.apply(StageType.MIDDLE));
-        //end stage
+        // end stage
         ProcessorInput chainEndInput = createBackOperator(chooseHandler.apply(StageType.BACK));
         return chainEndInput;
     }
 
     @SneakyThrows
-    private void createMiddleStage(TPhysicalNode root,
-                                   ProcessorInput input,
-                                   AbstractTableTransformerHandler handler) {
+    private void createMiddleStage(
+            TPhysicalNode root, ProcessorInput input, AbstractTableTransformerHandler handler) {
         handler.setNode(root);
         this.createOperator(root, input, handler, sourceRingBuffer);
     }
@@ -171,18 +167,19 @@ public class JoinGraphOperator<T extends Record> {
      * @param handler
      * @param input
      */
-    private ProcessorInput createFontOperator(AbstractTableTransformerHandler handler,
-                                              ProcessorInput input) {
+    private ProcessorInput createFontOperator(
+            AbstractTableTransformerHandler handler, ProcessorInput input) {
 
         return innerFrontCreated(graph, graph.getRoot(), handler, input);
     }
 
     @VisibleForTesting
     @SneakyThrows
-    public ProcessorInput innerFrontCreated(JoinPhysicalGraph graph,
-                                            TPhysicalNode node,
-                                            AbstractTableTransformerHandler handler,
-                                            ProcessorInput originInput) {
+    public ProcessorInput innerFrontCreated(
+            JoinPhysicalGraph graph,
+            TPhysicalNode node,
+            AbstractTableTransformerHandler handler,
+            ProcessorInput originInput) {
         if (node.getNodes() == null || node.getNodes().isEmpty()) {
             if (node == graph.getRoot()) {
                 return originInput;
@@ -216,9 +213,10 @@ public class JoinGraphOperator<T extends Record> {
         while (!stack.isEmpty()) {
             TPhysicalNode head = stack.poll();
             // default root is not init by this stage
-            ProcessorInput nextInput = head == root ? root.getOutput().convertTo() : createOperator(head, null,
-                                                                                                    handler.clone(head),
-                                                                                                    sinkerRingBuffer);
+            ProcessorInput nextInput =
+                    head == root
+                            ? root.getOutput().convertTo()
+                            : createOperator(head, null, handler.clone(head), sinkerRingBuffer);
             List<TPhysicalNode> childs = head.getNodes();
             if (childs == null || childs.size() == 0) {
                 sinkerInput.addSource(nextInput);
@@ -234,16 +232,16 @@ public class JoinGraphOperator<T extends Record> {
     }
 
     @VisibleForTesting
-    public ProcessorInput createOperator(TPhysicalNode head,
-                                         ProcessorInput input,
-                                         AbstractTableTransformerHandler handler) {
+    public ProcessorInput createOperator(
+            TPhysicalNode head, ProcessorInput input, AbstractTableTransformerHandler handler) {
         return createOperator(head, input, handler, null);
     }
 
-    private ProcessorInput createOperator(TPhysicalNode head,
-                                          ProcessorInput input,
-                                          AbstractTableTransformerHandler handler,
-                                          RingBuffer<StreamRecord<DiffStageRecords>> ring) {
+    private ProcessorInput createOperator(
+            TPhysicalNode head,
+            ProcessorInput input,
+            AbstractTableTransformerHandler handler,
+            RingBuffer<StreamRecord<DiffStageRecords>> ring) {
         if (ring == null) {
             ring = sourceRingBuffer;
         }
@@ -256,7 +254,8 @@ public class JoinGraphOperator<T extends Record> {
 
         SequenceBarrier barrier = ring.newBarrier(input.getSource());
         handler.setWareHouseManager(warehouseManager);
-        BatchEventProcessor<StreamRecord> processor = new BatchEventProcessor<>(ring, barrier, handler);
+        BatchEventProcessor<StreamRecord> processor =
+                new BatchEventProcessor<>(ring, barrier, handler);
         consumerRepository.add(processor);
         processor.setExceptionHandler(new FatalExceptionHandler());
         ProcessorOutput out = new ProcessorOutput(processor.getSequence());
@@ -268,18 +267,18 @@ public class JoinGraphOperator<T extends Record> {
         return out.convertTo();
     }
 
-    private ProcessorInput createOperator(ProcessorInput nextInput,
-                                          int parallel,
-                                          AbstractTableTransformerHandler handler,
-                                          RingBuffer<StreamRecord<DiffStageRecords>> ringBuffer
-    ) {
+    private ProcessorInput createOperator(
+            ProcessorInput nextInput,
+            int parallel,
+            AbstractTableTransformerHandler handler,
+            RingBuffer<StreamRecord<DiffStageRecords>> ringBuffer) {
         // 准备线程池
         ExecutorService executors = Executors.newFixedThreadPool(parallel);
 
         SequenceBarrier barrier = ringBuffer.newBarrier(nextInput.getSource());
         handler.setWareHouseManager(warehouseManager);
-        BatchEventProcessor<StreamRecord<DiffStageRecords>> processor = new BatchEventProcessor<>(ringBuffer,
-                                                                                                  barrier, handler);
+        BatchEventProcessor<StreamRecord<DiffStageRecords>> processor =
+                new BatchEventProcessor<>(ringBuffer, barrier, handler);
         processor.setExceptionHandler(new FatalExceptionHandler());
         consumerRepository.add(processor);
         ProcessorOutput out = new ProcessorOutput(processor.getSequence());
@@ -291,9 +290,8 @@ public class JoinGraphOperator<T extends Record> {
     }
 
     @SneakyThrows
-    private ProcessorInput createOperator(ProcessorInput nextInput,
-                                          int parallel,
-                                          AbstractTableTransformerHandler handler) {
+    private ProcessorInput createOperator(
+            ProcessorInput nextInput, int parallel, AbstractTableTransformerHandler handler) {
         return createOperator(nextInput, parallel, handler, sourceRingBuffer);
     }
 

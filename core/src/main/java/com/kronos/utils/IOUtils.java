@@ -18,8 +18,7 @@
 
 package com.kronos.utils;
 
-import org.kronos.utils.ExceptionUtils;
-import org.slf4j.Logger;
+import static java.util.Arrays.asList;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,8 +27,8 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import static java.util.Arrays.asList;
+import org.kronos.utils.ExceptionUtils;
+import org.slf4j.Logger;
 
 /** An utility class for I/O related functionality. */
 public final class IOUtils {

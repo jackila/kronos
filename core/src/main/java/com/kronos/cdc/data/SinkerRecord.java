@@ -4,14 +4,9 @@ import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.kronos.cdc.data.source.DtsRecord;
 import com.kronos.jobgraph.table.ObjectPath;
-
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * @Author: jackila
- * @Date: 16:11 2022/12/19
- */
+/** */
 public class SinkerRecord extends AbstractTableItemRecord {
     public SinkerRecord(DtsRecord record) {
         this.items = init(record);
@@ -21,8 +16,7 @@ public class SinkerRecord extends AbstractTableItemRecord {
         return new SinkerRecord(record);
     }
 
-    public SinkerRecord(ObjectPath target,
-                        Map<String, FieldItem> item) {
+    public SinkerRecord(ObjectPath target, ItemValue item) {
         if (items == null) {
             items = new ConcurrentHashMap<>();
         }

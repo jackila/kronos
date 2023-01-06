@@ -8,26 +8,20 @@ import com.kronos.cdc.data.sink.es.EsPrimaryFieldInfo;
 import com.kronos.jobgraph.raw.Mapper;
 import com.kronos.jobgraph.table.CatalogManager;
 import com.kronos.jobgraph.table.ObjectPath;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 import java.util.Set;
+import org.apache.commons.lang3.StringUtils;
 
-/**
- * @Author: jackila
- * @Date: 18:43 2022-12-14
- */
+/** */
 public class JoinPhysicalGraph {
 
     private TPhysicalNode root;
     private String primaryKeyFields;
     private Column2FieldInfo mapping;
 
-    public JoinPhysicalGraph(TPhysicalNode root,
-                             String sinkerId,
-                             List<Mapper> mappers) {
+    public JoinPhysicalGraph(TPhysicalNode root, String sinkerId, List<Mapper> mappers) {
         this.root = root;
         if (StringUtils.isNotBlank(sinkerId)) {
             String[] split = sinkerId.split("\\.");
@@ -51,7 +45,8 @@ public class JoinPhysicalGraph {
                 EsPrimaryFieldInfo field = new EsPrimaryFieldInfo(mapper);
                 mappingResult.add(field);
             } else {
-                ObjectPath target = CatalogManager.getInstance().findObjectPathByTable(mapper.getSource());
+                ObjectPath target =
+                        CatalogManager.getInstance().findObjectPathByTable(mapper.getSource());
 
                 EsPrimaryFieldInfo field = new EsPrimaryFieldInfo();
                 field.setName(mapper.getField());

@@ -1,14 +1,7 @@
 package com.kronos.jobgraph.physic.operator.source;
 
-/**
- *
- * it contain more other method other collect
- * such as watermark and status
- * @Author: jackila
- * @Date: 10:18 AM 2022-8-03
- */
+/** it contain more other method other collect such as watermark and status 2022-8-03 */
 public interface ReaderOutput<T> extends SourceOutput<T> {
-
 
     /**
      * Creates a {@code SourceOutput} for a specific Source Split. Use these outputs if you want to

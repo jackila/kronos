@@ -16,19 +16,17 @@
 
 package com.kronos.cdc.source.mysql.source.utils;
 
+import static com.kronos.cdc.source.mysql.source.utils.RecordUtils.rowToArray;
+
 import com.kronos.types.RowType;
 import io.debezium.jdbc.JdbcConnection;
 import io.debezium.relational.TableId;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static com.kronos.cdc.source.mysql.source.utils.RecordUtils.rowToArray;
-
 
 /** Utils to prepare SQL statement. */
 public class StatementUtils {

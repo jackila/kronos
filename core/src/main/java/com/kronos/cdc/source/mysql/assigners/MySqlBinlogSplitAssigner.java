@@ -16,6 +16,8 @@
 
 package com.kronos.cdc.source.mysql.assigners;
 
+import static com.kronos.cdc.source.mysql.debezium.DebeziumUtils.currentBinlogOffset;
+
 import com.kronos.cdc.source.mysql.assigners.state.BinlogPendingSplitsState;
 import com.kronos.cdc.source.mysql.assigners.state.PendingSplitsState;
 import com.kronos.cdc.source.mysql.debezium.DebeziumUtils;
@@ -26,9 +28,6 @@ import com.kronos.cdc.source.mysql.source.split.MySqlBinlogSplit;
 import com.kronos.cdc.source.mysql.source.split.MySqlSplit;
 import com.kronos.utils.FlinkRuntimeException;
 import io.debezium.jdbc.JdbcConnection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -36,8 +35,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import static com.kronos.cdc.source.mysql.debezium.DebeziumUtils.currentBinlogOffset;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** A {@link MySqlSplitAssigner} which only read binlog from current binlog position. */
 public class MySqlBinlogSplitAssigner implements MySqlSplitAssigner {

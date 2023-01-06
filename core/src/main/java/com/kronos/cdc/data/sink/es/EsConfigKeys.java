@@ -18,13 +18,7 @@
 
 package com.kronos.cdc.data.sink.es;
 
-/**
- * Configuration Keys for EsDataWriter and EsDataReader
- * <p>
- * Company: www.dtstack.com
- *
- * @author huyifan.zju@163.com
- */
+/** Configuration Keys for EsDataWriter and EsDataReader */
 public class EsConfigKeys {
 
     public static final String KEY_ADDRESS = "address";
@@ -100,5 +94,4 @@ public class EsConfigKeys {
     public static final String ONE_TO_ONE = "OneToOne";
 
     public static final String ONE_TO_MANY = "OneToMany";
-
 }

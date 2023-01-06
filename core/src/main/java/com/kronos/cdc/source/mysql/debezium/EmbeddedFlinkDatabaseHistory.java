@@ -27,7 +27,6 @@ import io.debezium.relational.history.HistoryRecord;
 import io.debezium.relational.history.HistoryRecordComparator;
 import io.debezium.relational.history.TableChanges;
 import io.debezium.relational.history.TableChanges.TableChange;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;

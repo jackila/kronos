@@ -1,15 +1,11 @@
 package com.kronos.jobgraph.physic;
 
+import java.util.List;
 import lombok.Builder;
 import lombok.Data;
 import org.apache.http.HttpHost;
 
-import java.util.List;
-
-/**
- * @Author: jackila
- * @Date: 19:36 2020-10-20
- */
+/** */
 @Data
 @Builder
 public class ConfigureInfo {

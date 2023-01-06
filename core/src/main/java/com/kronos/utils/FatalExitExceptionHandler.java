@@ -43,7 +43,7 @@ public final class FatalExitExceptionHandler implements Thread.UncaughtException
                     t.getName(),
                     e);
         } finally {
-            //FlinkSecurityManager.forceProcessExit(EXIT_CODE);
+            // FlinkSecurityManager.forceProcessExit(EXIT_CODE);
             System.setSecurityManager(null);
             System.exit(EXIT_CODE);
         }

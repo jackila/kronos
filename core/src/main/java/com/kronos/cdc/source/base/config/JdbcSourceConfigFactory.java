@@ -19,7 +19,6 @@ package com.kronos.cdc.source.base.config;
 import com.kronos.cdc.source.base.options.JdbcSourceOptions;
 import com.kronos.cdc.source.base.options.SourceOptions;
 import com.kronos.cdc.source.base.options.StartupOptions;
-
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;

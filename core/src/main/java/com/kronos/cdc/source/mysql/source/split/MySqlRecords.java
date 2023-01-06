@@ -17,7 +17,6 @@
 package com.kronos.cdc.source.mysql.source.split;
 
 import com.kronos.cdc.source.base.source.reader.RecordsWithSplitIds;
-
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
@@ -27,21 +26,18 @@ import java.util.Set;
  */
 public final class MySqlRecords implements RecordsWithSplitIds<SourceRecords> {
 
-     private String splitId;
-     private Iterator<SourceRecords> recordsForCurrentSplit;
-     private final Iterator<SourceRecords> recordsForSplit;
+    private String splitId;
+    private Iterator<SourceRecords> recordsForCurrentSplit;
+    private final Iterator<SourceRecords> recordsForSplit;
     private final Set<String> finishedSnapshotSplits;
 
     public MySqlRecords(
-             String splitId,
-             Iterator recordsForSplit,
-            Set<String> finishedSnapshotSplits) {
+            String splitId, Iterator recordsForSplit, Set<String> finishedSnapshotSplits) {
         this.splitId = splitId;
         this.recordsForSplit = recordsForSplit;
         this.finishedSnapshotSplits = finishedSnapshotSplits;
     }
 
-    
     @Override
     public String nextSplit() {
         // move the split one (from current value to null)
@@ -53,7 +49,6 @@ public final class MySqlRecords implements RecordsWithSplitIds<SourceRecords> {
         return nextSplit;
     }
 
-    
     @Override
     public SourceRecords nextRecordFromSplit() {
         final Iterator<SourceRecords> recordsForSplit = this.recordsForCurrentSplit;

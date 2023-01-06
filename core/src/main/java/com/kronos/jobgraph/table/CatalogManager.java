@@ -5,21 +5,13 @@ import com.kronos.jobgraph.raw.Sinker;
 import com.kronos.jobgraph.table.database.CatalogDatabase;
 import com.kronos.jobgraph.table.database.ElasticsearchCatalogDatabase;
 import com.kronos.jobgraph.table.database.JDBCCatalogDatabase;
-import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
-/**
- * 元数据
- * catalog 管理多个catalog database
- * catalog database 管理多个 catalog table
- *
- * @Author: jackila
- * @Date: 11:45 AM 2022-6-22
- */
+/** 元数据 catalog 管理多个catalog database catalog database 管理多个 catalog table 2022-6-22 */
 @Data
 public class CatalogManager {
     private static CatalogManager catalogManager;
@@ -31,16 +23,20 @@ public class CatalogManager {
 
     public void register(JobConfiguration config) {
 
-        this.register(config.getDataSources(), (datasource) -> databases.add(JDBCCatalogDatabase.build(datasource)));
+        this.register(
+                config.getDataSources(),
+                (datasource) -> databases.add(JDBCCatalogDatabase.build(datasource)));
         this.register(config.getSinker());
-        this.register(config.getTableInfos(), (tableInfo -> {
-            CatalogDatabase catalogDatabase = fetchDatabase(tableInfo.getDatabase());
-            catalogDatabase.registerTable(new ObjectPath(tableInfo.getDatabase(), tableInfo.getTableName()));
-        }));
+        this.register(
+                config.getTableInfos(),
+                (tableInfo -> {
+                    CatalogDatabase catalogDatabase = fetchDatabase(tableInfo.getDatabase());
+                    catalogDatabase.registerTable(
+                            new ObjectPath(tableInfo.getDatabase(), tableInfo.getTableName()));
+                }));
     }
 
-    private <T> void register(List<T> values,
-                              Consumer<T> handler) {
+    private <T> void register(List<T> values, Consumer<T> handler) {
         if (values == null || values.isEmpty()) {
             return;
         }
@@ -59,9 +55,10 @@ public class CatalogManager {
     }
 
     private CatalogDatabase fetchDatabase(String name) {
-        return databases.stream().filter(p ->
-                                                 name.equalsIgnoreCase(p.specificName())
-        ).findFirst().orElseThrow(() -> new RuntimeException("not found " + name));
+        return databases.stream()
+                .filter(p -> name.equalsIgnoreCase(p.specificName()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("not found " + name));
     }
 
     public static CatalogManager getInstance() {
@@ -72,7 +69,10 @@ public class CatalogManager {
     }
 
     public CatalogDatabase findSinkerCatalog() {
-        return databases.stream().filter(p -> p.isSinker()).findFirst().orElseThrow(() -> new RuntimeException("not found sinker "));
+        return databases.stream()
+                .filter(p -> p.isSinker())
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("not found sinker "));
     }
 
     public ObjectPath findObjectPathByTable(String table) {
@@ -86,9 +86,16 @@ public class CatalogManager {
             return new ObjectPath(info[0], info[1]);
         }
 
-        String database = databases.stream().filter(t -> {
-            return t.checkTable(table) && t.getDatabaseType() != DatabaseType.ES;
-        }).map(p -> p.specificName()).findFirst().orElseThrow(() -> new RuntimeException("not fount table " + table));
+        String database =
+                databases.stream()
+                        .filter(
+                                t -> {
+                                    return t.checkTable(table)
+                                            && t.getDatabaseType() != DatabaseType.ES;
+                                })
+                        .map(p -> p.specificName())
+                        .findFirst()
+                        .orElseThrow(() -> new RuntimeException("not fount table " + table));
         return new ObjectPath(database, table);
     }
 }

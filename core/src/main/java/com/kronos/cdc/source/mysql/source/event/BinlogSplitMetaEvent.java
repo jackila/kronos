@@ -16,12 +16,10 @@
 
 package com.kronos.cdc.source.mysql.source.event;
 
-
 import com.kronos.api.connector.source.SourceEvent;
 import com.kronos.cdc.source.mysql.source.enumerator.MySqlSourceEnumerator;
 import com.kronos.cdc.source.mysql.source.reader.MySqlSourceReader;
 import com.kronos.cdc.source.mysql.source.split.FinishedSnapshotSplitInfo;
-
 import java.util.List;
 
 /**

@@ -19,9 +19,6 @@
 package com.kronos.utils;
 
 import com.fasterxml.jackson.databind.ser.std.MapSerializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -39,6 +36,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** Utility class to create instances from class objects and checking failure reasons. */
 public final class InstantiationUtil {
@@ -204,15 +203,14 @@ public final class InstantiationUtil {
      * GenericData.Array (from Avro) by a dummy class so that the KryoSerializer can still be
      * deserialized without Avro being on the classpath.
      *
-     * <p>The {link  TypeSerializerSerializationUtil. TypeSerializerSerializationProxy} uses this
+     * <p>The {link TypeSerializerSerializationUtil. TypeSerializerSerializationProxy} uses this
      * specific object input stream to read serializers, so that mismatching serialVersionUIDs of
      * anonymous classes / Scala serializers are ignored. This is a required workaround to maintain
      * backwards compatibility for our pre-1.3 Scala serializers. See FLINK-6869 for details.
      *
      * @see <a href="https://issues.apache.org/jira/browse/FLINK-6869">FLINK-6869</a>
      */
-    public static class FailureTolerantObjectInputStream
-            extends ClassLoaderObjectInputStream {
+    public static class FailureTolerantObjectInputStream extends ClassLoaderObjectInputStream {
 
         public FailureTolerantObjectInputStream(InputStream in, ClassLoader cl) throws IOException {
             super(in, cl);
@@ -295,7 +293,6 @@ public final class InstantiationUtil {
      * Flink-{>= 1.6}.
      */
     private enum MigrationUtil {
-
         HASH_MAP_SERIALIZER(
                 "org.apache.flink.runtime.state.HashMapSerializer",
                 ObjectStreamClass.lookup(MapSerializer.class)); // added in 1.5
@@ -514,8 +511,6 @@ public final class InstantiationUtil {
         }
     }
 
-
-    @SuppressWarnings("unchecked")
     public static <T> T deserializeObject(byte[] bytes, ClassLoader cl)
             throws IOException, ClassNotFoundException {
         return deserializeObject(bytes, cl, false);

@@ -17,7 +17,16 @@
 
 package org.kronos.base;
 
+import static org.kronos.utils.Preconditions.checkArgument;
+import static org.kronos.utils.Preconditions.checkNotNull;
+
 import com.google.common.annotations.VisibleForTesting;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 import org.elasticsearch.action.ActionRequest;
 import org.elasticsearch.action.DocWriteRequest;
 import org.elasticsearch.action.bulk.BulkItemResponse;
@@ -31,16 +40,6 @@ import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.rest.RestStatus;
 import org.kronos.connector.SinkFunction;
 import org.kronos.utils.ParameterTool;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.AtomicReference;
-
-import static org.kronos.utils.Preconditions.checkArgument;
-import static org.kronos.utils.Preconditions.checkNotNull;
 
 /**
  * Base class for all Flink Elasticsearch Sinks.
@@ -74,9 +73,7 @@ public abstract class ElasticsearchSinkBase<T, C extends AutoCloseable> implemen
     public static final String CONFIG_KEY_BULK_FLUSH_BACKOFF_RETRIES = "bulk.flush.backoff.retries";
     public static final String CONFIG_KEY_BULK_FLUSH_BACKOFF_DELAY = "bulk.flush.backoff.delay";
 
-    /**
-     * Used to control whether the retry delay should increase exponentially or remain constant.
-     */
+    /** Used to control whether the retry delay should increase exponentially or remain constant. */
     public enum FlushBackoffType {
         CONSTANT,
         EXPONENTIAL
@@ -149,9 +146,7 @@ public abstract class ElasticsearchSinkBase<T, C extends AutoCloseable> implemen
      */
     private final ElasticsearchSinkFunction<T> elasticsearchSinkFunction;
 
-    /**
-     * User-provided handler for failed {@link ActionRequest ActionRequests}.
-     */
+    /** User-provided handler for failed {@link ActionRequest ActionRequests}. */
     private final ActionRequestFailureHandler failureHandler;
 
     /**
@@ -176,9 +171,7 @@ public abstract class ElasticsearchSinkBase<T, C extends AutoCloseable> implemen
     //  Internals for the Flink Elasticsearch Sink
     // ------------------------------------------------------------------------
 
-    /**
-     * Call bridge for different version-specific.
-     */
+    /** Call bridge for different version-specific. */
     private final ElasticsearchApiCallBridge<C> callBridge;
 
     /**
@@ -193,14 +186,10 @@ public abstract class ElasticsearchSinkBase<T, C extends AutoCloseable> implemen
      */
     private AtomicLong numPendingRequests = new AtomicLong(0);
 
-    /**
-     * Elasticsearch client created using the call bridge.
-     */
+    /** Elasticsearch client created using the call bridge. */
     private transient C client;
 
-    /**
-     * Bulk processor to buffer and send requests to Elasticsearch, created using the client.
-     */
+    /** Bulk processor to buffer and send requests to Elasticsearch, created using the client. */
     private transient BulkProcessor bulkProcessor;
 
     /**
@@ -222,7 +211,6 @@ public abstract class ElasticsearchSinkBase<T, C extends AutoCloseable> implemen
         this.callBridge = checkNotNull(callBridge);
         this.elasticsearchSinkFunction = checkNotNull(elasticsearchSinkFunction);
         this.failureHandler = checkNotNull(failureHandler);
-
 
         checkNotNull(userConfig);
 
@@ -313,7 +301,6 @@ public abstract class ElasticsearchSinkBase<T, C extends AutoCloseable> implemen
         elasticsearchSinkFunction.process(value, requestIndexer);
     }
 
-
     @Override
     public void close() throws Exception {
         elasticsearchSinkFunction.close();
@@ -403,14 +390,10 @@ public abstract class ElasticsearchSinkBase<T, C extends AutoCloseable> implemen
     private class BulkProcessorListener implements BulkProcessor.Listener {
 
         @Override
-        public void beforeBulk(long executionId,
-                               BulkRequest request) {
-        }
+        public void beforeBulk(long executionId, BulkRequest request) {}
 
         @Override
-        public void afterBulk(long executionId,
-                              BulkRequest request,
-                              BulkResponse response) {
+        public void afterBulk(long executionId, BulkRequest request, BulkResponse response) {
             if (response.hasFailures()) {
                 BulkItemResponse itemResponse;
                 Throwable failure;
@@ -462,9 +445,7 @@ public abstract class ElasticsearchSinkBase<T, C extends AutoCloseable> implemen
         }
 
         @Override
-        public void afterBulk(long executionId,
-                              BulkRequest request,
-                              Throwable failure) {
+        public void afterBulk(long executionId, BulkRequest request, Throwable failure) {
             try {
                 for (DocWriteRequest writeRequest : request.requests()) {
                     if (writeRequest instanceof ActionRequest) {

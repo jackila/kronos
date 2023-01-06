@@ -2,10 +2,7 @@ package org.kronos.utils;
 
 import java.util.Arrays;
 
-/**
- * @Author: jackila
- * @Date: 21:53 2022/12/26
- */
+/** */
 public class Utils {
     /**
      * Get the key from the given args. Keys have to start with '-' or '--'. For example, --key1

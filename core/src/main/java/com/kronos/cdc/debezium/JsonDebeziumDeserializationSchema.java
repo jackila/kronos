@@ -17,14 +17,13 @@
 package com.kronos.cdc.debezium;
 
 import com.kronos.api.operators.Collector;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.kafka.connect.json.JsonConverter;
 import org.apache.kafka.connect.json.JsonConverterConfig;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.storage.ConverterConfig;
 import org.apache.kafka.connect.storage.ConverterType;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * A JSON format implementation of {@link DebeziumDeserializationSchema} which deserializes the

@@ -6,20 +6,14 @@ import com.kronos.jobgraph.logical.TransformerLogicalNode;
 import com.kronos.jobgraph.physic.disruptor.ProcessorInput;
 import com.kronos.jobgraph.physic.disruptor.ProcessorOutput;
 import com.kronos.jobgraph.table.ObjectPath;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.Setter;
 
-/**
- * transformer physical node
- *
- * @Author: jackila
- * @Date: 18:47 2022-12-14
- */
+/** transformer physical node */
 @Getter
 @Setter
 public class TPhysicalNode extends StreamNode {
@@ -36,7 +30,7 @@ public class TPhysicalNode extends StreamNode {
         this.target = tableInfo;
     }
 
-    public TPhysicalNode(TransformerLogicalNode node,TPhysicalNode root) {
+    public TPhysicalNode(TransformerLogicalNode node, TPhysicalNode root) {
         input = new ProcessorInput();
         output = new ProcessorOutput();
         this.root = root;
@@ -45,14 +39,17 @@ public class TPhysicalNode extends StreamNode {
         List<QueryCondition> childRelevances = node.getChildRelevanceUsedInFrontStage();
         if (childRelevances != null) {
             this.childRelevanceInFrontStage =
-                    childRelevances.stream().collect(Collectors.toMap(QueryCondition::getFindTarget,
-                                                                      Function.identity()));
+                    childRelevances.stream()
+                            .collect(
+                                    Collectors.toMap(
+                                            QueryCondition::getFindTarget, Function.identity()));
         }
     }
 
     public QueryCondition findQuerConditionInPrepare(ObjectPath target) {
         return childRelevanceInFrontStage.get(target);
     }
+
     public List<TPhysicalNode> getNodes() {
         return nodes;
     }
@@ -65,7 +62,7 @@ public class TPhysicalNode extends StreamNode {
         return this;
     }
 
-    public boolean isRoot(){
+    public boolean isRoot() {
         return root == this;
     }
 

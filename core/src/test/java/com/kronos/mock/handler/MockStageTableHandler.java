@@ -5,22 +5,19 @@ import com.kronos.jobgraph.logical.QueryCondition;
 import com.kronos.jobgraph.physic.StreamRecord;
 import com.kronos.jobgraph.physic.TPhysicalNode;
 import com.kronos.jobgraph.physic.operator.handler.AbstractTableTransformerHandler;
-import org.junit.Assert;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.junit.Assert;
 
-/**
- * @Author: jackila
- * @Date: 17:49 2022-12-15
- */
-public class MockStageTableHandler extends AbstractTableTransformerHandler<StreamRecord<List<String>>> {
+/** */
+public class MockStageTableHandler
+        extends AbstractTableTransformerHandler<StreamRecord<List<String>>> {
 
     protected Set<String> checkedValues = new HashSet<>();
-    public MockStageTableHandler() {
-    }
+
+    public MockStageTableHandler() {}
 
     public MockStageTableHandler(TPhysicalNode node) {
         setNode(node);
@@ -33,8 +30,10 @@ public class MockStageTableHandler extends AbstractTableTransformerHandler<Strea
             List<String> value = new ArrayList<>(event.value());
 
             Assert.assertTrue(
-                    String.format("[%s] the table %s not exist in %s", node.getTarget().getObjectName()
-                            , tableName, String.join(",", value)), value.contains(tableName));
+                    String.format(
+                            "[%s] the table %s not exist in %s",
+                            node.getTarget().getObjectName(), tableName, String.join(",", value)),
+                    value.contains(tableName));
 
             long count = value.stream().filter(v -> tableName.equalsIgnoreCase(v)).count();
             Assert.assertEquals("count is " + count, 1l, count);

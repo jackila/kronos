@@ -19,12 +19,10 @@ package com.kronos.cdc.source.mysql.source.utils;
 import com.kronos.types.RowType;
 import io.debezium.relational.Column;
 import io.debezium.relational.Table;
-import org.kronos.utils.Preconditions;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+import org.kronos.utils.Preconditions;
 
 /** Utilities to split chunks of table. */
 public class ChunkUtils {
@@ -36,10 +34,10 @@ public class ChunkUtils {
     }
 
     public static RowType getChunkKeyColumnType(Column chunkKeyColumn) {
-        return new RowType(chunkKeyColumn.name(),chunkKeyColumn.typeName());
+        return new RowType(chunkKeyColumn.name(), chunkKeyColumn.typeName());
     }
 
-    public static Column getChunkKeyColumn(Table table,  String chunkKeyColumn) {
+    public static Column getChunkKeyColumn(Table table, String chunkKeyColumn) {
         List<Column> primaryKeys = table.primaryKeyColumns();
         if (primaryKeys.isEmpty()) {
             throw new ValidationException(

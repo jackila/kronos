@@ -21,19 +21,25 @@ package com.kronos.api.operators;
 import com.kronos.runtime.operators.coordination.OperatorEventDispatcher;
 import com.kronos.runtime.tasks.Output;
 
+/** @param <OUT> */
 public class StreamOperatorParameters<OUT> {
 
     private final OperatorEventDispatcher operatorEventDispatcher;
     private final Output output;
+    private final int operatorId;
 
     public StreamOperatorParameters(
-            OperatorEventDispatcher operatorEventDispatcher,
-            Output output) {
+            OperatorEventDispatcher operatorEventDispatcher, Output output, int operatorId) {
         this.operatorEventDispatcher = operatorEventDispatcher;
         this.output = output;
+        this.operatorId = operatorId;
     }
 
     public OperatorEventDispatcher getOperatorEventDispatcher() {
         return operatorEventDispatcher;
+    }
+
+    public int getOperatorId() {
+        return operatorId;
     }
 }

@@ -18,7 +18,6 @@ package com.kronos.cdc.source.base.config;
 
 import com.kronos.cdc.source.base.options.StartupOptions;
 import io.debezium.config.Configuration;
-
 import java.util.Properties;
 
 /** A basic Source configuration which is used by {@link JdbcIncrementalSource}. */

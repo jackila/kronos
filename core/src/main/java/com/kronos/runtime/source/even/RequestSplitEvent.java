@@ -19,7 +19,6 @@
 package com.kronos.runtime.source.even;
 
 import com.kronos.runtime.operators.coordination.OperatorEvent;
-
 import java.util.Objects;
 
 /**

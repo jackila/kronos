@@ -21,7 +21,6 @@ package com.kronos.cdc.source.base.source.reader.fetcher;
 import com.kronos.api.connector.source.SourceSplit;
 import com.kronos.cdc.source.base.source.reader.splitreader.SplitReader;
 import com.kronos.cdc.source.base.source.reader.splitreader.SplitsAddition;
-
 import java.util.List;
 import java.util.Map;
 

@@ -4,7 +4,7 @@ import com.kronos.jobgraph.table.ObjectPath;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
+/*
  *
  *                                    x              x
  *                                    x              x
@@ -42,9 +42,9 @@ import lombok.Setter;
  *  通过findTarget(student)\findField(grade_id) 获取值 x
  *  构造查询语句： select * from grade where id = find(student,grade_id)
  *
- * @Author: jackila
- * @Date: 21:19 2022/12/18
  */
+
+/** */
 @Getter
 @Setter
 public class QueryCondition {
@@ -52,9 +52,7 @@ public class QueryCondition {
     private String findField;
     private String field;
 
-    public QueryCondition(ObjectPath findTarget,
-                          String findField,
-                          String field) {
+    public QueryCondition(ObjectPath findTarget, String findField, String field) {
         this.findTarget = findTarget;
         this.findField = findField;
         this.field = field;

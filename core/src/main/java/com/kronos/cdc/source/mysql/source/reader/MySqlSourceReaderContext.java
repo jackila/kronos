@@ -16,7 +16,6 @@
 
 package com.kronos.cdc.source.mysql.source.reader;
 
-
 import com.kronos.jobgraph.physic.operator.source.SourceReaderContext;
 
 /**

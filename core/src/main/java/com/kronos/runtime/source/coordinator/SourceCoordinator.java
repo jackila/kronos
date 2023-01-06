@@ -9,24 +9,20 @@ import com.kronos.runtime.source.even.ReaderRegistrationEvent;
 import com.kronos.runtime.source.even.RequestSplitEvent;
 import com.kronos.runtime.source.even.SourceEventWrapper;
 import com.kronos.utils.ThrowingRunnable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 import org.kronos.utils.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
-
 /**
- * implement for source
- * provides an event loop style thread model
- * maintains SplitEnumeratorContext and share with the enumerator
+ * implement for source provides an event loop style thread model maintains SplitEnumeratorContext
+ * and share with the enumerator
  *
- * set up by the source operator and calls corresponding method of the SplitEnumerator to take actions
- *
- * @Author: jackila
- * @Date: 11:23 2022-10-15
+ * <p>set up by the source operator and calls corresponding method of the SplitEnumerator to take
+ * actions
  */
-public class SourceCoordinator implements OperatorCoordinator{
+public class SourceCoordinator implements OperatorCoordinator {
     private static final Logger LOG = LoggerFactory.getLogger(SourceCoordinator.class);
 
     /** The name of the operator this SourceCoordinator is associated with. */
@@ -95,8 +91,7 @@ public class SourceCoordinator implements OperatorCoordinator{
     }
 
     @Override
-    public void handleEventFromOperator(int subtask,
-                                        OperatorEvent event) throws Exception {
+    public void handleEventFromOperator(int subtask, OperatorEvent event) throws Exception {
 
         runInEventLoop(
                 () -> {
@@ -105,8 +100,7 @@ public class SourceCoordinator implements OperatorCoordinator{
                                 "Source {} received split request from parallel task {}",
                                 operatorName,
                                 subtask);
-                        enumerator.handleSplitRequest(
-                                subtask);
+                        enumerator.handleSplitRequest(subtask);
                     } else if (event instanceof SourceEventWrapper) {
                         final SourceEvent sourceEvent =
                                 ((SourceEventWrapper) event).getSourceEvent();
@@ -122,8 +116,7 @@ public class SourceCoordinator implements OperatorCoordinator{
                         LOG.info(
                                 "Source {} registering reader for parallel task {} @ {}",
                                 operatorName,
-                                subtask
-                                );
+                                subtask);
                         handleReaderRegistrationEvent(registrationEvent);
                     } else {
                         throw new RuntimeException("Unrecognized Operator Event: " + event);
@@ -165,14 +158,13 @@ public class SourceCoordinator implements OperatorCoordinator{
                                 operatorName,
                                 actionString,
                                 t);
-                        //context.failJob(t);
+                        // context.failJob(t);
                     }
                 });
     }
 
     @Override
-    public void subtaskReady(int subtask,
-                             SubtaskGateway gateway) {
+    public void subtaskReady(int subtask, SubtaskGateway gateway) {
 
         context.subtaskReady(gateway);
     }
@@ -187,5 +179,4 @@ public class SourceCoordinator implements OperatorCoordinator{
         context.registerSourceReader(new ReaderInfo(event.subtaskId()));
         enumerator.addReader(event.subtaskId());
     }
-
 }

@@ -18,6 +18,8 @@
 
 package com.kronos.cdc.source.base.source.reader.splitreader;
 
+import static org.kronos.utils.Preconditions.checkState;
+
 import com.kronos.api.connector.source.SourceEvent;
 import com.kronos.api.connector.source.SourceSplit;
 import com.kronos.cdc.source.base.source.reader.RecordEmitter;
@@ -31,18 +33,14 @@ import com.kronos.jobgraph.physic.operator.source.SourceOutput;
 import com.kronos.jobgraph.physic.operator.source.SourceReader;
 import com.kronos.jobgraph.physic.operator.source.SourceReaderContext;
 import com.kronos.runtime.io.DataInputStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-
-import static org.kronos.utils.Preconditions.checkState;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An abstract implementation of {@link SourceReader} which provides some sychronization between the
@@ -81,10 +79,10 @@ public abstract class SourceReaderBase<E, T, SplitT extends SourceSplit, SplitSt
     protected SourceReaderContext context;
 
     /** The latest fetched batch of records-by-split from the split reader. */
-     private RecordsWithSplitIds<E> currentFetch;
+    private RecordsWithSplitIds<E> currentFetch;
 
-     private SplitContext<T, SplitStateT> currentSplitContext;
-     private SourceOutput<T> currentSplitOutput;
+    private SplitContext<T, SplitStateT> currentSplitContext;
+    private SourceOutput<T> currentSplitOutput;
 
     /** Indicating whether the SourceReader will be assigned more splits or not. */
     private boolean noMoreSplitsAssignment;
@@ -149,7 +147,6 @@ public abstract class SourceReaderBase<E, T, SplitT extends SourceSplit, SplitSt
         return status;
     }
 
-    
     private RecordsWithSplitIds<E> getNextFetch(final ReaderOutput<T> output) {
         splitFetcherManager.checkErrors();
 
@@ -237,12 +234,12 @@ public abstract class SourceReaderBase<E, T, SplitT extends SourceSplit, SplitSt
         LOG.info("Closing Source Reader.");
         splitFetcherManager.close(options.sourceReaderCloseTimeout);
     }
+
     public List<SplitT> snapshotState(long checkpointId) {
         List<SplitT> splits = new ArrayList<>();
         splitStates.forEach((id, context) -> splits.add(toSplitType(id, context.state)));
         return splits;
     }
-
 
     /**
      * Gets the number of splits the reads has currently assigned.

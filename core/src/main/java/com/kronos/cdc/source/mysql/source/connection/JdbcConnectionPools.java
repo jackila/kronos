@@ -16,15 +16,14 @@
 
 package com.kronos.cdc.source.mysql.source.connection;
 
+import static com.kronos.cdc.source.mysql.source.connection.PooledDataSourceFactory.createPooledDataSource;
+
 import com.kronos.cdc.source.mysql.source.config.MySqlSourceConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.kronos.cdc.source.mysql.source.connection.PooledDataSourceFactory.createPooledDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** A Jdbc Connection pools implementation. */
 public class JdbcConnectionPools implements ConnectionPools {

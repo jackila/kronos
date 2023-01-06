@@ -16,6 +16,9 @@
 
 package com.kronos.cdc.source.mysql.assigners;
 
+import static com.kronos.cdc.source.mysql.assigners.AssignerStatus.isInitialAssigningFinished;
+import static com.kronos.cdc.source.mysql.assigners.AssignerStatus.isNewlyAddedAssigningFinished;
+import static com.kronos.cdc.source.mysql.assigners.AssignerStatus.isSuspended;
 
 import com.kronos.cdc.source.mysql.assigners.state.HybridPendingSplitsState;
 import com.kronos.cdc.source.mysql.assigners.state.PendingSplitsState;
@@ -26,9 +29,6 @@ import com.kronos.cdc.source.mysql.source.split.MySqlBinlogSplit;
 import com.kronos.cdc.source.mysql.source.split.MySqlSchemalessSnapshotSplit;
 import com.kronos.cdc.source.mysql.source.split.MySqlSplit;
 import io.debezium.relational.TableId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -37,8 +37,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static com.kronos.cdc.source.mysql.assigners.AssignerStatus.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A {@link MySqlSplitAssigner} that splits tables into small chunk splits based on primary key

@@ -22,7 +22,6 @@ import com.kronos.api.connector.source.SourceSplit;
 import com.kronos.cdc.source.base.source.reader.RecordsWithSplitIds;
 import com.kronos.cdc.source.base.source.reader.splitreader.SplitReader;
 import com.kronos.cdc.source.base.source.reader.synchronization.FutureCompletingBlockingQueue;
-
 import java.io.IOException;
 import java.util.Collection;
 import java.util.function.Consumer;

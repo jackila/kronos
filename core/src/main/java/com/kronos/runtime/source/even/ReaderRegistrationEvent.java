@@ -18,7 +18,6 @@ limitations under the License.
 
 package com.kronos.runtime.source.even;
 
-
 import com.kronos.runtime.operators.coordination.OperatorEvent;
 
 /**
@@ -39,10 +38,8 @@ public class ReaderRegistrationEvent implements OperatorEvent {
         return subtaskId;
     }
 
-
     @Override
     public String toString() {
-        return String.format(
-                "ReaderRegistrationEvent[subtaskId = %d)", subtaskId);
+        return String.format("ReaderRegistrationEvent[subtaskId = %d)", subtaskId);
     }
 }

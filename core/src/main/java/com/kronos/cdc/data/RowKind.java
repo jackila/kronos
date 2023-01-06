@@ -29,10 +29,7 @@ public enum RowKind {
     /** Insertion operation. */
     INSERT("I", (byte) 0),
 
-    /**
-     * Update operation
-     *
-     */
+    /** Update operation */
     UPDATE("U", (byte) 1),
 
     /** Deletion operation. */
@@ -54,8 +51,6 @@ public enum RowKind {
     /**
      * Returns a short string representation of this {@link RowKind}.
      *
-     * <p>
-     *
      * <ul>
      *   <li>"+I" represents {@link #INSERT}.
      *   <li>"-U" represents {@link #UPDATE}.
@@ -69,8 +64,6 @@ public enum RowKind {
     /**
      * Returns the byte value representation of this {@link RowKind}. The byte value is used for
      * serialization and deserialization.
-     *
-     * <p>
      *
      * <ul>
      *   <li>"0" represents {@link #INSERT}.

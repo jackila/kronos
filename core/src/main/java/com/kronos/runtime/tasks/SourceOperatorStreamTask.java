@@ -9,26 +9,23 @@ import com.kronos.runtime.io.StreamTaskSourceInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @Author: jackila
- * @Date: 5:02 PM 2022-8-02
- */
+/** */
 public class SourceOperatorStreamTask extends StreamTask<SourceOperator> {
     private int index;
     private static Logger logger = LoggerFactory.getLogger(StreamTask.class);
-    public SourceOperatorStreamTask(int index,
-                                    Environment env) {
+
+    public SourceOperatorStreamTask(int index, Environment env) {
         super(env);
         this.index = index;
     }
+
     public void init() throws Exception {
 
         SourceOperator sourceOperator = this.mainOperator;
         sourceOperator.initReader();
 
-        final StreamTaskInput input = new StreamTaskSourceInput(sourceOperator,index);
+        final StreamTaskInput input = new StreamTaskSourceInput(sourceOperator, index);
 
         streamInputProcessor = new StreamInputProcessor(input, sourceOutput);
     }
-
 }

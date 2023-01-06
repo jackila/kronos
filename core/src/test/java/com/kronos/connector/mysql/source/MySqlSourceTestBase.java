@@ -16,10 +16,17 @@
 
 package com.kronos.connector.mysql.source;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import com.kronos.cdc.source.mysql.source.MySqlSource;
 import com.kronos.connector.mysql.testutils.ElasticsearchVersion;
 import com.kronos.connector.mysql.testutils.MySqlContainer;
 import com.kronos.connector.mysql.testutils.MySqlVersion;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.SneakyThrows;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -38,28 +45,17 @@ import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.elasticsearch.ElasticsearchContainer;
 import org.testcontainers.lifecycle.Startables;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static org.junit.Assert.*;
-
-/**
- * Basic class for testing {@link MySqlSource}.
- */
+/** Basic class for testing {@link MySqlSource}. */
 public abstract class MySqlSourceTestBase {
 
     protected static final Logger LOG = LoggerFactory.getLogger(MySqlSourceTestBase.class);
 
     protected static final int DEFAULT_PARALLELISM = 4;
-    /**
-     * Elasticsearch default username, when secured
-     */
+    /** Elasticsearch default username, when secured */
     private static final String ELASTICSEARCH_USERNAME = "elastic";
-    /**
-     * From 6.8, we can optionally activate security with a default password.
-     */
+    /** From 6.8, we can optionally activate security with a default password. */
     private static final String ELASTICSEARCH_PASSWORD = "123456";
+
     protected static final MySqlContainer MYSQL_CONTAINER = createMySqlContainer(MySqlVersion.V5_7);
     protected static final ElasticsearchContainer ES_CONTAINER =
             createElasticsearchContainer(ElasticsearchVersion.V7_9_2);
@@ -81,30 +77,30 @@ public abstract class MySqlSourceTestBase {
     }
 
     @SneakyThrows
-    public static void init(){
+    public static void init() {
         // Do whatever you want with the rest client ...
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(
                 AuthScope.ANY,
-                new UsernamePasswordCredentials(ELASTICSEARCH_USERNAME, ELASTICSEARCH_PASSWORD)
-        );
+                new UsernamePasswordCredentials(ELASTICSEARCH_USERNAME, ELASTICSEARCH_PASSWORD));
 
-        RestClient client  =
-                RestClient
-                        .builder(HttpHost.create(ES_CONTAINER.getHttpHostAddress()))
-                        .setHttpClientConfigCallback(httpClientBuilder -> {
-                            return httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
-                        })
+        RestClient client =
+                RestClient.builder(HttpHost.create(ES_CONTAINER.getHttpHostAddress()))
+                        .setHttpClientConfigCallback(
+                                httpClientBuilder -> {
+                                    return httpClientBuilder.setDefaultCredentialsProvider(
+                                            credentialsProvider);
+                                })
                         .build();
 
         Response response = client.performRequest(new Request("GET", "/_cluster/health"));
 
-        assertEquals(response.getStatusLine().getStatusCode(),200);
+        assertEquals(response.getStatusLine().getStatusCode(), 200);
         assertTrue(EntityUtils.toString(response.getEntity()).contains("cluster_name"));
 
         Request createIndex = new Request("PUT", "/wide_orders");
         Response indexResponse = client.performRequest(createIndex);
-        assertEquals(indexResponse.getStatusLine().getStatusCode(),200);
+        assertEquals(indexResponse.getStatusLine().getStatusCode(), 200);
     }
 
     protected static MySqlContainer createMySqlContainer(MySqlVersion version) {
@@ -118,24 +114,22 @@ public abstract class MySqlSourceTestBase {
                         .withLogConsumer(new Slf4jLogConsumer(LOG));
     }
 
-    protected static ElasticsearchContainer createElasticsearchContainer(ElasticsearchVersion version) {
+    protected static ElasticsearchContainer createElasticsearchContainer(
+            ElasticsearchVersion version) {
         ElasticsearchContainer container =
-                new ElasticsearchContainer()
-                        .withPassword(ELASTICSEARCH_PASSWORD);
-        container.addEnv("action.auto_create_index","*");
+                new ElasticsearchContainer().withPassword(ELASTICSEARCH_PASSWORD);
+        container.addEnv("action.auto_create_index", "*");
         return container;
     }
 
-    public static void assertEqualsInAnyOrder(List<String> expected,
-                                              List<String> actual) {
+    public static void assertEqualsInAnyOrder(List<String> expected, List<String> actual) {
         assertTrue(expected != null && actual != null);
         assertEqualsInOrder(
                 expected.stream().sorted().collect(Collectors.toList()),
                 actual.stream().sorted().collect(Collectors.toList()));
     }
 
-    public static void assertEqualsInOrder(List<String> expected,
-                                           List<String> actual) {
+    public static void assertEqualsInOrder(List<String> expected, List<String> actual) {
         assertTrue(expected != null && actual != null);
         assertEquals(expected.size(), actual.size());
         assertArrayEquals(expected.toArray(new String[0]), actual.toArray(new String[0]));

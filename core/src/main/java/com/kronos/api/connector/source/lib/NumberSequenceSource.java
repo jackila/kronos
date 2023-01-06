@@ -9,15 +9,10 @@ import com.kronos.api.connector.source.lib.util.NumberSequenceIterator;
 import com.kronos.jobgraph.physic.operator.source.Source;
 import com.kronos.jobgraph.physic.operator.source.SourceReader;
 import com.kronos.jobgraph.physic.operator.source.SourceReaderContext;
-
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 一个产生有序数字的数据源
- * @Author: jackila
- * @Date: 13:12 2022-9-17
- */
+/** 一个产生有序数字的数据源 */
 public class NumberSequenceSource implements Source {
 
     private final long from;
@@ -39,7 +34,8 @@ public class NumberSequenceSource implements Source {
 
         final List<IteratorSourceSplit> splits =
                 splitNumberRange(from, to, enumContext.currentParallelism());
-        IteratorSourceEnumerator iteratorSourceEnumerator = new IteratorSourceEnumerator(enumContext, splits);
+        IteratorSourceEnumerator iteratorSourceEnumerator =
+                new IteratorSourceEnumerator(enumContext, splits);
         return iteratorSourceEnumerator;
     }
 
@@ -60,11 +56,8 @@ public class NumberSequenceSource implements Source {
         return splits;
     }
 
-    /**
-     * A split of the source, representing a number sub-sequence.
-     */
-    public static class NumberSequenceSplit
-            implements IteratorSourceSplit {
+    /** A split of the source, representing a number sub-sequence. */
+    public static class NumberSequenceSplit implements IteratorSourceSplit {
 
         private final String splitId;
         private final long from;
@@ -98,6 +91,5 @@ public class NumberSequenceSource implements Source {
         public String toString() {
             return String.format("NumberSequenceSplit [%d, %d] (%s)", from, to, splitId);
         }
-
     }
 }

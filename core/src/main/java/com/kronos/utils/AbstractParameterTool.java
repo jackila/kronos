@@ -18,18 +18,16 @@
 
 package com.kronos.utils;
 
-
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
 /**
- * This class provides common utility methods of {@link ParameterTool} and {@link
+ * This class provides common utility methods of {link ParameterTool} and {link
  * MultipleParameterTool}.
  */
-public abstract class AbstractParameterTool
-        implements Serializable, Cloneable {
+public abstract class AbstractParameterTool implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;
 
     protected static final String NO_VALUE_KEY = "__NO_VALUE_KEY";

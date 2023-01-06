@@ -18,6 +18,7 @@
 
 package org.kronos;
 
+import java.util.concurrent.atomic.AtomicLong;
 import org.elasticsearch.action.ActionRequest;
 import org.elasticsearch.action.bulk.BulkProcessor;
 import org.elasticsearch.action.delete.DeleteRequest;
@@ -25,8 +26,6 @@ import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.kronos.base.RequestIndexer;
 import org.kronos.utils.Preconditions;
-
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Implementation of a {@link RequestIndexer}, using a {@link BulkProcessor}. {@link ActionRequest

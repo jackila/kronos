@@ -18,7 +18,6 @@
 
 package com.kronos.utils;
 
-
 /** Base class of all Flink-specific unchecked exceptions. */
 public class FlinkRuntimeException extends RuntimeException {
 

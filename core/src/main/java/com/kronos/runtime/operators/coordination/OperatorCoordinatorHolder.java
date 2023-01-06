@@ -18,20 +18,18 @@
 
 package com.kronos.runtime.operators.coordination;
 
-import com.kronos.runtime.executiongraph.ExecutionJobVertex;
-import com.kronos.runtime.source.coordinator.OperatorCoordinator;
-import com.kronos.runtime.source.coordinator.SubtaskGatewayImpl;
-import org.kronos.utils.ExceptionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-import java.util.function.Consumer;
-
 import static org.kronos.utils.Preconditions.checkNotNull;
 import static org.kronos.utils.Preconditions.checkState;
 
+import com.kronos.runtime.executiongraph.ExecutionJobVertex;
+import com.kronos.runtime.source.coordinator.OperatorCoordinator;
+import com.kronos.runtime.source.coordinator.SubtaskGatewayImpl;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.function.Consumer;
+import org.kronos.utils.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The {@code OperatorCoordinatorHolder} holds the {@link OperatorCoordinator} and manages all its
@@ -60,8 +58,7 @@ import static org.kronos.utils.Preconditions.checkState;
  *       is closed. Events coming after that are held back (buffered), because they belong to the
  *       epoch after the checkpoint.
  *   <li>Once all coordinators in the job have completed the checkpoint, the barriers to the sources
- *       are injected. After that (see ) the valves are
- *       opened again and the events are sent.
+ *       are injected. After that (see ) the valves are opened again and the events are sent.
  *   <li>If a task fails in the meantime, the events are dropped from the valve. From the
  *       coordinator's perspective, these events are lost, because they were sent to a failed
  *       subtask after it's latest complete checkpoint.
@@ -101,8 +98,7 @@ import static org.kronos.utils.Preconditions.checkState;
  * <p>Actions from the coordinator to the "outside world" (like completing a checkpoint and sending
  * an event) are also enqueued back into the scheduler main-thread executor, strictly in order.
  */
-public class OperatorCoordinatorHolder
-        implements OperatorInfo,AutoCloseable{
+public class OperatorCoordinatorHolder implements OperatorInfo, AutoCloseable {
 
     private static final Logger LOG = LoggerFactory.getLogger(OperatorCoordinatorHolder.class);
 
@@ -192,8 +188,7 @@ public class OperatorCoordinatorHolder
         // this gets an access to the latest task execution attempt.
         final SubtaskAccess sta = taskAccesses.getAccessForSubtask(subtask);
 
-        final OperatorCoordinator.SubtaskGateway gateway =
-                new SubtaskGatewayImpl(sta);
+        final OperatorCoordinator.SubtaskGateway gateway = new SubtaskGatewayImpl(sta);
 
         notifySubtaskReady(subtask, gateway);
     }
@@ -212,24 +207,22 @@ public class OperatorCoordinatorHolder
     // ------------------------------------------------------------------------
 
     public static OperatorCoordinatorHolder create(
-            OperatorCoordinator.Provider provider,
-            ExecutionJobVertex jobVertex
-            )
-            throws Exception {
+            OperatorCoordinator.Provider provider, ExecutionJobVertex jobVertex) throws Exception {
 
-            final int opId = provider.getOperatorId();
+        final int opId = provider.getOperatorId();
 
-            final SubtaskAccess.SubtaskAccessFactory taskAccesses =
-                    new ExecutionSubtaskAccess.ExecutionJobVertexSubtaskAccess(jobVertex, opId);
+        final SubtaskAccess.SubtaskAccessFactory taskAccesses =
+                new ExecutionSubtaskAccess.ExecutionJobVertexSubtaskAccess(jobVertex, opId);
 
-            return create(
-                    opId,
-                    provider,
-                    jobVertex.getName(),
-                    jobVertex.getParallelism(),
-                    jobVertex.getMaxParallelism(),
-                    taskAccesses);
+        return create(
+                opId,
+                provider,
+                jobVertex.getName(),
+                jobVertex.getParallelism(),
+                jobVertex.getMaxParallelism(),
+                taskAccesses);
     }
+
     static OperatorCoordinatorHolder create(
             final int opId,
             final OperatorCoordinator.Provider coordinatorProvider,
@@ -240,8 +233,7 @@ public class OperatorCoordinatorHolder
             throws Exception {
 
         final LazyInitializedCoordinatorContext context =
-                new LazyInitializedCoordinatorContext(
-                        opId, operatorName,  operatorParallelism);
+                new LazyInitializedCoordinatorContext(opId, operatorName, operatorParallelism);
 
         final OperatorCoordinator coordinator = coordinatorProvider.create(context);
 
@@ -282,9 +274,7 @@ public class OperatorCoordinatorHolder
         private volatile boolean failed;
 
         public LazyInitializedCoordinatorContext(
-                final int operatorId,
-                final String operatorName,
-                final int operatorParallelism) {
+                final int operatorId, final String operatorName, final int operatorParallelism) {
             this.operatorId = checkNotNull(operatorId);
             this.operatorName = checkNotNull(operatorName);
             this.operatorParallelism = operatorParallelism;
@@ -318,6 +308,5 @@ public class OperatorCoordinatorHolder
         public int currentParallelism() {
             return operatorParallelism;
         }
-
     }
 }

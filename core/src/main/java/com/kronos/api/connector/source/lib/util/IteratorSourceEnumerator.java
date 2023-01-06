@@ -2,16 +2,12 @@ package com.kronos.api.connector.source.lib.util;
 
 import com.kronos.api.connector.source.SplitEnumerator;
 import com.kronos.api.connector.source.SplitEnumeratorContext;
-
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Queue;
 
-/**
- * @Author: jackila
- * @Date: 14:01 2022-9-17
- */
+/** */
 public class IteratorSourceEnumerator implements SplitEnumerator {
 
     private final SplitEnumeratorContext context;
@@ -24,11 +20,8 @@ public class IteratorSourceEnumerator implements SplitEnumerator {
         this.remainingSplits = new ArrayDeque<>(splits);
     }
 
-
     @Override
-    public void start() {
-
-    }
+    public void start() {}
 
     @Override
     public void handleSplitRequest(int subtaskId) {
@@ -49,7 +42,5 @@ public class IteratorSourceEnumerator implements SplitEnumerator {
     }
 
     @Override
-    public void close() throws IOException {
-
-    }
+    public void close() throws IOException {}
 }

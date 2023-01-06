@@ -18,7 +18,6 @@
 
 package com.kronos.cdc.source.mysql.source.utils;
 
-
 /**
  * Exception for all errors occurring during validation phase.
  *

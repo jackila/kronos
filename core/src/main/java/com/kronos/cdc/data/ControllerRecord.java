@@ -6,21 +6,15 @@ import com.kronos.cdc.data.source.SourceOffset;
 import com.kronos.jobgraph.physic.TPhysicalNode;
 import com.kronos.jobgraph.physic.operator.handler.StageType;
 import com.kronos.jobgraph.table.ObjectPath;
-import lombok.Data;
-
 import java.util.List;
 import java.util.Map;
+import lombok.Data;
 
-/**
- * 当前暂时不处理 外键变更的场景
- *
- * @Author: jackila
- * @Date: 12:13 2022/12/18
- */
+/** 当前暂时不处理 外键变更的场景 */
 @Data
 public class ControllerRecord implements Record {
 
-    //event table
+    // event table
     private ObjectPath target;
     // type 类型
     private RowKind type;
@@ -59,8 +53,7 @@ public class ControllerRecord implements Record {
      * @param stageType
      * @return
      */
-    public boolean doHandle(TPhysicalNode node,
-                            StageType stageType) {
+    public boolean doHandle(TPhysicalNode node, StageType stageType) {
         // not save operator
         if (isMasterTableDeleteOperation(node)) {
             return false;
@@ -70,7 +63,9 @@ public class ControllerRecord implements Record {
             case FRONT:
             case MIDDLE:
                 boolean pathNode = tablePathInFrontStage.contains(node.getTarget());
-                if (pathNode) cursor++;
+                if (pathNode) {
+                    cursor++;
+                }
                 return pathNode;
             case BACK:
             default:

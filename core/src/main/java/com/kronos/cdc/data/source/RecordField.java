@@ -11,7 +11,7 @@ public class RecordField {
     private boolean isUniqueKey;
     private int fieldPosition;
 
-    public RecordField(String fieldName, Schema.Type rawDataType,int fieldPosition) {
+    public RecordField(String fieldName, Schema.Type rawDataType, int fieldPosition) {
         this.fieldName = fieldName;
         this.type = rawDataType;
         this.fieldPosition = fieldPosition;

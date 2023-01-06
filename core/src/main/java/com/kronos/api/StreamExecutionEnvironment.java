@@ -2,14 +2,11 @@ package com.kronos.api;
 
 import com.kronos.jobgraph.common.ExecutionConfig;
 
-/**
- * @Author: jackila
- * @Date: 14:33 2022-9-17
- */
+/** */
 public class StreamExecutionEnvironment {
 
     /** The default parallelism used when creating a local environment. */
-    private static int defaultLocalParallelism = 1;// Runtime.getRuntime().availableProcessors();
+    private static int defaultLocalParallelism = 1; // Runtime.getRuntime().availableProcessors();
 
     /** The execution configuration for this environment. */
     private final ExecutionConfig config = new ExecutionConfig();

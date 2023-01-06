@@ -20,11 +20,10 @@ import com.kronos.cdc.source.base.config.JdbcSourceConfig;
 import com.kronos.cdc.source.mysql.source.connection.ConnectionPoolId;
 import com.kronos.cdc.source.mysql.source.connection.JdbcConnectionPoolFactory;
 import com.zaxxer.hikari.HikariDataSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** A Jdbc Connection pools implementation. */
 public class JdbcConnectionPools implements ConnectionPools<HikariDataSource, JdbcSourceConfig> {

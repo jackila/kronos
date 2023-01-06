@@ -11,16 +11,12 @@ import com.kronos.runtime.StreamTask;
 import com.kronos.runtime.jobmaster.JobMaster;
 import com.lmax.disruptor.BlockingWaitStrategy;
 import com.lmax.disruptor.RingBuffer;
-import lombok.SneakyThrows;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
+import lombok.SneakyThrows;
 
-/**
- * @Author: jackila
- * @Date: 17:40 2022-10-16
- */
+/** */
 public class DefaultExecutionGraph implements ExecutionGraph {
 
     private List<ExecutionJobVertex> sourceVertexs;
@@ -29,19 +25,20 @@ public class DefaultExecutionGraph implements ExecutionGraph {
     protected RingBuffer<StreamRecord<DiffStageRecords>> sinkRingBuffer;
 
     @SneakyThrows
-    public DefaultExecutionGraph(JobMaster master,
-                                 Source... sources) {
+    public DefaultExecutionGraph(JobMaster master, Source... sources) {
         sourceVertexs = new ArrayList<>();
-        int index = 0;
+        int operatorId = 0;
         for (Source source : sources) {
-            sourceVertexs.add(new ExecutionJobVertex(source, master,index));
-            index++;
+            sourceVertexs.add(new ExecutionJobVertex(source, master, operatorId));
+            operatorId++;
         }
 
-        sourceRingBuffer = RingBuffer.createMultiProducer(new StreamTask.MessageFactory(), 1024 * 1024,
-                                                          new BlockingWaitStrategy());
-        sinkRingBuffer = RingBuffer.createMultiProducer(new StreamTask.MessageFactory(), 1024 * 1024,
-                                                        new BlockingWaitStrategy());
+        sourceRingBuffer =
+                RingBuffer.createMultiProducer(
+                        new StreamTask.MessageFactory(), 1024 * 1024, new BlockingWaitStrategy());
+        sinkRingBuffer =
+                RingBuffer.createMultiProducer(
+                        new StreamTask.MessageFactory(), 1024 * 1024, new BlockingWaitStrategy());
     }
 
     @Override
@@ -61,12 +58,11 @@ public class DefaultExecutionGraph implements ExecutionGraph {
         return status;
     }
 
-
     private void buildLocalOperator(JoinPhysicalGraph graph) {
-        DataWarehouseManager warehouseManager = new MemoryWarehouseManager();//new RocksDBWarehouseManager();
-        JoinGraphOperator graphOperator = new JoinGraphOperator(sourceRingBuffer, sinkRingBuffer, graph,
-                                                                warehouseManager);
+        DataWarehouseManager warehouseManager =
+                new MemoryWarehouseManager(); // new RocksDBWarehouseManager();
+        JoinGraphOperator graphOperator =
+                new JoinGraphOperator(sourceRingBuffer, sinkRingBuffer, graph, warehouseManager);
         graphOperator.createOperator();
     }
-
 }

@@ -1,9 +1,6 @@
 package com.kronos.api.tuple;
 
-/**
- * @Author: jackila
- * @Date: 14:06 2022-12-14
- */
+/** */
 public class Tuple2<T0, T1> {
     /** Field 0 of the tuple. */
     public T0 f0;

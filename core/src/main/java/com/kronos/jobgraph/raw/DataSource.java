@@ -1,12 +1,8 @@
 package com.kronos.jobgraph.raw;
 
-/**
- * 数据库连接信息
- * @Author: jackila
- * @Date: 10:59 AM 2022-5-29
- */
+/** 数据库连接信息 */
 public class DataSource {
-    private  String schema;
+    private String schema;
     private String url;
     private String user;
     private String password;

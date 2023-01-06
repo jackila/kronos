@@ -19,7 +19,6 @@ package com.kronos.cdc.source.mysql.source.config;
 import com.kronos.cdc.source.mysql.source.MySqlSource;
 import com.kronos.config.ConfigOption;
 import com.kronos.config.ConfigOptions;
-
 import java.time.Duration;
 
 /** Configurations for {@link MySqlSource}. */
@@ -172,7 +171,7 @@ public class MySqlSourceOptions {
     // ----------------------------------------------------------------------------
     // experimental options, won't add them to documentation
     // ----------------------------------------------------------------------------
-    
+
     public static final ConfigOption<Integer> CHUNK_META_GROUP_SIZE =
             ConfigOptions.key("chunk-meta.group.size")
                     .intType()
@@ -180,7 +179,6 @@ public class MySqlSourceOptions {
                     .withDescription(
                             "The group size of chunk meta, if the meta size exceeds the group size, the meta will be divided into multiple groups.");
 
-    
     public static final ConfigOption<Double> CHUNK_KEY_EVEN_DISTRIBUTION_FACTOR_UPPER_BOUND =
             ConfigOptions.key("chunk-key.even-distribution.factor.upper-bound")
                     .doubleType()
@@ -193,7 +191,6 @@ public class MySqlSourceOptions {
                                     + " and the query MySQL for splitting would happen when it is uneven."
                                     + " The distribution factor could be calculated by (MAX(id) - MIN(id) + 1) / rowCount.");
 
-    
     public static final ConfigOption<Double> CHUNK_KEY_EVEN_DISTRIBUTION_FACTOR_LOWER_BOUND =
             ConfigOptions.key("chunk-key.even-distribution.factor.lower-bound")
                     .doubleType()
@@ -206,7 +203,6 @@ public class MySqlSourceOptions {
                                     + " and the query MySQL for splitting would happen when it is uneven."
                                     + " The distribution factor could be calculated by (MAX(id) - MIN(id) + 1) / rowCount.");
 
-    
     public static final ConfigOption<Boolean> SCAN_NEWLY_ADDED_TABLE_ENABLED =
             ConfigOptions.key("scan.newly-added-table.enabled")
                     .booleanType()
@@ -214,7 +210,6 @@ public class MySqlSourceOptions {
                     .withDescription(
                             "Whether capture the scan the newly added tables or not, by default is false.");
 
-    
     public static final ConfigOption<String> SCAN_INCREMENTAL_SNAPSHOT_CHUNK_KEY_COLUMN =
             ConfigOptions.key("scan.incremental.snapshot.chunk.key-column")
                     .stringType()

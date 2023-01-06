@@ -2,15 +2,11 @@ package com.kronos.jobgraph.physic.disruptor;
 
 import com.google.common.collect.Lists;
 import com.lmax.disruptor.Sequence;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * @Author: jackila
- * @Date: 11:13 2022-12-15
- */
+/** */
 public class ProcessorInput {
     private Optional<List<Sequence>> source;
 

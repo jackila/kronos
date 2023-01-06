@@ -21,11 +21,10 @@ import com.kronos.utils.FlinkRuntimeException;
 import com.zaxxer.hikari.HikariDataSource;
 import io.debezium.jdbc.JdbcConfiguration;
 import io.debezium.jdbc.JdbcConnection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.Connection;
 import java.sql.SQLException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** A factory to create JDBC connection for MySQL. */
 public class JdbcConnectionFactory implements JdbcConnection.ConnectionFactory {

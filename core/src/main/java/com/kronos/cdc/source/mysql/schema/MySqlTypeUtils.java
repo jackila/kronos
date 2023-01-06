@@ -137,9 +137,7 @@ public class MySqlTypeUtils {
             case DECIMAL:
             case DECIMAL_UNSIGNED:
             case DECIMAL_UNSIGNED_ZEROFILL:
-                return column.length() <= 38
-                        ? LogicalTypeRoot.DECIMAL
-                        : LogicalTypeRoot.VARCHAR;
+                return column.length() <= 38 ? LogicalTypeRoot.DECIMAL : LogicalTypeRoot.VARCHAR;
             case TIME:
                 return LogicalTypeRoot.TIME_WITHOUT_TIME_ZONE;
             case DATE:

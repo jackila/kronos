@@ -20,10 +20,7 @@ package com.kronos.jobgraph.tasks;
 
 import com.kronos.runtime.operators.coordination.OperatorEvent;
 
-/**
- *  Task ---->>> OperatorCoordinator(Task Manager)
- *
- */
+/** Task ---->>> OperatorCoordinator(Task Manager) */
 public interface TaskOperatorEventGateway {
 
     /**

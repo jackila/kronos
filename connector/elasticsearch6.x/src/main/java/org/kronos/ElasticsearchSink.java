@@ -17,6 +17,10 @@
 
 package org.kronos;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.ActionRequest;
 import org.elasticsearch.action.bulk.BulkProcessor;
@@ -26,11 +30,6 @@ import org.kronos.base.ElasticsearchSinkBase;
 import org.kronos.base.ElasticsearchSinkFunction;
 import org.kronos.base.NoOpFailureHandler;
 import org.kronos.utils.Preconditions;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * Elasticsearch 6.x sink that requests multiple {@link ActionRequest ActionRequests} against a

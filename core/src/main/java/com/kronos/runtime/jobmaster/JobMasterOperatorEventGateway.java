@@ -18,10 +18,7 @@
 
 package com.kronos.runtime.jobmaster;
 
-
-import com.kronos.runtime.executiongraph.Execution;
 import com.kronos.runtime.operators.coordination.OperatorEvent;
-import com.kronos.utils.FlinkException;
 
 /**
  * Gateway to send an {@link OperatorEvent} from the Task Manager to to the {@link
@@ -41,6 +38,5 @@ import com.kronos.utils.FlinkException;
  */
 public interface JobMasterOperatorEventGateway {
 
-    void sendOperatorEventToCoordinator(
-            int task, int operatorID, OperatorEvent event);
+    void sendOperatorEventToCoordinator(int task, int operatorID, OperatorEvent event);
 }

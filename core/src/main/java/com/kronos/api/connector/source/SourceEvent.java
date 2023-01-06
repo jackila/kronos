@@ -18,7 +18,5 @@
 
 package com.kronos.api.connector.source;
 
-
-
 /** An base class for the events passed between the SourceReaders and Enumerators. */
 public interface SourceEvent {}

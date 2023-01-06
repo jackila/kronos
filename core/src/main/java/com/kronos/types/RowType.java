@@ -1,19 +1,14 @@
 package com.kronos.types;
 
 import com.google.common.collect.Lists;
-
 import java.util.List;
 
-/**
- * @Author: jackila
- * @Date: 20:14 2022-12-11
- */
+/** */
 public class RowType {
     private String name;
     private String typeName;
 
-    public RowType(String name,
-                   String typeName) {
+    public RowType(String name, String typeName) {
         this.name = name;
         this.typeName = typeName;
     }

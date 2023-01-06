@@ -2,10 +2,7 @@ package com.kronos.jobgraph.raw;
 
 import java.util.List;
 
-/**
- * @Author: jackila
- * @Date: 3:44 PM 2022-5-30
- */
+/** */
 public class Mapper {
     private String field;
     private String source;

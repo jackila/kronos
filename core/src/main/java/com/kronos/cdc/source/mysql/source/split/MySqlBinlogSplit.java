@@ -19,7 +19,6 @@ package com.kronos.cdc.source.mysql.source.split;
 import com.kronos.cdc.source.mysql.source.offset.BinlogOffset;
 import io.debezium.relational.TableId;
 import io.debezium.relational.history.TableChanges.TableChange;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +34,7 @@ public class MySqlBinlogSplit extends MySqlSplit {
     private final Map<TableId, TableChange> tableSchemas;
     private final int totalFinishedSplitSize;
     private final boolean isSuspended;
-     transient byte[] serializedFormCache;
+    transient byte[] serializedFormCache;
 
     public MySqlBinlogSplit(
             String splitId,

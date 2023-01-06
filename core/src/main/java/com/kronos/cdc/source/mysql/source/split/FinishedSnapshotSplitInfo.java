@@ -20,13 +20,10 @@ import com.esotericsoftware.kryo.Kryo;
 import com.kronos.cdc.source.mysql.source.offset.BinlogOffset;
 import com.kronos.utils.KryoUtil;
 import io.debezium.relational.TableId;
-
 import java.util.Arrays;
 import java.util.Objects;
 
-/**
- * The information used to describe a finished snapshot split.
- */
+/** The information used to describe a finished snapshot split. */
 public class FinishedSnapshotSplitInfo {
 
     private static final ThreadLocal<Kryo> SERIALIZER_CACHE =
@@ -81,7 +78,6 @@ public class FinishedSnapshotSplitInfo {
     public static FinishedSnapshotSplitInfo deserialize(byte[] serialized) {
         return KryoUtil.readFromByteArray(serialized);
     }
-
 
     @Override
     public boolean equals(Object o) {
