@@ -54,7 +54,7 @@ Kronos is now installed in `build-target` as kronos.jar.
   * 运行服务`java -jar kronos.jar example.yml`
   * **原始数据**
     ![img](https://tva1.sinaimg.cn/large/008vxvgGly1h9ui8yd3h1j315c0u0diu.jpg)
-  * **数据结果(每个学生选择了哪门课程、课程的主讲老师是谁、课程的学分)**
+  * **数据结果(`每个学生选择了哪门课程、课程的主讲老师是谁、获得课程的成绩`)**
     ![image-20230107024449312](https://tva1.sinaimg.cn/large/008vxvgGly1h9ui7w1zacj311q0n5wha.jpg)
 
 
