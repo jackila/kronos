@@ -48,7 +48,7 @@ Kronos is now installed in `build-target` as kronos.jar.
 
 	 * `mvn test -Dtest=MySqlSourceExampleTest -DfailIfNoTests=false`
 
-* 方式二：通过业务模拟demo，了解kronos使用方法（业务背景见案例）
+* 方式二：通过业务模拟demo，了解kronos使用方法（业务背景见[案例](https://github.com/jackila/kronos/blob/master/%E6%A1%88%E4%BE%8B.md)）
   * 运行`mysql`、`es`服务
   * `mysql`服务应用`build-target\example.sql`
   * 运行服务`java -jar kronos.jar example.yml`
