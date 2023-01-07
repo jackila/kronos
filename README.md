@@ -86,9 +86,9 @@ IntelliJ 使用 Checkstyle-IDEA 插件在 IDE 中支持 checkstyle。
     2. 选择 "Use a local Checkstyle file" ，然后将其指向你存储库中 `"tools/maven/checkstyle.xml"` 文件。
     3. 选中 "Store relative to project location" 框，然后单击 "Next"。
     4. 将 "checkstyle.suppressions.file" 属性值配置为 `"suppressions.xml"`，然后单击 "Next"，然后单击 "Finish"。
-6. 选择 "Flink" 作为唯一的激活配置文件，单击 "Apply"，然后点击 "OK"。
+6. 选择 "Kronos" 作为唯一的激活配置文件，单击 "Apply"，然后点击 "OK"。
 7. Checkstyle 现在将在编辑器中针对任何违反 Checkstyle 的行为发出警告。
 
-插件安装完成后你可以通过 Settings → Editor → Code Style → Java → Scheme 下拉框旁边的齿轮图标， 直接导入 `"tools/maven/checkstyle.xml"` 文件。 例如，这将自动调整导入布局。
+插件安装完成后你可以通过 Settings → Editor → Code Style → Java → Scheme 下拉框旁边的齿轮图标,选择intellij IDEA code style XML， 直接导入 `"tools/intellij-java-google-style.xml"` 文件。
 
 你可以通过打开 Checkstyle 工具窗口并单击 "Check Module" 按钮来扫描整个模块。扫描不应报告任何错误。
